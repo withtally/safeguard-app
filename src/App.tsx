@@ -1,67 +1,33 @@
-import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
-import { Button, Loader, Title } from '@gnosis.pm/safe-react-components';
-import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
+import { FC } from "react";
+import { Router } from "@reach/router";
 
-const Container = styled.form`
-  margin-bottom: 2rem;
-  width: 100%;
-  max-width: 480px;
+// layout
+import Layout from "modules/layout/components/Layout";
 
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
-`;
+// common
+import PrivateRoute from "modules/common/lib/router/PrivateRoute";
+import PublicRoute from "modules/common/lib/router/PublicRoute";
 
-const App: React.FC = () => {
-  const { sdk, safe } = useSafeAppsSDK();
-  const [submitting, setSubmitting] = useState(false);
+// home
+import Home from "modules/home/Home";
 
-  const submitTx = useCallback(async () => {
-    setSubmitting(true);
-    try {
-      const { safeTxHash } = await sdk.txs.send({
-        txs: [
-          {
-            to: safe.safeAddress,
-            value: '0',
-            data: '0x',
-          },
-        ],
-      });
-      console.log({ safeTxHash });
-      const safeTx = await sdk.txs.getBySafeTxHash(safeTxHash);
-      console.log({ safeTx });
-    } catch (e) {
-      console.error(e);
-    }
-    setSubmitting(false);
-  }, [safe, sdk]);
+// admin
+import Roles from "modules/admin/components/Roles";
+import AdministrateFund from "modules/admin/components/AdministrateFund";
 
+// manager
+import ManageFund from "modules/manager/components/ManageFund";
+
+const App: FC = () => {
   return (
-    <Container>
-      <Title size="md">{safe.safeAddress}</Title>
-      {submitting ? (
-        <>
-          <Loader size="md" />
-          <br />
-          <Button
-            size="lg"
-            color="secondary"
-            onClick={() => {
-              setSubmitting(false);
-            }}
-          >
-            Cancel
-          </Button>
-        </>
-      ) : (
-        <Button size="lg" color="primary" onClick={submitTx}>
-          Submit
-        </Button>
-      )}
-    </Container>
+    <Layout>
+      <Router>
+        <PublicRoute component={Home} path="/" />
+        <PrivateRoute component={Roles} path="/administrator" />
+        <PrivateRoute component={AdministrateFund} path="/administrator/fund" />
+        <PrivateRoute component={ManageFund} path="/manager" />
+      </Router>
+    </Layout>
   );
 };
 

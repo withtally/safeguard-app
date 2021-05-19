@@ -1,27 +1,31 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { ThemeProvider } from "styled-components";
-import { theme, Loader, Title } from "@gnosis.pm/safe-react-components";
 import SafeProvider from "@gnosis.pm/safe-apps-react-sdk";
+import { ChakraProvider, Text, CircularProgress } from "@chakra-ui/react";
 
-import GlobalStyle from "./GlobalStyle";
+// common
+import "modules/common/lib/styles.css";
+import theme from "modules/common/theme";
+import { Web3Provider } from "modules/common/hooks/useWeb3";
+
 import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
+    <ChakraProvider theme={theme}>
       <SafeProvider
         loader={
           <>
-            <Title size="md">Waiting for Safe...</Title>
-            <Loader size="md" />
+            <Text size="md">Waiting for Safe...</Text>
+            <CircularProgress isIndeterminate color="green.300" />
           </>
         }
       >
-        <App />
+        <Web3Provider>
+          <App />
+        </Web3Provider>
       </SafeProvider>
-    </ThemeProvider>
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

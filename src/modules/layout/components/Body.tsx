@@ -1,13 +1,31 @@
 import { FC } from "react";
-import styled from "styled-components";
+import { Container as ChakraContainer, ContainerProps } from "@chakra-ui/react";
 
-const StyledBody = styled.div`
-  grid-area: body;
-  margin-top: 5rem;
-`;
-
-const Body: FC = ({ children }) => {
-  return <StyledBody>{children}</StyledBody>;
+type Props = {
+  isHome?: boolean;
 };
+
+const Body: FC<Props & ContainerProps> = ({
+  isHome,
+  children,
+  bg,
+  ...containerProps
+}) => (
+  <ChakraContainer
+    centerContent
+    alignItems="stretch"
+    as="main"
+    bg={bg}
+    display="flex"
+    flex={1}
+    flexDir="column"
+    maxW="8xl"
+    mt="5rem"
+    px={{ base: 3, lg: 0 }}
+    {...containerProps}
+  >
+    {children}
+  </ChakraContainer>
+);
 
 export default Body;

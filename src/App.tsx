@@ -23,9 +23,9 @@ const App: FC = () => {
     <Layout>
       <Router>
         <PublicRoute component={Home} path="/" />
-        <PrivateRoute component={Roles} path="/administrator" />
-        <PrivateRoute component={AdministrateFund} path="/administrator/fund" />
-        <PrivateRoute component={ManageFund} path="/manager" />
+        <PublicRoute component={Roles} path="/administrator" />
+        <PublicRoute component={AdministrateFund} path="/administrator/fund" />
+        <PublicRoute component={ManageFund} path="/manager" />
       </Router>
     </Layout>
   );

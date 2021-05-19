@@ -1,3 +1,6 @@
 export const ROUTES = {
-    home: (): string => `/`,
+    home: `/`,
+    roles: `/administrator`,
+    management: `/administrator/fund`,
+    manager: '/manager'
 }

@@ -1,144 +1,92 @@
 import { FC } from "react";
-import {
-  Card,
-  IconText,
-  Text,
-  Select,
-  TextField,
-  Button,
-  Table,
-  TableRow,
-  TableHeader,
-  Title,
-} from "@gnosis.pm/safe-react-components";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Box,
-} from "@material-ui/core";
+import { CircularProgress, HStack, Text, Flex } from "@chakra-ui/react";
+
+// common
+import { useTransactions } from "modules/common/hooks/useTransactions";
+import { useFundInformation } from "modules/common/hooks/useFundInformation";
+
+// admin
+import { useManageFunds } from "modules/admin/hooks/useManageFunds";
+import AdminTransactionsTable from "modules/admin/components/AdminTransactionsTable";
+import FundInfoCard from "modules/admin/components/FundInfoCard";
+import SendFundsCard from "modules/admin/components/SendFundsCard";
+import { FundManagementSteps } from "modules/admin/lib/constants";
 
 const AdministrateFund: FC = () => {
-  // TODO: replace with actual values
-  const headerCells: TableHeader[] = [
-    { id: "to", label: "Transfer to" },
-    { id: "amount", label: "Amount" },
-    { id: "date", label: "Date" },
-  ];
-  const rows: TableRow[] = [
-    {
-      id: "1",
-      cells: [
-        { content: "0xfeF621869b404a2240C5B10783477cA459B2a4b1" },
-        { content: "500 UNI" },
-        { content: "20/03.2021" },
-      ],
-    },
-    {
-      id: "1",
-      cells: [
-        { content: "0xfeF621869b404a2240C5B10783477cA459B2a4b1" },
-        { content: "200 UNI" },
-        { content: "10/04/2021" },
-      ],
-    },
-  ];
+  // custom hooks
+  const {
+    values,
+    handleChange,
+    submitForm,
+    isSubmitting,
+    errors,
+    touched,
+  } = useManageFunds();
+
+  const {
+    transactions,
+    cancelTransaction,
+    isSubmitting: isSubmittingTransactions,
+  } = useTransactions();
+
+  const { fundBalance, timelockAddress } = useFundInformation();
 
   return (
-    <Box>
-      <Title size="sm">Manage Fund</Title>
-      <Card>
-        <Accordion>
-          <AccordionSummary>
-            <IconText
-              iconSize="sm"
-              textSize="xl"
-              iconType="info"
-              text="Fund information"
-            />
-          </AccordionSummary>
-          <AccordionDetails style={{ flexDirection: "column" }}>
-            <Text size="lg">Fund Information</Text>
-            <Box
-              style={{
-                alignItems: "center",
-                marginTop: "2rem",
-              }}
-            >
-              <Box
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: "20px",
-                  maxWidth: "29rem",
-                }}
-              >
-                <Text size="md" strong>
-                  Fund manager:
-                </Text>
-                <Text size="md">
-                  0xfeF621869b404a2240C5B10783477cA459B2a4b1
-                </Text>
-              </Box>
-              <Box
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: "20px",
-                  maxWidth: "15rem",
-                }}
-              >
-                <Text size="md" strong>
-                  Fund balance:
-                </Text>
-                <Text size="md">1000 UNI</Text>
-              </Box>
-              <Box
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: "20px",
-                  maxWidth: "15rem",
-                }}
-              >
-                <Text size="md" strong>
-                  Fund active since block:
-                </Text>
-                <Text size="md">2334398</Text>
-              </Box>
-              <Button color="error" size="lg" variant="contained">
-                Revoke funds
-              </Button>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary>
-            <IconText
-              iconSize="sm"
-              textSize="xl"
-              iconType="collectibles"
-              text="Fund Transactions"
-            />
-          </AccordionSummary>
-          <AccordionDetails style={{ flexDirection: "column" }}>
-            <Text size="lg">Fund Transaction Logs</Text>
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "2rem",
-              }}
-            >
-              <Table headers={headerCells} rows={rows} />
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      </Card>
-    </Box>
+    <Flex direction="column">
+      <HStack align="center" mt={5} spacing={10} as="section" w="full">
+        <FundInfoCard
+          balance={fundBalance}
+          timelockAddress={timelockAddress}
+          processFlowSteps={FundManagementSteps}
+        />
+        <SendFundsCard
+          values={values}
+          errors={errors}
+          touched={touched}
+          submitForm={submitForm}
+          handleChange={handleChange}
+          isSubmitting={isSubmitting}
+        />
+      </HStack>
+
+      <Flex
+        as="section"
+        borderRadius="sm"
+        direction="column"
+        mb={20}
+        mt={12}
+        w="full"
+      >
+        <Text as="h4" color="purple.900" mb={1} textStyle="h4">
+          Requested Payments
+        </Text>
+        <Text color="gray.500" mb={8} textStyle="body.regular.lg">
+          Payments requests list with state
+        </Text>
+
+        {isSubmittingTransactions ? (
+          <Flex
+            align="center"
+            border="gray.dark"
+            minH="22.813rem"
+            bg="white"
+            justify="center"
+            direction="column"
+          >
+            <CircularProgress isIndeterminate color="purple.300" />
+          </Flex>
+        ) : (
+          <Flex border="gray.dark" bg="white" direction="column">
+            {transactions && (
+              <AdminTransactionsTable
+                transactions={transactions}
+                cancelTransaction={cancelTransaction}
+              />
+            )}
+          </Flex>
+        )}
+      </Flex>
+    </Flex>
   );
 };
 

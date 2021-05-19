@@ -22,13 +22,13 @@ type Props = {
 const PrivateRoute = ({ component: Component, path, ...rest }: Props): any => {
   const { userRole } = useUserInfo();
 
-  const isAllowedPath = ALLOWED_PATH_BY_ROLE[userRole].some(
-    (allowedPath) => allowedPath === path
-  );
+  const isAllowedPath =
+    userRole &&
+    ALLOWED_PATH_BY_ROLE[userRole].some((allowedPath) => allowedPath === path);
 
   if (isAllowedPath) return <Component path={path} {...rest} />;
 
-  if (!isAllowedPath) return <Redirect noThrow to={ROUTES.home()} />;
+  if (!isAllowedPath) return <Redirect noThrow to={ROUTES.home} />;
 
   return null;
 };

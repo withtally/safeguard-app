@@ -1,129 +1,75 @@
-import { FC, useState } from "react";
-import {
-  Card,
-  IconText,
-  Text,
-  Select,
-  TextField,
-  Button,
-  Table,
-  TableRow,
-  TableHeader,
-  Title,
-} from "@gnosis.pm/safe-react-components";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Box,
-  FormControl,
-  InputLabel,
-} from "@material-ui/core";
+import { FC } from "react";
+import { CircularProgress, HStack, Text, Flex } from "@chakra-ui/react";
 
 // admin
-import { ROLES } from "modules/admin/lib/constants";
+import { useRoles } from "modules/admin/hooks/useRoles";
+import AdminRolesTable from "modules/admin/components/AdminRolesTable";
+import GrantRoleCard from "modules/admin/components/GrantRoleCard";
+import RolesInfoCard from "modules/admin/components/RolesInfoCard";
 
 const Roles: FC = () => {
-  const [activeItemId, setActiveItemId] = useState("");
-  const [value, setValue] = useState<string>("");
-
-  // TODO: replace with actual values
-  const headerCells: TableHeader[] = [
-    { id: "address", label: "Address" },
-    { id: "role", label: "Role" },
-    { id: "action", label: "Action" },
-  ];
-  const rows: TableRow[] = [
-    {
-      id: "1",
-      cells: [
-        { content: "address 1" },
-        { content: "role 1" },
-        { content: "action 1" },
-      ],
-    },
-    {
-      id: "1",
-      cells: [
-        { content: "address 2" },
-        { content: "role 2" },
-        { content: "action 1" },
-      ],
-    },
-  ];
+  const {
+    handleChange,
+    values,
+    submitForm,
+    grantedRoles,
+    revokeRole,
+    formSubmitting,
+    errors,
+    touched,
+  } = useRoles();
 
   return (
-    <Box>
-      <Title size="md">Manage Roles</Title>
-      <Card>
-        <Accordion>
-          <AccordionSummary>
-            <IconText
-              iconSize="sm"
-              textSize="xl"
-              iconType="add"
-              text="Grant Roles"
-            />
-          </AccordionSummary>
-          <AccordionDetails style={{ flexDirection: "column" }}>
-            <Text size="lg">Grant roles to addresses for the FailSafe</Text>
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "2rem",
-              }}
-            >
-              <FormControl style={{ maxWidth: "300px", marginRight: "10px" }}>
-                <InputLabel htmlFor="role">Role</InputLabel>
-                <Select
-                  id="role"
-                  items={ROLES}
-                  activeItemId={activeItemId}
-                  onItemClick={(id) => {
-                    setActiveItemId(id);
-                  }}
-                />
-              </FormControl>
-              <FormControl style={{ maxWidth: "600px", marginRight: "10px" }}>
-                <InputLabel htmlFor="address">Address</InputLabel>
-                <TextField
-                  id="address"
-                  label="Address"
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                />
-              </FormControl>
-              <Button color="primary" size="lg" variant="contained">
-                Grant role
-              </Button>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary>
-            <IconText
-              iconSize="sm"
-              textSize="xl"
-              iconType="settingsTool"
-              text="Manage granted roles"
-            />
-          </AccordionSummary>
-          <AccordionDetails style={{ flexDirection: "column" }}>
-            <Text size="lg">Visualize granted roles and manage them</Text>
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginTop: "2rem",
-              }}
-            >
-              <Table headers={headerCells} rows={rows} />
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      </Card>
-    </Box>
+    <Flex direction="column">
+      <HStack align="center" mt={5} spacing={10} as="section" w="full">
+        <RolesInfoCard />
+        <GrantRoleCard
+          values={values}
+          errors={errors}
+          touched={touched}
+          submitForm={submitForm}
+          handleChange={handleChange}
+          isSubmitting={formSubmitting}
+        />
+      </HStack>
+
+      <Flex
+        as="section"
+        borderRadius="sm"
+        direction="column"
+        mb={20}
+        mt={12}
+        w="full"
+      >
+        <Text as="h4" color="purple.900" mb={1} textStyle="h4">
+          Granted Roles
+        </Text>
+        <Text color="gray.500" mb={8} textStyle="body.regular.lg">
+          List of roles with management feature
+        </Text>
+        {formSubmitting ? (
+          <Flex
+            align="center"
+            border="gray.dark"
+            minH="22.813rem"
+            bg="white"
+            justify="center"
+            direction="column"
+          >
+            <CircularProgress isIndeterminate color="purple.300" />
+          </Flex>
+        ) : (
+          <Flex border="gray.dark" bg="white" direction="column">
+            {grantedRoles && (
+              <AdminRolesTable
+                grantedRoles={grantedRoles}
+                revokeRole={revokeRole}
+              />
+            )}
+          </Flex>
+        )}
+      </Flex>
+    </Flex>
   );
 };
 

@@ -19,7 +19,6 @@ import { getTransactionEta } from "modules/manager/lib/helpers";
 
 // admin
 import { Transaction } from "modules/admin/lib/types";
-import abbreviate from "@pqt/abbreviate";
 
 dayjs.extend(advancedFormat);
 
@@ -66,55 +65,67 @@ export const useTransactions = (): Values => {
   const { web3 } = useWeb3();
 
   const getTimelockEvents = async () => {
-    const queuedEventFilter = await signedContract?.filters.QueueTransaction();
-    const queuedTransactions = await signedContract?.queryFilter(
-      queuedEventFilter
-    );
+    try {
+      const queuedEventFilter =
+        await signedContract?.filters.QueueTransaction();
+      const queuedTransactions = await signedContract?.queryFilter(
+        queuedEventFilter
+      );
 
-    const canceledEventFilter = await signedContract?.filters.CancelTransaction();
-    const canceledTransactions = await signedContract?.queryFilter(
-      canceledEventFilter
-    );
+      const canceledEventFilter =
+        await signedContract?.filters.CancelTransaction();
+      const canceledTransactions = await signedContract?.queryFilter(
+        canceledEventFilter
+      );
 
-    const executedEventFilter = await signedContract?.filters.ExecuteTransaction();
-    const executedTransactions = await signedContract?.queryFilter(
-      executedEventFilter
-    );
+      const executedEventFilter =
+        await signedContract?.filters.ExecuteTransaction();
+      const executedTransactions = await signedContract?.queryFilter(
+        executedEventFilter
+      );
 
-    const gracePeriodLabel = await signedContract?.GRACE_PERIOD();
-    const gracePeriod = Number(gracePeriodLabel.toString());
-    const currentTimestamp = Number(dayjs().format("X"));
+      const gracePeriodLabel = await signedContract?.GRACE_PERIOD();
+      const gracePeriod = Number(gracePeriodLabel.toString());
+      const currentTimestamp = Number(dayjs().format("X"));
 
-    const transactionInfo = queuedTransactions?.map(
-      (item) => item.args && parseTransaction(item.args, gracePeriod)
-    );
+      const transactionInfo = queuedTransactions?.map(
+        (item) => item.args && parseTransaction(item.args, gracePeriod)
+      );
 
-    const allTransactions = (await Promise.all(
-      transactionInfo.map(async (item) => {
-        if (item) {
-          return {
-            ...item,
-            currentlyQueued: await signedContract?.queuedTransactions(
-              item.txHash
-            ),
-            canceled: canceledTransactions.some(
-              (canceled) => canceled.args?.txHash === item.txHash
-            ),
-            executed: executedTransactions.some(
-              (executed) => executed.args?.txHash === item.txHash
-            ),
-            stale:
-              !executedTransactions.some(
+      const allTransactions = (await Promise.all(
+        transactionInfo.map(async (item) => {
+          if (item) {
+            return {
+              ...item,
+              currentlyQueued: await signedContract?.queuedTransactions(
+                item.txHash
+              ),
+              canceled: canceledTransactions.some(
+                (canceled) => canceled.args?.txHash === item.txHash
+              ),
+              executed: executedTransactions.some(
                 (executed) => executed.args?.txHash === item.txHash
-              ) && item.executableTime <= currentTimestamp,
-          };
-        }
-      })
-    )) as Transaction[];
+              ),
+              stale:
+                !executedTransactions.some(
+                  (executed) => executed.args?.txHash === item.txHash
+                ) && item.executableTime <= currentTimestamp,
+            };
+          }
+        })
+      )) as Transaction[];
 
-    const sortedTransactions = allTransactions.sort((a, b) => b.executableTime - a.executableTime)
+      const sortedTransactions = allTransactions.sort(
+        (a, b) => b.executableTime - a.executableTime
+      );
 
-    setTransactions(sortedTransactions);
+      setTransactions(sortedTransactions);
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: useTransactions.ts ~ line 120 ~ getTimelockEvents ~ error",
+        error
+      );
+    }
   };
 
   useEffect(() => {

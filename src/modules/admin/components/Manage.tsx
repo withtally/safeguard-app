@@ -1,46 +1,39 @@
 import { FC } from "react";
 import { CircularProgress, HStack, Text, Flex } from "@chakra-ui/react";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
 import { useTransactions } from "modules/common/hooks/useTransactions";
 import { useFundInformation } from "modules/common/hooks/useFundInformation";
 
-// manager
-import ManagerTransactionsTable from "modules/manager/components/ManagerTransactionsTable";
-import { PaymentsFlowSteps } from "modules/manager/lib/constants";
-import RequestPaymentCard from "modules/manager/components/RequestPaymentCard";
-
 // admin
+import { useManageFunds } from "modules/admin/hooks/useManageFunds";
+import AdminTransactionsTable from "modules/admin/components/AdminTransactionsTable";
 import FundInfoCard from "modules/admin/components/FundInfoCard";
+import SendFundsCard from "modules/admin/components/SendFundsCard";
+import { FundManagementSteps } from "modules/admin/lib/constants";
 
-dayjs.extend(advancedFormat);
-
-const ManageFund: FC = () => {
+const Manage: FC = () => {
   // custom hooks
+  const { values, handleChange, submitForm, isSubmitting, errors, touched } =
+    useManageFunds();
+
   const {
     transactions,
-    executeTransaction,
-    isSubmitting,
-    values,
-    handleChange,
-    submitForm,
-    errors,
-    touched,
+    cancelTransaction,
+    isSubmitting: isSubmittingTransactions,
   } = useTransactions();
 
   const { fundBalance, timelockAddress } = useFundInformation();
 
   return (
-    <Flex direction="column" w="full">
+    <Flex direction="column">
       <HStack align="center" mt={5} spacing={10} as="section" w="full">
         <FundInfoCard
           balance={fundBalance}
           timelockAddress={timelockAddress}
-          processFlowSteps={PaymentsFlowSteps}
+          processFlowSteps={FundManagementSteps}
         />
-        <RequestPaymentCard
+        <SendFundsCard
           values={values}
           errors={errors}
           touched={touched}
@@ -49,6 +42,7 @@ const ManageFund: FC = () => {
           isSubmitting={isSubmitting}
         />
       </HStack>
+
       <Flex
         as="section"
         borderRadius="sm"
@@ -64,7 +58,7 @@ const ManageFund: FC = () => {
           Payments requests list with state
         </Text>
 
-        {isSubmitting ? (
+        {isSubmittingTransactions ? (
           <Flex
             align="center"
             border="gray.dark"
@@ -78,9 +72,9 @@ const ManageFund: FC = () => {
         ) : (
           <Flex border="gray.dark" bg="white" direction="column">
             {transactions && (
-              <ManagerTransactionsTable
+              <AdminTransactionsTable
                 transactions={transactions}
-                executeTransaction={executeTransaction}
+                cancelTransaction={cancelTransaction}
               />
             )}
           </Flex>
@@ -90,4 +84,4 @@ const ManageFund: FC = () => {
   );
 };
 
-export default ManageFund;
+export default Manage;

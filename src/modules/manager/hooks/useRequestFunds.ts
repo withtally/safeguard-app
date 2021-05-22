@@ -45,9 +45,8 @@ export const useRequestFunds = (): Values => {
 
   // custom hook
   const { signedContract: signedTokenContract } = useSignedTokenContract();
-  const {
-    signedContract: signedRolManagerContract,
-  } = useSignedRolManagerContract();
+  const { signedContract: signedRolManagerContract } =
+    useSignedRolManagerContract();
   const { web3 } = useWeb3();
 
   const timelockAddress = CONTRACT_ADDRESSES.timelock.rinkeby;
@@ -64,7 +63,10 @@ export const useRequestFunds = (): Values => {
   }, [timelockAddress, signedTokenContract]);
 
   // handlers
-  const onSubmit = async (formValues: InitialValuesRequestFunds, formikInfo: any) => {
+  const onSubmit = async (
+    formValues: InitialValuesRequestFunds,
+    formikInfo: any
+  ) => {
     try {
       formikInfo.setSubmitting(true);
       const tokenInterface = new ethers.utils.Interface(TOKEN_JSON.abi);
@@ -77,7 +79,10 @@ export const useRequestFunds = (): Values => {
       const target = tokenAddress;
 
       let currentETA = await getTransactionEta(300, web3);
-      console.log("🚀 ~ file: useRequestFunds.ts ~ line 78 ~ onSubmit ~ currentETA", currentETA)
+      console.log(
+        "🚀 ~ file: useRequestFunds.ts ~ line 78 ~ onSubmit ~ currentETA",
+        currentETA
+      );
 
       // Now lets queue the transfer
       const transferSignature = "";
@@ -102,19 +107,6 @@ export const useRequestFunds = (): Values => {
         safeTxGas: 500000,
       };
       const safeTxs = await sdk.txs.send({ txs, params });
-      //const transactionData = await sdk.txs.getBySafeTxHash(safeTxs.safeTxHash);
-
-      console.log({ safeTxs });
-
-      //   const transferTx = await signedRolManagerContract?.queueTransaction(
-      //     target,
-      //     value,
-      //     transferSignature,
-      //     transferCallData,
-      //     currentETA,
-      //     {gasLimit: 2500000,}
-      //   );
-      //   console.log("Transfer queued", transferTx);
 
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
@@ -137,6 +129,6 @@ export const useRequestFunds = (): Values => {
     values,
     handleChange,
     submitForm,
-    formSubmitting: isSubmitting
+    formSubmitting: isSubmitting,
   };
 };

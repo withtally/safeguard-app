@@ -1,44 +1,57 @@
 import { FC } from "react";
-import { StackProps, HStack, Link, Box, Heading } from "@chakra-ui/react";
-import { Link as ReachLink } from "@reach/router";
+import { HStack, Link, Box, Flex, Text } from "@chakra-ui/react";
+import { Link as ReachLink, useLocation } from "@reach/router";
 
 // common
 import { ROUTES } from "modules/common/lib/routes";
 
-const Header: FC<StackProps> = ({ ...stackProps }) => {
+// layout
+import HeaderTopBorder from "modules/layout/components/HeaderTopBorder";
+
+const Header: FC = () => {
+  // const { pathname } = useLocation();
+  // const isRolesPage = pathname?.endsWith("/roles") ?? undefined;
+  // const isManagePage = pathname?.endsWith("/manage") ?? undefined;
+  // const isPaymentsPage = pathname?.endsWith("/payments") ?? undefined;
+
   return (
-    <HStack
-      px="2rem"
-      py="0.75rem"
-      justify="space-between"
-      as="nav"
-      spacing={5}
-      w="full"
-      bg="white"
-      shadow="md"
-      {...stackProps}
-    >
-      <Box>
-        <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.home}>
-          <Heading size="md">FailSafe</Heading>
-        </Link>
-      </Box>
-      <HStack spacing={4}>
-        <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.roles}>
-          <Heading size="sm">Roles</Heading>
-        </Link>
-        <Link
-          _hover={{ textDecor: "none" }}
-          as={ReachLink}
-          to={ROUTES.management}
-        >
-          <Heading size="sm">Manage</Heading>
-        </Link>
-        <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.manager}>
-          <Heading size="sm">Payments</Heading>
-        </Link>
+    <Flex display="column" border="gray.dark">
+      <HeaderTopBorder />
+      <HStack
+        px="2rem"
+        py="0.75rem"
+        justify="space-between"
+        as="nav"
+        spacing={5}
+        w="full"
+        h={20}
+      >
+        <Box>
+          <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.home}>
+            <Text textStyle="h4">FailSafe</Text>
+          </Link>
+        </Box>
+        <HStack spacing={4}>
+          <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.roles}>
+            <Text textStyle="paragraph">Roles</Text>
+          </Link>
+          <Link
+            _hover={{ textDecor: "none" }}
+            as={ReachLink}
+            to={ROUTES.manage}
+          >
+            <Text textStyle="paragraph">Manage</Text>
+          </Link>
+          <Link
+            _hover={{ textDecor: "none" }}
+            as={ReachLink}
+            to={ROUTES.payments}
+          >
+            <Text textStyle="paragraph">Payments</Text>
+          </Link>
+        </HStack>
       </HStack>
-    </HStack>
+    </Flex>
   );
 };
 

@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Button, HStack } from "@chakra-ui/react";
-import { FormikErrors, FormikTouched } from "formik";
 
 // common
 import FormInput from "modules/common/components/FormInput";
@@ -8,32 +7,12 @@ import FormSelect from "modules/common/components/FormSelect";
 
 // admin
 import { ROLES } from "modules/admin/lib/constants";
-import { InitialValuesRoles } from "modules/admin/lib/types";
+import { useGrantRole } from "modules/admin/hooks/useGrantRole";
 
-type Props = {
-  values: InitialValuesRoles;
-  submitForm: () => Promise<any>;
-  handleChange: {
-    (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
-  isSubmitting: boolean;
-  errors: FormikErrors<InitialValuesRoles>;
-  touched: FormikTouched<InitialValuesRoles>;
-};
-
-const GrantRoleForm: FC<Props> = ({
-  values,
-  touched,
-  handleChange,
-  errors,
-  submitForm,
-  isSubmitting,
-}) => {
+const GrantRoleForm: FC = () => {
+  // custom hooks
+  const { handleChange, values, submitForm, formSubmitting, errors, touched } =
+    useGrantRole();
   return (
     <form id="grantRoleForm">
       <HStack spacing={4} mb={10} align="end" w="full">
@@ -67,7 +46,7 @@ const GrantRoleForm: FC<Props> = ({
           size="md"
           variant="primary"
           loadingText="Minning"
-          isLoading={isSubmitting}
+          isLoading={formSubmitting}
         >
           Grant role
         </Button>

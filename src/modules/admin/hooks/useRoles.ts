@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { useFormik, FormikErrors, FormikTouched } from "formik";
-import { ethers } from "ethers";
 
 // common
 import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
@@ -8,29 +6,12 @@ import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 
 // admin
-import { InitialValuesRoles, GrantedRole } from "modules/admin/lib/types";
-
-const initialValues: InitialValuesRoles = {
-  role: "",
-  address: "",
-};
+import { GrantedRole } from "modules/admin/lib/types";
 
 type Values = {
-  values: InitialValuesRoles;
-  submitForm: () => Promise<any>;
-  handleChange: {
-    (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
   grantedRoles: GrantedRole[] | undefined;
   revokeRole: (role: string, address: string) => Promise<void>;
   formSubmitting: boolean;
-  errors: FormikErrors<InitialValuesRoles>;
-  touched: FormikTouched<InitialValuesRoles>;
 };
 
 export const useRoles = (): Values => {
@@ -87,24 +68,6 @@ export const useRoles = (): Values => {
   }, []);
 
   // handlers
-  const onSubmit = async (formValues: InitialValuesRoles, formikInfo: any) => {
-    try {
-      formikInfo.setSubmitting(true);
-      const transferTx = await signedContract?.grantRole(
-        formValues.role,
-        formValues.address
-      );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-      await getGrantedRoles();
-      formikInfo.setSubmitting(false);
-      formikInfo.resetForm();
-    } catch (error) {
-      console.log(
-        "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
-        error
-      );
-    }
-  };
 
   const revokeRole = async (role: string, address: string) => {
     try {
@@ -121,20 +84,9 @@ export const useRoles = (): Values => {
     }
   };
 
-  // formik hooks
-  const { values, handleChange, submitForm, isSubmitting, errors, touched } = useFormik({
-    initialValues,
-    onSubmit,
-  });
-
   return {
     grantedRoles,
-    values,
-    handleChange,
-    submitForm,
     revokeRole,
-    formSubmitting: isSubmitting || revokingRole,
-    errors,
-    touched
+    formSubmitting: revokingRole,
   };
 };

@@ -11,19 +11,12 @@ import { IoSettingsOutline } from "react-icons/io5";
 
 // admin
 import AdminRolesTable from "modules/admin/components/AdminRolesTable";
-import { GrantedRole } from "modules/admin/lib/types";
+import { useRoles } from "modules/admin/hooks/useRoles";
 
-type Props = {
-  grantedRoles: GrantedRole[] | undefined;
-  formSubmitting: boolean;
-  revokeRole: (role: string, address: string) => Promise<void>;
-};
+const ManageGrantedRoles: FC = () => {
+  // custom hooks
+  const { grantedRoles, revokeRole, formSubmitting } = useRoles();
 
-const ManageGrantedRoles: FC<Props> = ({
-  grantedRoles,
-  formSubmitting,
-  revokeRole,
-}) => {
   return (
     <Stack
       as="section"

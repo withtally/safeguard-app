@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { FormikErrors, FormikTouched } from "formik";
 import { Text, Flex, FlexProps, HStack, Icon } from "@chakra-ui/react";
 import { IoAddCircleOutline } from "react-icons/io5";
 
@@ -7,35 +6,10 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import InstructionList from "modules/common/components/InstructionList";
 
 // admin
-import { InitialValuesRoles } from "modules/admin/lib/types";
 import GrantRoleForm from "modules/admin/components/GrantRoleForm";
 import { ROLE_TYPES_INFO } from "modules/admin/lib/constants";
 
-type Props = {
-  values: InitialValuesRoles;
-  submitForm: () => Promise<any>;
-  handleChange: {
-    (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
-  isSubmitting: boolean;
-  errors: FormikErrors<InitialValuesRoles>;
-  touched: FormikTouched<InitialValuesRoles>;
-};
-
-const GrantRoles: FC<Props & FlexProps> = ({
-  values,
-  errors,
-  touched,
-  handleChange,
-  submitForm,
-  isSubmitting,
-  ...flexProps
-}) => {
+const GrantRoles: FC<FlexProps> = ({ ...flexProps }) => {
   return (
     <Flex
       as="article"
@@ -54,14 +28,7 @@ const GrantRoles: FC<Props & FlexProps> = ({
             Grant role to address
           </Text>
         </HStack>
-        <GrantRoleForm
-          values={values}
-          submitForm={submitForm}
-          errors={errors}
-          handleChange={handleChange}
-          isSubmitting={isSubmitting}
-          touched={touched}
-        />
+        <GrantRoleForm />
       </Flex>
       <InstructionList title="Types of roles" instructions={ROLE_TYPES_INFO} />
     </Flex>

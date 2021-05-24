@@ -9,7 +9,6 @@ import FundInformationCard from "modules/common/components/FundInformationCard";
 
 // manager
 import ManagerTransactionsTable from "modules/manager/components/ManagerTransactionsTable";
-import { PaymentsFlowSteps } from "modules/manager/lib/constants";
 import RequestPaymentCard from "modules/manager/components/RequestPaymentCard";
 import PageHeader from "modules/common/components/PageHeader";
 

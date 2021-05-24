@@ -5,7 +5,6 @@ import { useSafeAppsSDK } from "@gnosis.pm/safe-apps-react-sdk";
 
 // common
 import { useSignedTokenContract } from "modules/common/hooks/useSignedTokenContract";
-import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
 import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
 import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
 import ROLE_MANAGER_JSON from "modules/common/lib/abis/RolManager.json";
@@ -45,8 +44,6 @@ export const useRequestFunds = (): Values => {
 
   // custom hook
   const { signedContract: signedTokenContract } = useSignedTokenContract();
-  const { signedContract: signedRolManagerContract } =
-    useSignedRolManagerContract();
   const { web3 } = useWeb3();
 
   const timelockAddress = CONTRACT_ADDRESSES.timelock.rinkeby;

@@ -15,22 +15,24 @@ export const useFundInformation = () => {
   // constant
   const timelockAddress = CONTRACT_ADDRESSES.timelock.rinkeby;
 
-  const getFailSafeTokenBalance = async () => {
-    // fail safe timelock
-    try {
-      const bigBalance = await signedTokenContract?.balanceOf(timelockAddress);
-      const balance = parseBigNumber(Number(bigBalance.toString()));
-      const fundBalanceLabel = labelNumber(balance);
-      if (bigBalance) setFundBalance(fundBalanceLabel);
-    } catch (e) {
-      console.log(
-        "🚀 ~ file: useFundInformation.ts ~ line 27 ~ getFailSafeTokenBalance ~ e",
-        e
-      );
-    }
-  };
-
   useEffect(() => {
+    const getFailSafeTokenBalance = async () => {
+      // fail safe timelock
+      try {
+        const bigBalance = await signedTokenContract?.balanceOf(
+          timelockAddress
+        );
+        const balance = parseBigNumber(Number(bigBalance.toString()));
+        const fundBalanceLabel = labelNumber(balance);
+        if (bigBalance) setFundBalance(fundBalanceLabel);
+      } catch (e) {
+        console.log(
+          "🚀 ~ file: useFundInformation.ts ~ line 27 ~ getFailSafeTokenBalance ~ e",
+          e
+        );
+      }
+    };
+
     if (signedTokenContract) getFailSafeTokenBalance();
   }, [timelockAddress, signedTokenContract]);
 

@@ -65,7 +65,7 @@ const RequestPayment: FC<FlexProps & Props> = ({
             errors={errors}
             touched={touched}
             onChange={handleChange}
-            maxW={96}
+            maxW="lg"
           />
           <FormInput
             name="amount"

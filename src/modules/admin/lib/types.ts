@@ -16,7 +16,7 @@ export type GrantedRole = {
 export type Transaction = {
   txHash: string;
   eta: string;
-  transferTo?: string;
+  transferTo: string;
   rawAmount?: string;
   date: string;
   signature: string;

@@ -8,9 +8,9 @@ export const ROLES = [
 ];
 
 export const FundManagementSteps = [
-  { type: "1", description: "Review the payments requested to FailSafe." },
+  { type: "Step 1", description: "Review the payments requested to FailSafe." },
   {
-    type: "2",
+    type: "Step 2",
     description:
       "You can cancel the transaction if doesn't comply to the grant agreement.",
   },

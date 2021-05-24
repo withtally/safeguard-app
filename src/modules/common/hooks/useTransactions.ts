@@ -57,7 +57,7 @@ export const useTransactions = (): Values => {
   const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
 
   // custom hook
-  const { signedContract } = useSignedContract({
+  const { signedContract: signedTimelockContract } = useSignedContract({
     contractAddress: timelockAddress,
     contractAbi: TIMELOCK_JSON.abi,
   });
@@ -67,24 +67,24 @@ export const useTransactions = (): Values => {
   const getTimelockEvents = async () => {
     try {
       const queuedEventFilter =
-        await signedContract?.filters.QueueTransaction();
-      const queuedTransactions = await signedContract?.queryFilter(
+        await signedTimelockContract?.filters.QueueTransaction();
+      const queuedTransactions = await signedTimelockContract?.queryFilter(
         queuedEventFilter
       );
 
       const canceledEventFilter =
-        await signedContract?.filters.CancelTransaction();
-      const canceledTransactions = await signedContract?.queryFilter(
+        await signedTimelockContract?.filters.CancelTransaction();
+      const canceledTransactions = await signedTimelockContract?.queryFilter(
         canceledEventFilter
       );
 
       const executedEventFilter =
-        await signedContract?.filters.ExecuteTransaction();
-      const executedTransactions = await signedContract?.queryFilter(
+        await signedTimelockContract?.filters.ExecuteTransaction();
+      const executedTransactions = await signedTimelockContract?.queryFilter(
         executedEventFilter
       );
 
-      const gracePeriodLabel = await signedContract?.GRACE_PERIOD();
+      const gracePeriodLabel = await signedTimelockContract?.GRACE_PERIOD();
       const gracePeriod = Number(gracePeriodLabel.toString());
       const currentTimestamp = Number(dayjs().format("X"));
 
@@ -97,7 +97,7 @@ export const useTransactions = (): Values => {
           if (item) {
             return {
               ...item,
-              currentlyQueued: await signedContract?.queuedTransactions(
+              currentlyQueued: await signedTimelockContract?.queuedTransactions(
                 item.txHash
               ),
               canceled: canceledTransactions.some(
@@ -129,8 +129,30 @@ export const useTransactions = (): Values => {
   };
 
   useEffect(() => {
-    if (signedContract) getTimelockEvents();
+    if (signedTimelockContract) getTimelockEvents();
   }, []);
+
+  useEffect(() => {
+    if (!signedTimelockContract) return;
+
+    signedTimelockContract.on("QueueTransaction", (event) => {
+      getTimelockEvents();
+    });
+
+    signedTimelockContract.on("ExecuteTransaction", (event) => {
+      getTimelockEvents();
+    });
+
+    signedTimelockContract.on("CancelTransaction", (event) => {
+      getTimelockEvents();
+    });
+
+    return () => {
+      signedTimelockContract.removeAllListeners("QueueTransaction");
+      signedTimelockContract.removeAllListeners("ExecuteTransaction");
+      signedTimelockContract.removeAllListeners("CancelTransaction");
+    };
+  });
 
   // handlers
   const cancelTransaction = async (transaction: Transaction) => {
@@ -144,9 +166,6 @@ export const useTransactions = (): Values => {
         transaction.eta
       );
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-
-      await getTimelockEvents();
-
       setSubmitting(false);
     } catch (error) {
       console.log(
@@ -167,8 +186,6 @@ export const useTransactions = (): Values => {
         transaction.eta
       );
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-
-      await getTimelockEvents();
 
       setSubmitting(false);
     } catch (error) {
@@ -207,8 +224,6 @@ export const useTransactions = (): Values => {
       );
 
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-
-      await getTimelockEvents();
 
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();

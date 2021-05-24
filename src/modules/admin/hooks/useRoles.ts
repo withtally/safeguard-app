@@ -67,14 +67,28 @@ export const useRoles = (): Values => {
     if (signedContract) getGrantedRoles();
   }, []);
 
-  // handlers
+  useEffect(() => {
+    if (!signedContract) return;
 
+    signedContract.on("RoleGranted", (event) => {
+      getGrantedRoles();
+    });
+
+    signedContract.on("RoleRevoked", (event) => {
+      getGrantedRoles();
+    });
+    return () => {
+      signedContract.removeAllListeners("RoleGranted");
+      signedContract.removeAllListeners("RoleRevoked");
+    };
+  });
+
+  // handlers
   const revokeRole = async (role: string, address: string) => {
     try {
       setRevokingRole(true);
       const transferTx = await signedContract?.revokeRole(role, address);
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-      await getGrantedRoles();
       setRevokingRole(false);
     } catch (error) {
       console.log(

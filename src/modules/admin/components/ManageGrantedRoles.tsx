@@ -34,27 +34,14 @@ const ManageGrantedRoles: FC = () => {
           Manage granted roles
         </Text>
       </HStack>
-      {formSubmitting ? (
-        <Flex
-          align="center"
-          border="gray.dark"
-          minH="22.813rem"
-          bg="white"
-          justify="center"
-          direction="column"
-        >
-          <CircularProgress isIndeterminate color="purple.300" />
-        </Flex>
-      ) : (
-        <Flex border="gray.dark" bg="white" direction="column">
-          {grantedRoles && (
-            <AdminRolesTable
-              grantedRoles={grantedRoles}
-              revokeRole={revokeRole}
-            />
-          )}
-        </Flex>
-      )}
+      <Flex border="gray.dark" bg="white" direction="column">
+        {grantedRoles && (
+          <AdminRolesTable
+            grantedRoles={grantedRoles}
+            revokeRole={revokeRole}
+          />
+        )}
+      </Flex>
     </Stack>
   );
 };

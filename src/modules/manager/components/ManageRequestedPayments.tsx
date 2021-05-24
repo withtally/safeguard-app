@@ -2,16 +2,21 @@ import { FC } from "react";
 import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 
-// common
-import { useTransactions } from "modules/common/hooks/useTransactions";
+// manager
+import ManagerTransactionsTable from "modules/manager/components/ManagerTransactionsTable";
 
 // admin
-import AdminTransactionsTable from "modules/admin/components/AdminTransactionsTable";
+import { Transaction } from "modules/admin/lib/types";
 
-const ManageRequestedPayments: FC = () => {
-  // custom hooks
-  const { transactions, cancelTransaction } = useTransactions();
+type Props = {
+  transactions?: Transaction[];
+  executeTransaction: (transaction: Transaction) => Promise<void>;
+};
 
+const ManageRequestedPayments: FC<Props> = ({
+  transactions,
+  executeTransaction,
+}) => {
   return (
     <Stack
       as="section"
@@ -31,9 +36,9 @@ const ManageRequestedPayments: FC = () => {
       </HStack>
       <Flex border="gray.dark" bg="white" direction="column">
         {transactions && (
-          <AdminTransactionsTable
+          <ManagerTransactionsTable
             transactions={transactions}
-            cancelTransaction={cancelTransaction}
+            executeTransaction={executeTransaction}
           />
         )}
       </Flex>

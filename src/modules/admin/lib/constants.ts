@@ -8,8 +8,12 @@ export const ROLES = [
 ];
 
 export const FundManagementSteps = [
-  "Review the payments requested to FailSafe.",
-  "You can cancel the transaction if doesn't comply to the grant agreement.",
+  { type: "1", description: "Review the payments requested to FailSafe." },
+  {
+    type: "2",
+    description:
+      "You can cancel the transaction if doesn't comply to the grant agreement.",
+  },
 ];
 
 export const ROLE_TYPES_INFO = [

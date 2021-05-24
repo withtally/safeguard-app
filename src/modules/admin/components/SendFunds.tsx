@@ -8,7 +8,6 @@ import {
   Icon,
   Stack,
   Button,
-  Box,
 } from "@chakra-ui/react";
 import { IoAddCircleOutline } from "react-icons/io5";
 
@@ -18,6 +17,7 @@ import UniswapIcon from "modules/common/components/icons/UniswapIcon";
 
 // admin
 import { InitialValuesSendValues } from "modules/admin/lib/types";
+import { FundManagementSteps } from "modules/admin/lib/constants";
 import InstructionList from "modules/common/components/InstructionList";
 
 type Props = {
@@ -93,7 +93,10 @@ const SendFunds: FC<Props & FlexProps> = ({
           </Button>
         </HStack>
       </Flex>
-      <InstructionList title="Process flow" instructions={[]} />
+      <InstructionList
+        title="Process flow"
+        instructions={FundManagementSteps}
+      />
     </Flex>
   );
 };

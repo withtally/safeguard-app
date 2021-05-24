@@ -40,6 +40,7 @@ const FormSelect: FC<Props & FormControlProps> = ({
       }}
       id={name}
       name={name}
+      borderRadius="sm"
       placeholder={placeholder}
       value={value}
       onChange={onChange}

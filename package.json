@@ -19,6 +19,7 @@
     "@types/react-dom": "^17.0.0",
     "constate": "^3.2.0",
     "dayjs": "^1.10.4",
+    "ethereum-blockies-base64": "^1.0.2",
     "ethers": "^5.1.4",
     "formik": "^2.2.6",
     "framer-motion": "^4",

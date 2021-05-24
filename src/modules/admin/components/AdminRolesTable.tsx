@@ -1,7 +1,20 @@
 import { FC } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
+  HStack,
+  Text,
+} from "@chakra-ui/react";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+
+// common
+import Avatar from "modules/common/components/Avatar";
 
 // admin
 import { ROLES } from "modules/admin/lib/constants";
@@ -16,7 +29,7 @@ type Props = {
 
 const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
   return (
-    <Table variant="simple" size="md">
+    <Table variant="simple" size="lg">
       <Thead>
         <Tr>
           <Th>Address</Th>
@@ -29,11 +42,18 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
           const roleName = ROLES.find((item) => item.id === role.roleId)?.label;
           return (
             <Tr>
-              <Td>{role.address}</Td>
+              <Td>
+                <HStack spacing={2}>
+                  <Avatar address={role.address} />
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {role.address}
+                  </Text>
+                </HStack>
+              </Td>
               <Td>{roleName}</Td>
               <Td>
                 <Button
-                  size="lg"
+                  size="md"
                   variant="error"
                   onClick={() => revokeRole(role.roleId, role.address)}
                 >

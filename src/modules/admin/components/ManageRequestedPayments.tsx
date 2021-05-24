@@ -9,21 +9,16 @@ import {
 } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 
+// common
+import { useTransactions } from "modules/common/hooks/useTransactions";
+
 // admin
-import { Transaction } from "modules/admin/lib/types";
 import AdminTransactionsTable from "modules/admin/components/AdminTransactionsTable";
 
-type Props = {
-  transactions?: Transaction[];
-  cancelTransaction: (transaction: Transaction) => Promise<void>;
-  formSubmitting: boolean;
-};
+const ManageRequestedPayments: FC = () => {
+  // custom hooks
+  const { transactions, cancelTransaction, isSubmitting } = useTransactions();
 
-const ManageRequestedPayments: FC<Props> = ({
-  transactions,
-  formSubmitting,
-  cancelTransaction,
-}) => {
   return (
     <Stack
       as="section"
@@ -41,7 +36,7 @@ const ManageRequestedPayments: FC<Props> = ({
           Manage requested payments
         </Text>
       </HStack>
-      {formSubmitting ? (
+      {isSubmitting ? (
         <Flex
           align="center"
           border="gray.dark"

@@ -16,35 +16,15 @@ import FormInput from "modules/common/components/FormInput";
 import UniswapIcon from "modules/common/components/icons/UniswapIcon";
 
 // admin
-import { InitialValuesSendValues } from "modules/admin/lib/types";
+import { useManageFunds } from "modules/admin/hooks/useManageFunds";
 import { FundManagementSteps } from "modules/admin/lib/constants";
 import InstructionList from "modules/common/components/InstructionList";
 
-type Props = {
-  values: InitialValuesSendValues;
-  submitForm: () => Promise<any>;
-  handleChange: {
-    (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
-  isSubmitting: boolean;
-  errors: FormikErrors<InitialValuesSendValues>;
-  touched: FormikTouched<InitialValuesSendValues>;
-};
+const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
+  // custom hooks
+  const { values, handleChange, submitForm, isSubmitting, errors, touched } =
+    useManageFunds();
 
-const SendFunds: FC<Props & FlexProps> = ({
-  values,
-  errors,
-  touched,
-  handleChange,
-  submitForm,
-  isSubmitting,
-  ...flexProps
-}) => {
   return (
     <Flex
       as="article"

@@ -5,7 +5,6 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
 import { useTransactions } from "modules/common/hooks/useTransactions";
-import { useFundInformation } from "modules/common/hooks/useFundInformation";
 import FundInformationCard from "modules/common/components/FundInformationCard";
 
 // manager
@@ -29,15 +28,10 @@ const Payments: FC = () => {
     touched,
   } = useTransactions();
 
-  const { fundBalance, timelockAddress } = useFundInformation();
-
   return (
     <Flex direction="column" w="full">
       <PageHeader title="Payments" />
-      <FundInformationCard
-        timelockAddress={timelockAddress}
-        balance={fundBalance}
-      />
+      <FundInformationCard />
       <HStack align="center" mt={5} spacing={10} as="section" w="full">
         <RequestPaymentCard
           values={values}

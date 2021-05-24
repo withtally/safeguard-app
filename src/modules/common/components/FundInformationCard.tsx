@@ -1,12 +1,13 @@
 import { FC } from "react";
 import { HStack, Text, Flex, Stack } from "@chakra-ui/react";
 
-type Props = {
-  balance: string;
-  timelockAddress: string;
-};
+// common
+import { useFundInformation } from "modules/common/hooks/useFundInformation";
 
-const FundInformationCard: FC<Props> = ({ balance, timelockAddress }) => {
+const FundInformationCard: FC = () => {
+  // custom hooks
+  const { fundBalance, timelockAddress } = useFundInformation();
+
   return (
     <Flex
       as="section"
@@ -22,7 +23,7 @@ const FundInformationCard: FC<Props> = ({ balance, timelockAddress }) => {
           <Text color="gray.500" textStyle="label">
             Balance
           </Text>
-          <Text textStyle="h4">{balance} UNI</Text>
+          <Text textStyle="h4">{fundBalance} UNI</Text>
         </Stack>
         <Stack spacing={0.5}>
           <Text color="gray.500" textStyle="label">

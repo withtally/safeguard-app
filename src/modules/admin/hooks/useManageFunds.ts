@@ -11,7 +11,7 @@ import { InitialValuesSendValues } from "modules/admin/lib/types";
 import { ethers } from "ethers";
 
 const initialValues: InitialValuesSendValues = {
-  amount: "0",
+  amount: "",
   amountType: "",
 };
 
@@ -78,10 +78,11 @@ export const useManageFunds = (): Values => {
   };
 
   // formik hooks
-  const { values, handleChange, submitForm, isSubmitting, errors, touched } = useFormik({
-    initialValues,
-    onSubmit,
-  });
+  const { values, handleChange, submitForm, isSubmitting, errors, touched } =
+    useFormik({
+      initialValues,
+      onSubmit,
+    });
 
   return {
     fundBalance,
@@ -90,6 +91,6 @@ export const useManageFunds = (): Values => {
     submitForm,
     isSubmitting,
     errors,
-    touched
+    touched,
   };
 };

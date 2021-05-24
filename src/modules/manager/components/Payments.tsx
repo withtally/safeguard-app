@@ -6,14 +6,13 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 // common
 import { useTransactions } from "modules/common/hooks/useTransactions";
 import { useFundInformation } from "modules/common/hooks/useFundInformation";
+import FundInformationCard from "modules/common/components/FundInformationCard";
 
 // manager
 import ManagerTransactionsTable from "modules/manager/components/ManagerTransactionsTable";
 import { PaymentsFlowSteps } from "modules/manager/lib/constants";
 import RequestPaymentCard from "modules/manager/components/RequestPaymentCard";
-
-// admin
-import FundInfoCard from "modules/admin/components/FundInfoCard";
+import PageHeader from "modules/common/components/PageHeader";
 
 dayjs.extend(advancedFormat);
 
@@ -34,12 +33,12 @@ const Payments: FC = () => {
 
   return (
     <Flex direction="column" w="full">
+      <PageHeader title="Payments" />
+      <FundInformationCard
+        timelockAddress={timelockAddress}
+        balance={fundBalance}
+      />
       <HStack align="center" mt={5} spacing={10} as="section" w="full">
-        <FundInfoCard
-          balance={fundBalance}
-          timelockAddress={timelockAddress}
-          processFlowSteps={PaymentsFlowSteps}
-        />
         <RequestPaymentCard
           values={values}
           errors={errors}

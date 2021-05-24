@@ -6,13 +6,12 @@ export type InitialValuesRoles = {
 export type InitialValuesSendValues = {
   amount: string;
   amountType: string;
-}
+};
 
 export type GrantedRole = {
   address: string;
   roleId: string;
-}
-
+};
 
 export type Transaction = {
   txHash: string;

@@ -66,6 +66,7 @@ const GrantRoleForm: FC<Props> = ({
           onClick={submitForm}
           size="md"
           variant="primary"
+          loadingText="Minning"
           isLoading={isSubmitting}
         >
           Grant role

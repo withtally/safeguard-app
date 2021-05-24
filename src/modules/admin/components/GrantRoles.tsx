@@ -3,10 +3,13 @@ import { FormikErrors, FormikTouched } from "formik";
 import { Text, Flex, FlexProps, HStack, Icon } from "@chakra-ui/react";
 import { IoAddCircleOutline } from "react-icons/io5";
 
+// common
+import InstructionList from "modules/common/components/InstructionList";
+
 // admin
 import { InitialValuesRoles } from "modules/admin/lib/types";
-import RoleTypesInfo from "modules/admin/components/RoleTypesInfo";
 import GrantRoleForm from "modules/admin/components/GrantRoleForm";
+import { ROLE_TYPES_INFO } from "modules/admin/lib/constants";
 
 type Props = {
   values: InitialValuesRoles;
@@ -60,7 +63,7 @@ const GrantRoles: FC<Props & FlexProps> = ({
           touched={touched}
         />
       </Flex>
-      <RoleTypesInfo />
+      <InstructionList title="Types of roles" instructions={ROLE_TYPES_INFO} />
     </Flex>
   );
 };

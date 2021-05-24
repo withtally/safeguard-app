@@ -24,7 +24,7 @@ dayjs.extend(advancedFormat);
 
 const initialValues: InitialValuesRequestFunds = {
   unitType: "",
-  amount: "0",
+  amount: "",
   address: "",
 };
 

@@ -6,7 +6,7 @@ type Props = {
   description: string;
 };
 
-const RoleType: FC<Props> = ({ type, description }) => {
+const InstructionElement: FC<Props> = ({ type, description }) => {
   return (
     <Stack spacing={1}>
       <Text color="purple.500" textStyle="body.bold.md">
@@ -19,4 +19,4 @@ const RoleType: FC<Props> = ({ type, description }) => {
   );
 };
 
-export default RoleType;
+export default InstructionElement;

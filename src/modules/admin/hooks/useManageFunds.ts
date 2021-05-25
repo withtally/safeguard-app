@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useFormik, FormikErrors, FormikTouched } from "formik";
+import { useToast } from "@chakra-ui/react";
 
 // common
 import { useSignedTokenContract } from "modules/common/hooks/useSignedTokenContract";
 import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
+import { useUserInfo } from "modules/common/hooks/useUserInfo";
 
 // admin
 import { InitialValuesSendValues } from "modules/admin/lib/types";
 import { ethers } from "ethers";
+import { SendFundsValidationSchema } from "modules/admin/lib/validations";
 
 const initialValues: InitialValuesSendValues = {
   amount: "",
@@ -36,9 +39,13 @@ export const useManageFunds = (): Values => {
   // react hooks
   const [fundBalance, setFundBalance] = useState("0");
 
+  // chakra hooks
+  const toast = useToast();
+
   // custom hook
   const { signedContract: signedTokenContract } = useSignedTokenContract();
   const { web3 } = useWeb3();
+  const { hasAdminRole } = useUserInfo();
 
   // constant
   const timelockAddress = CONTRACT_ADDRESSES.timelock.rinkeby;
@@ -54,6 +61,16 @@ export const useManageFunds = (): Values => {
     formValues: InitialValuesSendValues,
     formikInfo: any
   ) => {
+    if (!hasAdminRole) {
+      toast({
+        title: "Error",
+        description: "You don't have the role needed for this action",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     try {
       formikInfo.setSubmitting(true);
 
@@ -82,6 +99,7 @@ export const useManageFunds = (): Values => {
     useFormik({
       initialValues,
       onSubmit,
+      validate: SendFundsValidationSchema,
     });
 
   return {

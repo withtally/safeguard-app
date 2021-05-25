@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
 
 // common
 import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
 import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
+import { useUserInfo } from "modules/common/hooks/useUserInfo";
 
 // admin
 import { GrantedRole } from "modules/admin/lib/types";
@@ -18,9 +20,14 @@ export const useRoles = (): Values => {
   // react hooks
   const [grantedRoles, setGrantedRoles] = useState<GrantedRole[]>();
   const [revokingRole, setRevokingRole] = useState(false);
+
+  // chakra hooks
+  const toast = useToast();
+
   // custom hooks
   const { signedContract } = useSignedRolManagerContract();
   const { web3 } = useWeb3();
+  const { hasAdminRole } = useUserInfo();
 
   const getGrantedRoles = async () => {
     const { proposerRole, executorRole, cancelerRole } = ROLES_HASHES;
@@ -85,6 +92,16 @@ export const useRoles = (): Values => {
 
   // handlers
   const revokeRole = async (role: string, address: string) => {
+    if (!hasAdminRole) {
+      toast({
+        title: "Error",
+        description: "You don't have the role needed for this action",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     try {
       setRevokingRole(true);
       const transferTx = await signedContract?.revokeRole(role, address);

@@ -6,6 +6,7 @@ import { useWeb3 } from "modules/common/hooks/useWeb3";
 
 // admin
 import { InitialValuesRoles } from "modules/admin/lib/types";
+import { GrantRoleValidationSchema } from "modules/admin/lib/validations";
 
 const initialValues: InitialValuesRoles = {
   role: "",
@@ -57,6 +58,7 @@ export const useGrantRole = (): Values => {
     useFormik({
       initialValues,
       onSubmit,
+      validate: GrantRoleValidationSchema,
     });
 
   return {

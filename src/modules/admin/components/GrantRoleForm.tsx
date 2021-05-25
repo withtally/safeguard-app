@@ -15,8 +15,8 @@ const GrantRoleForm: FC = () => {
     useGrantRole();
   return (
     <form id="grantRoleForm">
-      <HStack spacing={4} mb={10} align="end" w="full">
-        <HStack spacing={4} align="center" w="xl">
+      <HStack spacing={4} mb={10} w="full">
+        <HStack spacing={4} w="xl" align="center">
           <FormSelect
             id="role"
             name="role"
@@ -24,7 +24,10 @@ const GrantRoleForm: FC = () => {
             value={values.role}
             placeholder="Select role"
             onChange={handleChange}
+            errors={errors}
+            touched={touched}
             w={44}
+            h="6.125rem"
           >
             {ROLES.map((rol) => (
               <option value={rol.id}>{rol.label}</option>
@@ -39,6 +42,7 @@ const GrantRoleForm: FC = () => {
             errors={errors}
             touched={touched}
             onChange={handleChange}
+            h="6.125rem"
           />
         </HStack>
         <Button

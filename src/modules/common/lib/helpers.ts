@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { abbreviate } from '@pqt/abbreviate';
+import { abbreviate } from "@pqt/abbreviate";
 import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
 
 // address
@@ -20,9 +20,8 @@ export const labelNumber = (number: number): string => {
   if (number === 0) return String(0);
   if (number > 0.01) return String(limitNumberDecimals(number));
 
-  return '< 0.01';
+  return "< 0.01";
 };
-
 
 export const unhashCalldata = (
   calldata: string
@@ -37,4 +36,3 @@ export const unhashCalldata = (
     console.log("🚀 ~ file: helpers.ts ~ line 45 ~ error");
   }
 };
-

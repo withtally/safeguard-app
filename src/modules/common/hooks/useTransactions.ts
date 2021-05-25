@@ -3,6 +3,7 @@ import { useFormik, FormikErrors, FormikTouched } from "formik";
 import dayjs from "dayjs";
 import { ethers } from "ethers";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import { useToast } from "@chakra-ui/react";
 
 // common
 import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
@@ -12,6 +13,8 @@ import TIMELOCK_JSON from "modules/common/lib/abis/Timelock.json";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { parseTransaction } from "modules/common/lib/parsers/parseTransaction";
 import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
+import { useUserInfo } from "modules/common/hooks/useUserInfo";
+import { RequestPaymentValidationSchema } from "modules/common/lib/validations";
 
 // manager
 import { InitialValuesRequestFunds } from "modules/manager/lib/types";
@@ -52,6 +55,9 @@ export const useTransactions = (): Values => {
   const [transactions, setTransactions] = useState<Transaction[]>();
   const [isSubmitting, setSubmitting] = useState(false);
 
+  // chakra hooks
+  const toast = useToast();
+
   // constants
   const timelockAddress = CONTRACT_ADDRESSES.timelock.rinkeby;
   const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
@@ -63,6 +69,7 @@ export const useTransactions = (): Values => {
   });
   const { signedContract: signedRolContract } = useSignedRolManagerContract();
   const { web3 } = useWeb3();
+  const { hasCancelerRole, hasExecutorRole, hasProposerRole } = useUserInfo();
 
   const getTimelockEvents = async () => {
     try {
@@ -156,6 +163,16 @@ export const useTransactions = (): Values => {
 
   // handlers
   const cancelTransaction = async (transaction: Transaction) => {
+    if (!hasCancelerRole) {
+      toast({
+        title: "Error",
+        description: "You don't have the role needed for this action",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     try {
       setSubmitting(true);
       const transferTx = await signedRolContract?.cancelTransaction(
@@ -176,6 +193,16 @@ export const useTransactions = (): Values => {
   };
 
   const executeTransaction = async (transaction: Transaction) => {
+    if (!hasExecutorRole) {
+      toast({
+        title: "Error",
+        description: "You don't have the role needed for this action",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     try {
       setSubmitting(true);
       const transferTx = await signedRolContract?.executeTransaction(
@@ -200,6 +227,16 @@ export const useTransactions = (): Values => {
     formValues: InitialValuesRequestFunds,
     formikInfo: any
   ) => {
+    if (!hasProposerRole) {
+      toast({
+        title: "Error",
+        description: "You don't have the role needed for this action",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     try {
       formikInfo.setSubmitting(true);
       const tokenInterface = new ethers.utils.Interface(TOKEN_JSON.abi);
@@ -246,6 +283,7 @@ export const useTransactions = (): Values => {
   } = useFormik({
     initialValues,
     onSubmit,
+    validate: RequestPaymentValidationSchema,
   });
 
   return {

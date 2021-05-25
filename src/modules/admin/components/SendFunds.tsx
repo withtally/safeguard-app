@@ -1,18 +1,9 @@
 import { FC } from "react";
-import {
-  Text,
-  Flex,
-  FlexProps,
-  HStack,
-  Icon,
-  Stack,
-  Button,
-} from "@chakra-ui/react";
+import { Text, Flex, FlexProps, HStack, Icon, Button } from "@chakra-ui/react";
 import { IoAddCircleOutline } from "react-icons/io5";
 
 // common
-import FormInput from "modules/common/components/FormInput";
-import UniswapIcon from "modules/common/components/icons/UniswapIcon";
+import FormAmountInput from "modules/common/components/FormAmountInput";
 
 // admin
 import { useManageFunds } from "modules/admin/hooks/useManageFunds";
@@ -43,15 +34,8 @@ const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
           </Text>
         </HStack>
 
-        <HStack align="end" spacing={3}>
-          <Stack spacing={1}>
-            <Text textStyle="label">Token</Text>
-            <HStack px={2} w="5.188rem" h={10} spacing={1} border="gray.dark">
-              <UniswapIcon w={5} h={5} />
-              <Text textStyle="body.regular.md">UNI</Text>
-            </HStack>
-          </Stack>
-          <FormInput
+        <HStack align="center" spacing={3}>
+          <FormAmountInput
             name="amount"
             id="amount"
             label="Amount"
@@ -61,6 +45,7 @@ const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
             touched={touched}
             onChange={handleChange}
             w={64}
+            h="6.125rem"
           />
           <Button
             isLoading={isSubmitting}

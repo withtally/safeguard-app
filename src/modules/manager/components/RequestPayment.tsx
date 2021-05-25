@@ -4,6 +4,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { FormikErrors, FormikTouched } from "formik";
 
 // common
+import FormAmountInput from "modules/common/components/FormAmountInput";
 import FormInput from "modules/common/components/FormInput";
 import InstructionList from "modules/common/components/InstructionList";
 
@@ -55,7 +56,7 @@ const RequestPayment: FC<FlexProps & Props> = ({
           </Text>
         </HStack>
 
-        <HStack align="end" spacing={3}>
+        <HStack align="center" spacing={3}>
           <FormInput
             name="address"
             id="address"
@@ -66,8 +67,9 @@ const RequestPayment: FC<FlexProps & Props> = ({
             touched={touched}
             onChange={handleChange}
             maxW="lg"
+            h="6.125rem"
           />
-          <FormInput
+          <FormAmountInput
             name="amount"
             id="amount"
             label="Amount"

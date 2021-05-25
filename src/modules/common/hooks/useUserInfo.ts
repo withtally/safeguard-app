@@ -1,16 +1,23 @@
 import { useState, useEffect } from "react";
 
 // common
-import { Routes } from "modules/common/lib/types";
 import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 
-export const useUserInfo = () => {
+type Values = {
+  hasAdminRole: boolean;
+  hasProposerRole: boolean;
+  hasCancelerRole: boolean;
+  hasExecutorRole: boolean;
+};
+
+export const useUserInfo = (): Values => {
   // react hooks
-  const [userIsAdmin, setUserIsAdmin] = useState(false);
-  const [userIsManager, setUserIsManager] = useState(false);
-  const [userRole, setUserRole] = useState<keyof Routes | undefined>();
+  const [hasAdminRole, setHasAdminRole] = useState(false);
+  const [hasProposerRole, setHasProposerRole] = useState(false);
+  const [hasExecutorRole, setHasExecutorRole] = useState(false);
+  const [hasCancelerRole, setHasCancelerRole] = useState(false);
 
   // custom hooks
   const { signerAddress } = useWeb3();
@@ -18,13 +25,9 @@ export const useUserInfo = () => {
 
   useEffect(() => {
     const getUserRole = async () => {
-      const { adminRole, proposerRole, executorRole } = ROLES_HASHES;
+      const { adminRole, proposerRole, executorRole, cancelerRole } =
+        ROLES_HASHES;
       const admin = await signedContract?.hasRole(adminRole, signerAddress);
-
-      if (Boolean(admin)) {
-        setUserIsAdmin(admin);
-        return setUserRole("admin");
-      }
 
       const proposer = await signedContract?.hasRole(
         proposerRole,
@@ -36,18 +39,24 @@ export const useUserInfo = () => {
         signerAddress
       );
 
-      if (Boolean(proposer) || Boolean(executor)) {
-        setUserIsManager(true);
-        return setUserRole("manager");
-      }
+      const canceler = await signedContract?.hasRole(
+        cancelerRole,
+        signerAddress
+      );
+
+      setHasAdminRole(Boolean(admin));
+      setHasProposerRole(Boolean(proposer));
+      setHasExecutorRole(Boolean(executor));
+      setHasCancelerRole(Boolean(canceler));
     };
 
     if (signerAddress) getUserRole();
   }, [signerAddress, signedContract]);
 
   return {
-    userRole,
-    userIsManager,
-    userIsAdmin,
+    hasAdminRole,
+    hasProposerRole,
+    hasExecutorRole,
+    hasCancelerRole,
   };
 };

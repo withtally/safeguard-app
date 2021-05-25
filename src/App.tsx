@@ -8,7 +8,7 @@ import Layout from "modules/layout/components/Layout";
 import PublicRoute from "modules/common/lib/router/PublicRoute";
 
 // home
-import Home from "modules/home/Home";
+import Home from "modules/home/components/Home";
 
 // admin
 import Roles from "modules/admin/components/Roles";

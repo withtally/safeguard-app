@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoListOutline } from "react-icons/io5";
 
 // manager
 import ManagerTransactionsTable from "modules/manager/components/ManagerTransactionsTable";
@@ -29,7 +29,7 @@ const ManageRequestedPayments: FC<Props> = ({
       shadow="gray.card"
     >
       <HStack spacing={1.5}>
-        <Icon as={IoSettingsOutline} w={6} h={6} />
+        <Icon as={IoListOutline} w={6} h={6} />
         <Text color="gray.800" flex={1} mb={4} textStyle="paragraph">
           Manage requested payments
         </Text>

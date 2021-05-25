@@ -1,12 +1,5 @@
 import { FC } from "react";
-import {
-  CircularProgress,
-  HStack,
-  Text,
-  Flex,
-  Stack,
-  Icon,
-} from "@chakra-ui/react";
+import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 
 // admin

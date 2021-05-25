@@ -36,7 +36,7 @@ const AdminTransactionsTable: FC<Props> = ({
   cancelTransaction,
 }) => {
   return (
-    <Table variant="simple" size="md">
+    <Table variant="simple" size="lg">
       <Thead>
         <Tr>
           <Th>Destination address</Th>

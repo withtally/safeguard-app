@@ -76,10 +76,6 @@ export const useRequestFunds = (): Values => {
       const target = tokenAddress;
 
       let currentETA = await getTransactionEta(300, web3);
-      console.log(
-        "🚀 ~ file: useRequestFunds.ts ~ line 78 ~ onSubmit ~ currentETA",
-        currentETA
-      );
 
       // Now lets queue the transfer
       const transferSignature = "";

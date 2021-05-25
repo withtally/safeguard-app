@@ -1,8 +1,10 @@
 import { useFormik, FormikErrors, FormikTouched } from "formik";
+import { useToast } from "@chakra-ui/react";
 
 // common
 import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
+import { useUserInfo } from "modules/common/hooks/useUserInfo";
 
 // admin
 import { InitialValuesRoles } from "modules/admin/lib/types";
@@ -30,12 +32,26 @@ type Values = {
 };
 
 export const useGrantRole = (): Values => {
+  // chakra hooks
+  const toast = useToast();
+
   // custom hooks
   const { signedContract } = useSignedRolManagerContract();
   const { web3 } = useWeb3();
+  const { hasAdminRole } = useUserInfo();
 
   // handlers
   const onSubmit = async (formValues: InitialValuesRoles, formikInfo: any) => {
+    if (!hasAdminRole) {
+      toast({
+        title: "Error",
+        description: "You don't have the role needed for this action",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     try {
       formikInfo.setSubmitting(true);
       const transferTx = await signedContract?.grantRole(

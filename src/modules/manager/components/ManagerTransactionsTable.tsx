@@ -35,6 +35,7 @@ const ManagerTransactionsTable: FC<Props> = ({
   transactions,
   executeTransaction,
 }) => {
+  const hasRows = Boolean(transactions.length);
   return (
     <Table variant="simple" size="lg">
       <Thead>
@@ -84,6 +85,20 @@ const ManagerTransactionsTable: FC<Props> = ({
             </Tr>
           );
         })}
+        {!hasRows ? (
+          <Tr align="center" bg="gray.50" h={16} justify="center" w="full">
+            <Td></Td>
+            <Td></Td>
+            <Td>
+              <Text color="gray.600" textStyle="body.bold.sm">
+                No transactions yet
+              </Text>
+            </Td>
+            <Td></Td>
+            <Td></Td>
+            <Td></Td>
+          </Tr>
+        ) : null}
       </Tbody>
     </Table>
   );

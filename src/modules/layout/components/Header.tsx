@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { HStack, Link, Box, Flex, Text } from "@chakra-ui/react";
-import { Link as ReachLink, useLocation } from "@reach/router";
+import { Link as ReachLink } from "@reach/router";
 
 // common
 import { ROUTES } from "modules/common/lib/routes";
@@ -9,11 +9,6 @@ import { ROUTES } from "modules/common/lib/routes";
 import HeaderTopBorder from "modules/layout/components/HeaderTopBorder";
 
 const Header: FC = () => {
-  // const { pathname } = useLocation();
-  // const isRolesPage = pathname?.endsWith("/roles") ?? undefined;
-  // const isManagePage = pathname?.endsWith("/manage") ?? undefined;
-  // const isPaymentsPage = pathname?.endsWith("/payments") ?? undefined;
-
   return (
     <Flex display="column" border="gray.dark">
       <HeaderTopBorder />

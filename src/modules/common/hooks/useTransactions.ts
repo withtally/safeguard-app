@@ -184,6 +184,13 @@ export const useTransactions = (): Values => {
       );
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
       setSubmitting(false);
+      toast({
+        title: "Success",
+        description: "Transaction canceled!",
+        status: "success",
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(
         "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
@@ -215,6 +222,13 @@ export const useTransactions = (): Values => {
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
 
       setSubmitting(false);
+      toast({
+        title: "Success",
+        description: "Transaction executed!",
+        status: "success",
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(
         "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
@@ -264,6 +278,13 @@ export const useTransactions = (): Values => {
 
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
+      toast({
+        title: "Success",
+        description: "Payment requested!",
+        status: "success",
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(
         "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",

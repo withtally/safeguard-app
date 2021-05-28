@@ -58,9 +58,16 @@ export const useGrantRole = (): Values => {
         formValues.role,
         formValues.address
       );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3.waitForTransaction(transferTx.hash, 2);
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
+      toast({
+        title: "Success",
+        description: "Role granted!",
+        status: "success",
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(
         "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
@@ -70,18 +77,24 @@ export const useGrantRole = (): Values => {
   };
 
   // formik hooks
-  const { values, handleChange, submitForm, isSubmitting, errors, touched } =
-    useFormik({
-      initialValues,
-      onSubmit,
-      validate: GrantRoleValidationSchema,
-    });
+  const {
+    values,
+    handleChange,
+    submitForm,
+    isSubmitting: formSubmitting,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues,
+    onSubmit,
+    validate: GrantRoleValidationSchema,
+  });
 
   return {
     values,
     handleChange,
     submitForm,
-    formSubmitting: isSubmitting,
+    formSubmitting,
     errors,
     touched,
   };

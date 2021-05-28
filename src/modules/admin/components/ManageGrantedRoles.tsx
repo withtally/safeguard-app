@@ -8,7 +8,7 @@ import { useRoles } from "modules/admin/hooks/useRoles";
 
 const ManageGrantedRoles: FC = () => {
   // custom hooks
-  const { grantedRoles, revokeRole, formSubmitting } = useRoles();
+  const { grantedRoles, revokeRole } = useRoles();
 
   return (
     <Stack

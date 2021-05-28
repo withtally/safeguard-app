@@ -35,6 +35,7 @@ const AdminTransactionsTable: FC<Props> = ({
   transactions,
   cancelTransaction,
 }) => {
+  const hasRows = Boolean(transactions.length);
   return (
     <Table variant="simple" size="lg">
       <Thead>
@@ -53,7 +54,7 @@ const AdminTransactionsTable: FC<Props> = ({
           const btnDisabled =
             transaction.canceled || transaction.executed || transaction.stale;
           return (
-            <Tr>
+            <Tr key={transaction.txHash}>
               <Td>
                 <HStack spacing={2}>
                   <Avatar address={transaction.transferTo} />
@@ -87,6 +88,20 @@ const AdminTransactionsTable: FC<Props> = ({
             </Tr>
           );
         })}
+        {!hasRows ? (
+          <Tr align="center" bg="gray.50" h={16} justify="center" w="full">
+            <Td></Td>
+            <Td></Td>
+            <Td>
+              <Text color="gray.600" textStyle="body.bold.sm">
+                No transactions yet
+              </Text>
+            </Td>
+            <Td></Td>
+            <Td></Td>
+            <Td></Td>
+          </Tr>
+        ) : null}
       </Tbody>
     </Table>
   );

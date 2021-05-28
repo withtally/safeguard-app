@@ -13,7 +13,7 @@ import { GrantedRole } from "modules/admin/lib/types";
 type Values = {
   grantedRoles: GrantedRole[] | undefined;
   revokeRole: (role: string, address: string) => Promise<void>;
-  formSubmitting: boolean;
+  revokingRole: boolean;
 };
 
 export const useRoles = (): Values => {
@@ -107,6 +107,13 @@ export const useRoles = (): Values => {
       const transferTx = await signedContract?.revokeRole(role, address);
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
       setRevokingRole(false);
+      toast({
+        title: "Success",
+        description: "Role revoked!",
+        status: "success",
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(
         "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
@@ -118,6 +125,6 @@ export const useRoles = (): Values => {
   return {
     grantedRoles,
     revokeRole,
-    formSubmitting: revokingRole,
+    revokingRole,
   };
 };

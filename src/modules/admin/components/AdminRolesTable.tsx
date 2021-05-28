@@ -15,11 +15,6 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
 import Avatar from "modules/common/components/Avatar";
-import {
-  UsersInformation,
-  useUserInformation,
-} from "modules/common/hooks/useUserInformation";
-import { getProfileImage, getUsername } from "modules/common/lib/helpers";
 
 // admin
 import { ROLES } from "modules/admin/lib/constants";

@@ -12,7 +12,7 @@ const StatusTag: FC<Props & TagProps> = ({ status, ...tagProps }) => {
   // constants
   const STATUSES_STYLES = {
     pending: {
-      bg: "purple.100",
+      bg: "purple.50",
       textColor: "purple.500",
       text: "Pending",
     },
@@ -23,17 +23,17 @@ const StatusTag: FC<Props & TagProps> = ({ status, ...tagProps }) => {
     },
     available: {
       bg: "teal.50",
-      textColor: "teal.500",
+      textColor: "teal.600",
       text: "Available",
     },
     canceled: {
-      bg: "red.100",
+      bg: "red.50",
       textColor: "red.500",
       text: "Canceled",
     },
     executed: {
-      bg: "teal.50",
-      textColor: "teal.600",
+      bg: "external.twitterLight",
+      textColor: "external.twitter",
       text: "Executed",
     },
   };

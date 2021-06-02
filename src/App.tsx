@@ -5,27 +5,26 @@ import { Router } from "@reach/router";
 import Layout from "modules/layout/components/Layout";
 
 // common
-import PrivateRoute from "modules/common/lib/router/PrivateRoute";
 import PublicRoute from "modules/common/lib/router/PublicRoute";
 
 // home
-import Home from "modules/home/Home";
+import Home from "modules/home/components/Home";
 
 // admin
 import Roles from "modules/admin/components/Roles";
-import AdministrateFund from "modules/admin/components/AdministrateFund";
+import Manage from "modules/admin/components/Manage";
 
 // manager
-import ManageFund from "modules/manager/components/ManageFund";
+import Payments from "modules/manager/components/Payments";
 
 const App: FC = () => {
   return (
     <Layout>
       <Router>
         <PublicRoute component={Home} path="/" />
-        <PublicRoute component={Roles} path="/administrator" />
-        <PublicRoute component={AdministrateFund} path="/administrator/fund" />
-        <PublicRoute component={ManageFund} path="/manager" />
+        <PublicRoute component={Roles} path="/roles" />
+        <PublicRoute component={Manage} path="/manage" />
+        <PublicRoute component={Payments} path="/payments" />
       </Router>
     </Layout>
   );

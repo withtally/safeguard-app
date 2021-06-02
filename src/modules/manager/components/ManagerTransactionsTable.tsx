@@ -1,11 +1,22 @@
 import { FC } from "react";
-import { Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
+  HStack,
+  Text,
+} from "@chakra-ui/react";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
 import { parseBigNumber } from "modules/common/lib/helpers";
 import StatusTag from "modules/common/components/StatusTag";
+import Avatar from "modules/common/components/Avatar";
 
 // admin
 import { Transaction } from "modules/admin/lib/types";
@@ -25,10 +36,10 @@ const ManagerTransactionsTable: FC<Props> = ({
   executeTransaction,
 }) => {
   return (
-    <Table variant="simple" size="md">
+    <Table variant="simple" size="lg">
       <Thead>
         <Tr>
-          <Th>Transfer to</Th>
+          <Th>Destination address</Th>
           <Th isNumeric>Amount</Th>
           <Th>Date payment unlocks</Th>
           <Th>Date payment expires</Th>
@@ -44,7 +55,14 @@ const ManagerTransactionsTable: FC<Props> = ({
             !transaction.currentlyQueued || !etaMeet || transaction.stale;
           return (
             <Tr>
-              <Td>{transaction.transferTo}</Td>
+              <Td>
+                <HStack spacing={2}>
+                  <Avatar address={transaction.transferTo} />
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {transaction.transferTo}
+                  </Text>
+                </HStack>
+              </Td>
               <Td isNumeric>
                 {parseBigNumber(Number(transaction.rawAmount))} UNI
               </Td>

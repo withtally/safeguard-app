@@ -1,45 +1,33 @@
 import { useState, useEffect } from "react";
-import { useFormik, FormikErrors, FormikTouched } from "formik";
-import { ethers } from "ethers";
+import { useToast } from "@chakra-ui/react";
 
 // common
 import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
 import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
+import { useUserInfo } from "modules/common/hooks/useUserInfo";
 
 // admin
-import { InitialValuesRoles, GrantedRole } from "modules/admin/lib/types";
-
-const initialValues: InitialValuesRoles = {
-  role: "",
-  address: "",
-};
+import { GrantedRole } from "modules/admin/lib/types";
 
 type Values = {
-  values: InitialValuesRoles;
-  submitForm: () => Promise<any>;
-  handleChange: {
-    (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
   grantedRoles: GrantedRole[] | undefined;
   revokeRole: (role: string, address: string) => Promise<void>;
   formSubmitting: boolean;
-  errors: FormikErrors<InitialValuesRoles>;
-  touched: FormikTouched<InitialValuesRoles>;
 };
 
 export const useRoles = (): Values => {
   // react hooks
   const [grantedRoles, setGrantedRoles] = useState<GrantedRole[]>();
   const [revokingRole, setRevokingRole] = useState(false);
+
+  // chakra hooks
+  const toast = useToast();
+
   // custom hooks
   const { signedContract } = useSignedRolManagerContract();
   const { web3 } = useWeb3();
+  const { hasAdminRole } = useUserInfo();
 
   const getGrantedRoles = async () => {
     const { proposerRole, executorRole, cancelerRole } = ROLES_HASHES;
@@ -86,32 +74,38 @@ export const useRoles = (): Values => {
     if (signedContract) getGrantedRoles();
   }, []);
 
-  // handlers
-  const onSubmit = async (formValues: InitialValuesRoles, formikInfo: any) => {
-    try {
-      formikInfo.setSubmitting(true);
-      const transferTx = await signedContract?.grantRole(
-        formValues.role,
-        formValues.address
-      );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-      await getGrantedRoles();
-      formikInfo.setSubmitting(false);
-      formikInfo.resetForm();
-    } catch (error) {
-      console.log(
-        "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
-        error
-      );
-    }
-  };
+  useEffect(() => {
+    if (!signedContract) return;
 
+    signedContract.on("RoleGranted", (event) => {
+      getGrantedRoles();
+    });
+
+    signedContract.on("RoleRevoked", (event) => {
+      getGrantedRoles();
+    });
+    return () => {
+      signedContract.removeAllListeners("RoleGranted");
+      signedContract.removeAllListeners("RoleRevoked");
+    };
+  });
+
+  // handlers
   const revokeRole = async (role: string, address: string) => {
+    if (!hasAdminRole) {
+      toast({
+        title: "Error",
+        description: "You don't have the role needed for this action",
+        status: "error",
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
     try {
       setRevokingRole(true);
       const transferTx = await signedContract?.revokeRole(role, address);
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-      await getGrantedRoles();
       setRevokingRole(false);
     } catch (error) {
       console.log(
@@ -121,20 +115,9 @@ export const useRoles = (): Values => {
     }
   };
 
-  // formik hooks
-  const { values, handleChange, submitForm, isSubmitting, errors, touched } = useFormik({
-    initialValues,
-    onSubmit,
-  });
-
   return {
     grantedRoles,
-    values,
-    handleChange,
-    submitForm,
     revokeRole,
-    formSubmitting: isSubmitting || revokingRole,
-    errors,
-    touched
+    formSubmitting: revokingRole,
   };
 };

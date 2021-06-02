@@ -1,11 +1,17 @@
 import { FC } from "react";
-import { FormikHandlers } from "formik";
+import {
+  FormikErrors,
+  FormikValues,
+  FormikHandlers,
+  FormikTouched,
+} from "formik";
 
 import {
   FormControl,
   SelectProps,
   Select,
   FormControlProps,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 // common
@@ -20,6 +26,8 @@ type Props = {
   value: string;
   placeholder: string;
   selectProps?: SelectProps;
+  errors: FormikErrors<FormikValues>;
+  touched: FormikTouched<FormikValues>;
 };
 
 const FormSelect: FC<Props & FormControlProps> = ({
@@ -29,10 +37,15 @@ const FormSelect: FC<Props & FormControlProps> = ({
   placeholder,
   value,
   selectProps,
+  errors,
+  touched,
   onChange,
   ...formControlProps
 }) => (
-  <FormControl {...formControlProps}>
+  <FormControl
+    isInvalid={Boolean(touched?.[name] && errors?.[name])}
+    {...formControlProps}
+  >
     <FormLabel htmlFor={name}>{label}</FormLabel>
     <Select
       _focus={{
@@ -40,6 +53,7 @@ const FormSelect: FC<Props & FormControlProps> = ({
       }}
       id={name}
       name={name}
+      borderRadius="sm"
       placeholder={placeholder}
       value={value}
       onChange={onChange}
@@ -47,6 +61,7 @@ const FormSelect: FC<Props & FormControlProps> = ({
     >
       {children}
     </Select>
+    <FormErrorMessage>{errors?.[name]}</FormErrorMessage>
   </FormControl>
 );
 

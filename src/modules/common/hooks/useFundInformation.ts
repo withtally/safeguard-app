@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 
 // common
@@ -7,7 +6,7 @@ import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
 import { parseBigNumber, labelNumber } from "modules/common/lib/helpers";
 
 export const useFundInformation = () => {
-     // react hooks
+  // react hooks
   const [fundBalance, setFundBalance] = useState("0");
 
   // custom hook
@@ -16,20 +15,29 @@ export const useFundInformation = () => {
   // constant
   const timelockAddress = CONTRACT_ADDRESSES.timelock.rinkeby;
 
-  const getFailSafeTokenBalance = async () => {
-    // fail safe timelock
-    const bigBalance = await signedTokenContract?.balanceOf(timelockAddress);
-    const balance = parseBigNumber(Number(bigBalance.toString()));
-    const fundBalanceLabel = labelNumber(balance);
-    if (bigBalance) setFundBalance(fundBalanceLabel);
-  };
-
   useEffect(() => {
+    const getFailSafeTokenBalance = async () => {
+      // fail safe timelock
+      try {
+        const bigBalance = await signedTokenContract?.balanceOf(
+          timelockAddress
+        );
+        const balance = parseBigNumber(Number(bigBalance.toString()));
+        const fundBalanceLabel = labelNumber(balance);
+        if (bigBalance) setFundBalance(fundBalanceLabel);
+      } catch (e) {
+        console.log(
+          "🚀 ~ file: useFundInformation.ts ~ line 27 ~ getFailSafeTokenBalance ~ e",
+          e
+        );
+      }
+    };
+
     if (signedTokenContract) getFailSafeTokenBalance();
   }, [timelockAddress, signedTokenContract]);
 
   return {
-      fundBalance,
-      timelockAddress,
-  }
-}
+    fundBalance,
+    timelockAddress,
+  };
+};

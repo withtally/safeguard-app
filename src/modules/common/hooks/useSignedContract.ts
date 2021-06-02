@@ -8,14 +8,14 @@ type Values = {
 };
 
 type Props = {
-    contractAddress: string;
-    contractAbi: any;
-}
+  contractAddress: string;
+  contractAbi: any;
+};
 
-export const useSignedContract = ({contractAddress, contractAbi}: Props) => {
-    const { signer } = useWeb3();
+export const useSignedContract = ({ contractAddress, contractAbi }: Props) => {
+  const { signer } = useWeb3();
 
-    const signedContract = new Contract(contractAddress, contractAbi, signer);
-  
-    return { signedContract };
-}
+  const signedContract = new Contract(contractAddress, contractAbi, signer);
+
+  return { signedContract };
+};

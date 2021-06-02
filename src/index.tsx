@@ -8,6 +8,13 @@ import "modules/common/lib/styles.css";
 import theme from "modules/common/theme";
 import { Web3Provider } from "modules/common/hooks/useWeb3";
 
+// fonts
+import "typeface-open-sans";
+import "typeface-inter";
+import "typeface-montserrat";
+import "typeface-source-code-pro";
+import "typeface-dm-sans";
+
 import App from "./App";
 
 ReactDOM.render(

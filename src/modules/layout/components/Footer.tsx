@@ -28,7 +28,6 @@ const Footer: FC<StackProps> = ({ ...stackProps }) => {
     <Stack
       align={{ base: "center" }}
       as="footer"
-      bg="white"
       borderTop="gray.dark"
       justify="center"
       mt={{ base: 0, lg: 10 }}

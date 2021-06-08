@@ -8,15 +8,15 @@ export const ALLOWED_PATH_BY_ROLE: Routes = {
 
 export const CONTRACT_ADDRESSES = {
   timelock: {
-    rinkeby: "0xAbc92fa35cA56A6788a5bd132041070e92ef69a6",
+    rinkeby: "0x0D67FDda0D8e6333c2Ec4E3d2351DA979fBF6Bbf",
     mainnet: "",
   },
   token: {
-    rinkeby: "0xc7bE88b20B5623D7891Af6407fbbe1A38DE3C3Fe",
+    rinkeby: "0xB0926c1BC534813Aa51f209b91Bc0AA60feC7624",
     mainnet: "",
   },
   rolManager: {
-    rinkeby: "0x54e858b5025c7B8A684160435f0AAd2BC94cF271",
+    rinkeby: "0x43e342E3360015279EC682a40C45c50860B4b800",
     mainnet: "",
   },
 };

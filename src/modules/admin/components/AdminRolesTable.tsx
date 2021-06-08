@@ -15,6 +15,11 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
 import Avatar from "modules/common/components/Avatar";
+import {
+  UsersInformation,
+  useUserInformation,
+} from "modules/common/hooks/useUserInformation";
+import { getProfileImage, getUsername } from "modules/common/lib/helpers";
 
 // admin
 import { ROLES } from "modules/admin/lib/constants";
@@ -28,7 +33,18 @@ type Props = {
 };
 
 const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
+  // constants
+  const addresses = useMemo(
+    () => grantedRoles.map((role) => role.address),
+    [grantedRoles]
+  );
   const hasRows = Boolean(grantedRoles.length);
+
+  // custom hooks
+  const { usersInformation } = useUserInformation({
+    addresses,
+  });
+
   return (
     <Table variant="simple" size="lg">
       <Thead>
@@ -41,6 +57,7 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
       <Tbody>
         {grantedRoles.map((role, index) => {
           const roleName = ROLES.find((item) => item.id === role.roleId)?.label;
+          const username = getUsername(usersInformation, role.address, false);
 
           return (
             <Tr key={`${role.address}-${index}`}>
@@ -48,7 +65,7 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
                 <HStack spacing={2}>
                   <Avatar address={role.address} />
                   <Text color="gray.500" textStyle="body.regular.md">
-                    {role.address}
+                    {username}
                   </Text>
                 </HStack>
               </Td>

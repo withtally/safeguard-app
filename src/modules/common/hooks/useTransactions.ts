@@ -74,8 +74,8 @@ export const useTransactions = (): Values => {
   const getTimelockEvents = async () => {
     try {
       const queuedEventFilter =
-        await signedTimelockContract?.filters.QueueTransaction();
-      const queuedTransactions = await signedTimelockContract?.queryFilter(
+        await signedRolContract?.filters.QueueTransaction();
+      const queuedTransactions = await signedRolContract?.queryFilter(
         queuedEventFilter
       );
 

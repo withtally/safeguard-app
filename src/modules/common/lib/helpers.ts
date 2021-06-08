@@ -1,5 +1,10 @@
 import { ethers } from "ethers";
 import { abbreviate } from "@pqt/abbreviate";
+import { isAddress } from "ethers/lib/utils";
+import isEmpty from "lodash.isempty";
+
+// common
+import { UsersInformation } from "modules/common/hooks/useUserInformation";
 import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
 
 // address
@@ -35,4 +40,39 @@ export const unhashCalldata = (
   } catch (error) {
     console.log("🚀 ~ file: helpers.ts ~ line 45 ~ error");
   }
+};
+
+export const getProfileImage = (
+  usersInformation: UsersInformation,
+  address?: string
+): string | null => {
+  return address ? usersInformation?.[address]?.avatarUrl : null;
+};
+
+export const getUsername = (
+  usersInformation: UsersInformation,
+  address?: string | null,
+  isTruncated = true
+): string | null => {
+  if (!address) {
+    return null;
+  }
+
+  // methods
+  const applyTruncation = (address: string): string => {
+    return isTruncated ? shortAddress(address) : address;
+  };
+
+  // constants
+  const noUsersInformation = isEmpty(usersInformation);
+
+  if (noUsersInformation) {
+    return applyTruncation(address);
+  }
+
+  // constants
+  const displayName = usersInformation[address]?.displayName ?? "";
+  const username = displayName ? displayName : address;
+
+  return isAddress(username) ? applyTruncation(username) : username;
 };

@@ -6,7 +6,7 @@ import ROLE_MANAGER_JSON from "modules/common/lib/abis/RolManager.json";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 
 type Values = {
-  signedContract?: Contract;
+  signedContract: Contract;
 };
 
 export const useSignedRolManagerContract = (): Values => {

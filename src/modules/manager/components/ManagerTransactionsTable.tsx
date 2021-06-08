@@ -56,7 +56,7 @@ const ManagerTransactionsTable: FC<Props> = ({
           const btnDisabled =
             !transaction.currentlyQueued || !etaMeet || transaction.stale;
           return (
-            <Tr>
+            <Tr key={`${index}-${transaction.txHash}`}>
               <Td>
                 <HStack spacing={2}>
                   <Avatar address={transaction.transferTo} />

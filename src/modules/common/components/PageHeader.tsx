@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Flex, Text } from "@chakra-ui/react";
 
 // common
-import WavesBackground from "modules/layout/components/WavesBackground";
+import WavesBackground from "modules/common/components/WavesBackground";
 
 type Props = {
   title: string;

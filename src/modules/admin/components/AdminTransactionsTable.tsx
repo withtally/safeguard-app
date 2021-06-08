@@ -64,12 +64,26 @@ const AdminTransactionsTable: FC<Props> = ({
                   </Text>
                 </HStack>
               </Td>
-              <Td>{transaction.description}</Td>
-              <Td isNumeric>
-                {parseBigNumber(Number(transaction.rawAmount))} UNI
+              <Td>
+                <Text color="gray.500" textStyle="body.regular.md">
+                  {transaction.description}
+                </Text>
               </Td>
-              <Td>{transaction.date}</Td>
-              <Td>{transaction.expireDate}</Td>
+              <Td isNumeric>
+                <Text color="gray.500" textStyle="body.regular.md">
+                  {parseBigNumber(Number(transaction.rawAmount))} UNI
+                </Text>
+              </Td>
+              <Td>
+                <Text color="gray.500" textStyle="body.regular.md">
+                  {transaction.date}
+                </Text>
+              </Td>
+              <Td>
+                <Text color="gray.500" textStyle="body.regular.md">
+                  {transaction.expireDate}
+                </Text>
+              </Td>
               <Td>
                 <StatusTag
                   borderRadius="sm"

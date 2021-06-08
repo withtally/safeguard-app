@@ -5,7 +5,6 @@ import isEmpty from "lodash.isempty";
 
 // common
 import { UsersInformation } from "modules/common/hooks/useUserInformation";
-import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
 
 // address
 export const shortAddress = (
@@ -29,12 +28,17 @@ export const labelNumber = (number: number): string => {
 };
 
 export const unhashCalldata = (
-  calldata: string
+  calldata: string,
+  abi: any,
+  funcName: string
 ): ethers.utils.Result | undefined => {
   try {
-    const tokenInterface = new ethers.utils.Interface(TOKEN_JSON.abi);
+    const contractInterface = new ethers.utils.Interface(abi);
 
-    const decodedData = tokenInterface.decodeFunctionData("transfer", calldata);
+    const decodedData = contractInterface.decodeFunctionData(
+      funcName,
+      calldata
+    );
 
     return decodedData;
   } catch (error) {

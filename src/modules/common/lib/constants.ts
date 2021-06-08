@@ -1,11 +1,3 @@
-import { Routes } from "modules/common/lib/types";
-
-// TODO: figure out a better way to manage route access
-export const ALLOWED_PATH_BY_ROLE: Routes = {
-  admin: ["/administrator", "/administrator/fund"],
-  manager: ["/manager"],
-};
-
 export const CONTRACT_ADDRESSES = {
   timelock: {
     rinkeby: "0x0D67FDda0D8e6333c2Ec4E3d2351DA979fBF6Bbf",
@@ -17,6 +9,14 @@ export const CONTRACT_ADDRESSES = {
   },
   rolManager: {
     rinkeby: "0x43e342E3360015279EC682a40C45c50860B4b800",
+    mainnet: "",
+  },
+  registry: {
+    rinkeby: "0x36d4c9476e7091210Bc9e0C01d2075Efc183CA8b",
+    mainnet: "",
+  },
+  factory: {
+    rinkeby: "0xcB9f13923D71c09B3B7310ab0E1e56819B134f1d",
     mainnet: "",
   },
 };

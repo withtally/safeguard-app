@@ -1,6 +1,9 @@
 import { utils } from "ethers";
-import { unhashCalldata } from "../helpers";
 import dayjs from "dayjs";
+import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
+
+// common
+import { unhashCalldata } from "modules/common/lib/helpers";
 
 type Transaction = {
   txHash: string;
@@ -21,7 +24,11 @@ export const parseTransaction = (
   transaction: utils.Result,
   gracePeriod: number
 ): Transaction => {
-  const decodedInfo = unhashCalldata(transaction.data);
+  const decodedInfo = unhashCalldata(
+    transaction.data,
+    TOKEN_JSON.abi,
+    "transfer"
+  );
 
   const executableTime = gracePeriod + Number(transaction.eta.toString());
 

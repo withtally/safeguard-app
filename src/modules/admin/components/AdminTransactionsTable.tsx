@@ -37,10 +37,11 @@ const AdminTransactionsTable: FC<Props> = ({
 }) => {
   const hasRows = Boolean(transactions.length);
   return (
-    <Table variant="simple" size="lg">
+    <Table variant="simple" size="md">
       <Thead>
         <Tr>
           <Th>Destination address</Th>
+          <Th>Description</Th>
           <Th isNumeric>Amount</Th>
           <Th>Date tx unlocks</Th>
           <Th>Date tx expires</Th>
@@ -63,6 +64,7 @@ const AdminTransactionsTable: FC<Props> = ({
                   </Text>
                 </HStack>
               </Td>
+              <Td>{transaction.description}</Td>
               <Td isNumeric>
                 {parseBigNumber(Number(transaction.rawAmount))} UNI
               </Td>

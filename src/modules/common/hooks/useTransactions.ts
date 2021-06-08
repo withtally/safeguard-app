@@ -29,6 +29,7 @@ const initialValues: InitialValuesRequestFunds = {
   unitType: "",
   amount: "",
   address: "",
+  description: "",
 };
 
 type Values = {
@@ -271,7 +272,8 @@ export const useTransactions = (): Values => {
         value,
         transferSignature,
         transferCallData,
-        currentETA
+        currentETA,
+        formValues.description
       );
 
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);

@@ -29,4 +29,5 @@ export type Transaction = {
   stale: boolean;
   executableTime: number;
   expireDate: string;
+  description: string;
 };

@@ -14,9 +14,13 @@ type Transaction = {
   value: string;
   executableTime: number;
   expireDate: string;
+  description: string;
 };
 
-export const parseTransaction = (transaction: utils.Result, gracePeriod: number): Transaction => {
+export const parseTransaction = (
+  transaction: utils.Result,
+  gracePeriod: number
+): Transaction => {
   const decodedInfo = unhashCalldata(transaction.data);
 
   const executableTime = gracePeriod + Number(transaction.eta.toString());
@@ -30,6 +34,7 @@ export const parseTransaction = (transaction: utils.Result, gracePeriod: number)
     eta: transaction.eta.toString(),
     transferTo: decodedInfo?.dst,
     rawAmount: decodedInfo?.rawAmount.toString(),
+    description: transaction.description,
     date: dayjs(transaction.eta * 1000).format("MM/DD/YYYY hh:mm:ss A"),
     expireDate: dayjs(executableTime * 1000).format("MM/DD/YYYY hh:mm:ss A"),
     executableTime,

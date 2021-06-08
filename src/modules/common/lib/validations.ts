@@ -22,5 +22,9 @@ export const RequestPaymentValidationSchema = (
     errors.amount = "Must be a number";
   }
 
+  if (!values.description) {
+    errors.amount = "Required";
+  }
+
   return errors;
 };

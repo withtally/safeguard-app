@@ -30,7 +30,9 @@ const GrantRoleForm: FC = () => {
             h="6.125rem"
           >
             {ROLES.map((rol) => (
-              <option value={rol.id}>{rol.label}</option>
+              <option key={rol.id} value={rol.id}>
+                {rol.label}
+              </option>
             ))}
           </FormSelect>
           <FormInput
@@ -49,7 +51,6 @@ const GrantRoleForm: FC = () => {
           onClick={submitForm}
           size="md"
           variant="primary"
-          loadingText="Minning"
           isLoading={formSubmitting}
         >
           Grant role

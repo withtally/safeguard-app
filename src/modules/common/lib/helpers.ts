@@ -1,6 +1,11 @@
 import { ethers } from "ethers";
 import { abbreviate } from "@pqt/abbreviate";
-import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
+import { isAddress } from "ethers/lib/utils";
+import isEmpty from "lodash.isempty";
+import { JsonRpcSigner } from "@ethersproject/providers/lib/json-rpc-provider";
+
+// common
+import { UsersInformation } from "modules/common/hooks/useUserInformation";
 
 // address
 export const shortAddress = (
@@ -24,15 +29,55 @@ export const labelNumber = (number: number): string => {
 };
 
 export const unhashCalldata = (
-  calldata: string
+  calldata: string,
+  abi: any,
+  funcName: string
 ): ethers.utils.Result | undefined => {
   try {
-    const tokenInterface = new ethers.utils.Interface(TOKEN_JSON.abi);
+    const contractInterface = new ethers.utils.Interface(abi);
 
-    const decodedData = tokenInterface.decodeFunctionData("transfer", calldata);
+    const decodedData = contractInterface.decodeFunctionData(
+      funcName,
+      calldata
+    );
 
     return decodedData;
   } catch (error) {
     console.log("🚀 ~ file: helpers.ts ~ line 45 ~ error");
   }
+};
+
+export const getProfileImage = (
+  usersInformation: UsersInformation,
+  address?: string
+): string | null => {
+  return address ? usersInformation?.[address]?.avatarUrl : null;
+};
+
+export const getUsername = (
+  usersInformation: UsersInformation,
+  address?: string | null,
+  isTruncated = true
+): string | null => {
+  if (!address) {
+    return null;
+  }
+
+  // methods
+  const applyTruncation = (address: string): string => {
+    return isTruncated ? shortAddress(address) : address;
+  };
+
+  // constants
+  const noUsersInformation = isEmpty(usersInformation);
+
+  if (noUsersInformation) {
+    return applyTruncation(address);
+  }
+
+  // constants
+  const displayName = usersInformation[address]?.displayName ?? "";
+  const username = displayName ? displayName : address;
+
+  return isAddress(username) ? applyTruncation(username) : username;
 };

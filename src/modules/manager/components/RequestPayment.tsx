@@ -80,6 +80,18 @@ const RequestPayment: FC<FlexProps & Props> = ({
             onChange={handleChange}
             w={64}
           />
+          <FormInput
+            name="description"
+            id="description"
+            label="Description"
+            placeholder="Specify a description for the payment"
+            values={values}
+            errors={errors}
+            touched={touched}
+            onChange={handleChange}
+            maxW="xs"
+            h="6.125rem"
+          />
           <Button
             isLoading={isSubmitting}
             onClick={submitForm}

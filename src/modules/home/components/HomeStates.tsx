@@ -39,7 +39,7 @@ const HomeStates: FC = () => {
           </Thead>
           <Tbody>
             {STATES_INFORMATION.map(({ state, description }) => (
-              <Tr>
+              <Tr key={state}>
                 <Td textStyle="body.bold.lg">
                   <StatusTag status={state} size="lg" />
                 </Td>

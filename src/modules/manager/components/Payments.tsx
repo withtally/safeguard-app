@@ -4,32 +4,37 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
-import { useTransactions } from "modules/common/hooks/useTransactions";
+
 import FundInformationCard from "modules/common/components/FundInformationCard";
 
 // manager
 import ManageRequestedPayments from "modules/manager/components/ManageRequestedPayments";
 import RequestPayment from "modules/manager/components/RequestPayment";
-import PageHeader from "modules/common/components/PageHeader";
+import { usePayments } from "modules/manager/hooks/usePayments";
+
+// admin
+import { Transaction } from "modules/admin/lib/types";
 
 dayjs.extend(advancedFormat);
 
-const Payments: FC = () => {
+type Props = {
+  transactions?: Transaction[];
+};
+
+const Payments: FC<Props> = ({ transactions }) => {
   // custom hooks
   const {
-    transactions,
     executeTransaction,
-    isSubmitting,
+    formSubmitting,
     values,
     handleChange,
     submitForm,
     errors,
     touched,
-  } = useTransactions();
+  } = usePayments();
 
   return (
     <Flex direction="column" w="full">
-      <PageHeader title="Payments" />
       <FundInformationCard />
       <RequestPayment
         values={values}
@@ -37,7 +42,7 @@ const Payments: FC = () => {
         touched={touched}
         submitForm={submitForm}
         handleChange={handleChange}
-        isSubmitting={isSubmitting}
+        isSubmitting={formSubmitting}
       />
       <ManageRequestedPayments
         transactions={transactions}

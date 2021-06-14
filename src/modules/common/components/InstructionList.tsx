@@ -39,7 +39,11 @@ const InstructionList: FC<Props> = ({ title, instructions }) => {
         <AccordionPanel pb={6} px={6}>
           <Stack spacing={5}>
             {instructions.map(({ type, description }) => (
-              <InstructionElement type={type} description={description} />
+              <InstructionElement
+                key={type}
+                type={type}
+                description={description}
+              />
             ))}
           </Stack>
         </AccordionPanel>

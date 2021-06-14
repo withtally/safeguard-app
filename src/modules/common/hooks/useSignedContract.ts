@@ -12,10 +12,15 @@ type Props = {
   contractAbi: any;
 };
 
-export const useSignedContract = ({ contractAddress, contractAbi }: Props) => {
+export const useSignedContract = ({
+  contractAddress,
+  contractAbi,
+}: Props): Values => {
   const { signer } = useWeb3();
 
-  const signedContract = new Contract(contractAddress, contractAbi, signer);
+  const signedContract = contractAddress
+    ? new Contract(contractAddress, contractAbi, signer)
+    : undefined;
 
   return { signedContract };
 };

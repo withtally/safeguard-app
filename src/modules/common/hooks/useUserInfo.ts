@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useParams } from "@reach/router";
 
 // common
 import { ROLES_HASHES } from "modules/common/lib/constants";
-import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
+import { useSignedContract } from "modules/common/hooks/useSignedContract";
+import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
 
 type Values = {
   hasAdminRole: boolean;
@@ -13,6 +15,9 @@ type Values = {
 };
 
 export const useUserInfo = (): Values => {
+  // router hooks
+  const { rolManagerAddress } = useParams();
+
   // react hooks
   const [hasAdminRole, setHasAdminRole] = useState(false);
   const [hasProposerRole, setHasProposerRole] = useState(false);
@@ -21,7 +26,10 @@ export const useUserInfo = (): Values => {
 
   // custom hooks
   const { signerAddress } = useWeb3();
-  const { signedContract } = useSignedRolManagerContract();
+  const { signedContract } = useSignedContract({
+    contractAddress: rolManagerAddress,
+    contractAbi: ROLMANAGER_JSON.abi,
+  });
 
   useEffect(() => {
     const getUserRole = async () => {

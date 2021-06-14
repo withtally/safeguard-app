@@ -36,15 +36,15 @@ const HomeRoles: FC = () => {
           </Thead>
           <Tbody>
             {ROLES_INFORMATION.map(({ role, description, assignmentTime }) => (
-              <Tr>
+              <Tr key={role}>
                 <Td color="purple.500" textStyle="body.bold.lg">
                   {role}
                 </Td>
                 <Td color="gray.600" textStyle="body.regular.md">
-                  {assignmentTime}
+                  {description}
                 </Td>
                 <Td color="gray.600" textStyle="body.regular.md">
-                  {description}
+                  {assignmentTime}
                 </Td>
               </Tr>
             ))}

@@ -1,10 +1,12 @@
 import { useFormik, FormikErrors, FormikTouched } from "formik";
 import { useToast } from "@chakra-ui/react";
+import { useParams } from "@reach/router";
 
 // common
-import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
+import { useSignedContract } from "modules/common/hooks/useSignedContract";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
+import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
 
 // admin
 import { InitialValuesRoles } from "modules/admin/lib/types";
@@ -32,11 +34,17 @@ type Values = {
 };
 
 export const useGrantRole = (): Values => {
+  // router hooks
+  const { rolManagerAddress } = useParams();
+
   // chakra hooks
   const toast = useToast();
 
   // custom hooks
-  const { signedContract } = useSignedRolManagerContract();
+  const { signedContract } = useSignedContract({
+    contractAddress: rolManagerAddress,
+    contractAbi: ROLMANAGER_JSON.abi,
+  });
   const { web3 } = useWeb3();
   const { hasAdminRole } = useUserInfo();
 
@@ -58,30 +66,40 @@ export const useGrantRole = (): Values => {
         formValues.role,
         formValues.address
       );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3.waitForTransaction(transferTx.hash, 2);
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
+      toast({
+        title: "Success",
+        description: "Role granted!",
+        status: "success",
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
-        error
-      );
+      console.log("🚀 ~ ~ error", error);
     }
   };
 
   // formik hooks
-  const { values, handleChange, submitForm, isSubmitting, errors, touched } =
-    useFormik({
-      initialValues,
-      onSubmit,
-      validate: GrantRoleValidationSchema,
-    });
+  const {
+    values,
+    handleChange,
+    submitForm,
+    isSubmitting: formSubmitting,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues,
+    onSubmit,
+    validate: GrantRoleValidationSchema,
+  });
 
   return {
     values,
     handleChange,
     submitForm,
-    formSubmitting: isSubmitting,
+    formSubmitting,
     errors,
     touched,
   };

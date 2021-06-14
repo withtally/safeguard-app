@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import {
   Table,
   Thead,
@@ -9,12 +9,15 @@ import {
   Button,
   HStack,
   Text,
+  Flex,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
 import Avatar from "modules/common/components/Avatar";
+import { useUserInformation } from "modules/common/hooks/useUserInformation";
+import { getUsername } from "modules/common/lib/helpers";
 
 // admin
 import { ROLES } from "modules/admin/lib/constants";
@@ -28,43 +31,68 @@ type Props = {
 };
 
 const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
+  // constants
+  const addresses = useMemo(
+    () => grantedRoles.map((role) => role.address),
+    [grantedRoles]
+  );
+  const hasRows = Boolean(grantedRoles.length);
+
+  // custom hooks
+  const { usersInformation } = useUserInformation({
+    addresses,
+  });
+
   return (
-    <Table variant="simple" size="lg">
-      <Thead>
-        <Tr>
-          <Th>Address</Th>
-          <Th>Role</Th>
-          <Th>Action</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {grantedRoles.map((role) => {
-          const roleName = ROLES.find((item) => item.id === role.roleId)?.label;
-          return (
-            <Tr>
-              <Td>
-                <HStack spacing={2}>
-                  <Avatar address={role.address} />
-                  <Text color="gray.500" textStyle="body.regular.md">
-                    {role.address}
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{roleName}</Td>
-              <Td>
-                <Button
-                  size="md"
-                  variant="error"
-                  onClick={() => revokeRole(role.roleId, role.address)}
-                >
-                  Revoke
-                </Button>
-              </Td>
-            </Tr>
-          );
-        })}
-      </Tbody>
-    </Table>
+    <Flex align="stretch" direction="column" w="full">
+      <Table variant="simple" size="lg">
+        <Thead>
+          <Tr>
+            <Th>Address</Th>
+            <Th>Role</Th>
+            <Th>Action</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {grantedRoles.map((role, index) => {
+            const roleName = ROLES.find(
+              (item) => item.id === role.roleId
+            )?.label;
+            const username = getUsername(usersInformation, role.address, false);
+
+            return (
+              <Tr key={`${role.address}-${index}`}>
+                <Td>
+                  <HStack spacing={2}>
+                    <Avatar address={role.address} />
+                    <Text color="gray.500" textStyle="body.regular.md">
+                      {username}
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{roleName}</Td>
+                <Td>
+                  <Button
+                    size="md"
+                    variant="error"
+                    onClick={() => revokeRole(role.roleId, role.address)}
+                  >
+                    Revoke
+                  </Button>
+                </Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+      {!hasRows ? (
+        <Flex align="center" bg="gray.50" h={16} justify="center" w="full">
+          <Text color="gray.600" textStyle="body.bold.sm">
+            No rows to show
+          </Text>
+        </Flex>
+      ) : null}
+    </Flex>
   );
 };
 

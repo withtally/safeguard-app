@@ -30,23 +30,6 @@ const Header: FC = () => {
           <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.safes}>
             <Text textStyle="paragraph">Safe Management</Text>
           </Link>
-          <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.roles}>
-            <Text textStyle="paragraph">Roles</Text>
-          </Link>
-          <Link
-            _hover={{ textDecor: "none" }}
-            as={ReachLink}
-            to={ROUTES.manage}
-          >
-            <Text textStyle="paragraph">Manage</Text>
-          </Link>
-          <Link
-            _hover={{ textDecor: "none" }}
-            as={ReachLink}
-            to={ROUTES.payments}
-          >
-            <Text textStyle="paragraph">Payments</Text>
-          </Link>
         </HStack>
       </HStack>
     </Flex>

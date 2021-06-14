@@ -1,22 +1,10 @@
 export const CONTRACT_ADDRESSES = {
-  timelock: {
-    rinkeby: "0x0D67FDda0D8e6333c2Ec4E3d2351DA979fBF6Bbf",
-    mainnet: "",
-  },
   token: {
     rinkeby: "0xB0926c1BC534813Aa51f209b91Bc0AA60feC7624",
     mainnet: "",
   },
-  rolManager: {
-    rinkeby: "0x43e342E3360015279EC682a40C45c50860B4b800",
-    mainnet: "",
-  },
-  registry: {
-    rinkeby: "0x36d4c9476e7091210Bc9e0C01d2075Efc183CA8b",
-    mainnet: "",
-  },
   factory: {
-    rinkeby: "0xcB9f13923D71c09B3B7310ab0E1e56819B134f1d",
+    rinkeby: "0xA6A6c5Ec9A74D913006571A0abc1BE98429125CC",
     mainnet: "",
   },
 };

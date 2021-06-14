@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@chakra-ui/react";
+import { useParams } from "@reach/router";
 
 // common
-import { useSignedRolManagerContract } from "modules/common/hooks/useSignedRolManagerContract";
+import { useSignedContract } from "modules/common/hooks/useSignedContract";
 import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
+import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
 
 // admin
 import { GrantedRole } from "modules/admin/lib/types";
@@ -17,6 +19,9 @@ type Values = {
 };
 
 export const useRoles = (): Values => {
+  // router hooks
+  const { rolManagerAddress } = useParams();
+
   // react hooks
   const [grantedRoles, setGrantedRoles] = useState<GrantedRole[]>();
   const [revokingRole, setRevokingRole] = useState(false);
@@ -25,7 +30,10 @@ export const useRoles = (): Values => {
   const toast = useToast();
 
   // custom hooks
-  const { signedContract } = useSignedRolManagerContract();
+  const { signedContract } = useSignedContract({
+    contractAddress: rolManagerAddress,
+    contractAbi: ROLMANAGER_JSON.abi,
+  });
   const { web3 } = useWeb3();
   const { hasAdminRole } = useUserInfo();
 
@@ -61,7 +69,7 @@ export const useRoles = (): Values => {
 
     for (let i = 0; i < cancelersCount; ++i) {
       const cancelerAddress = await signedContract?.getRoleMember(
-        executorRole,
+        cancelerRole,
         i
       );
       members.push({ address: cancelerAddress, roleId: cancelerRole });
@@ -115,10 +123,7 @@ export const useRoles = (): Values => {
         position: "top",
       });
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
-        error
-      );
+      console.log("🚀 ~  ~ error", error);
     }
   };
 

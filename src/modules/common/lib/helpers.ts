@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { abbreviate } from "@pqt/abbreviate";
 import { isAddress } from "ethers/lib/utils";
 import isEmpty from "lodash.isempty";
+import { JsonRpcSigner } from "@ethersproject/providers/lib/json-rpc-provider";
 
 // common
 import { UsersInformation } from "modules/common/hooks/useUserInformation";

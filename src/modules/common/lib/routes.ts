@@ -4,4 +4,5 @@ export const ROUTES = {
   manage: `/manage`,
   payments: "/payments",
   safes: "/safes",
+  viewSafe: (address: string) => `/view/${address}`,
 };

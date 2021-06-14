@@ -9,7 +9,7 @@ import FailSafeList from "modules/failSafe/components/FailSafeList";
 import CreateFailSafe from "modules/failSafe/components/CreateFailSafe";
 import { useFailSafe } from "modules/failSafe/hooks/useFailSafe";
 
-const Roles: FC = () => {
+const FailSafe: FC = () => {
   // custom hooks
   const {
     createdSafes,
@@ -36,4 +36,4 @@ const Roles: FC = () => {
   );
 };
 
-export default Roles;
+export default FailSafe;

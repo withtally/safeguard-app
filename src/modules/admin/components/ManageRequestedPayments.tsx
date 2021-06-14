@@ -2,15 +2,18 @@ import { FC } from "react";
 import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
 import { IoListOutline } from "react-icons/io5";
 
-// common
-import { useTransactions } from "modules/common/hooks/useTransactions";
-
 // admin
 import AdminTransactionsTable from "modules/admin/components/AdminTransactionsTable";
+import { useCancelRequest } from "modules/admin/hooks/useCancelRequest";
+import { Transaction } from "modules/admin/lib/types";
 
-const ManageRequestedPayments: FC = () => {
+type Props = {
+  transactions?: Transaction[];
+};
+
+const ManageRequestedPayments: FC<Props> = ({ transactions }) => {
   // custom hooks
-  const { transactions, cancelTransaction } = useTransactions();
+  const { cancelTransaction } = useCancelRequest();
 
   return (
     <Stack

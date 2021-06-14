@@ -2,20 +2,23 @@ import { FC } from "react";
 import { Flex } from "@chakra-ui/react";
 
 // common
-import PageHeader from "modules/common/components/PageHeader";
 import FundInformationCard from "modules/common/components/FundInformationCard";
 
 // admin
 import SendFunds from "modules/admin/components/SendFunds";
 import ManageRequestedPayments from "modules/admin/components/ManageRequestedPayments";
+import { Transaction } from "modules/admin/lib/types";
 
-const Manage: FC = () => {
+type Props = {
+  transactions?: Transaction[];
+};
+
+const Manage: FC<Props> = ({ transactions }) => {
   return (
     <Flex direction="column" w="full">
-      <PageHeader title="Manage" />
       <FundInformationCard />
       <SendFunds />
-      <ManageRequestedPayments />
+      <ManageRequestedPayments transactions={transactions} />
     </Flex>
   );
 };

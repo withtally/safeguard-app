@@ -6,14 +6,18 @@ import {
   Tr,
   Th,
   Td,
-  Button,
-  HStack,
   Text,
   Flex,
+  Link,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
+import { Link as ReachLink } from "@reach/router";
 
+// common
+import { ROUTES } from "modules/common/lib/routes";
+
+// failSafe
 import { FailSafe } from "modules/failSafe/lib/types";
 
 dayjs.extend(advancedFormat);
@@ -29,7 +33,9 @@ const FailSafeTable: FC<Props> = ({ safeList }) => {
       <Table variant="simple" size="md">
         <Thead>
           <Tr>
-            <Th>Safe Name</Th>
+            <Th>FailSafe Name</Th>
+            <Th>FailSafe Address</Th>
+            <Th>Admin Address</Th>
             <Th>View</Th>
           </Tr>
         </Thead>
@@ -38,6 +44,16 @@ const FailSafeTable: FC<Props> = ({ safeList }) => {
             <Tr key={`${index}-${safe.rolManagerAddress}`}>
               <Td>{safe.safeName}</Td>
               <Td>{safe.rolManagerAddress}</Td>
+              <Td>{safe.admin}</Td>
+              <Td>
+                <Link
+                  _hover={{ textDecor: "none" }}
+                  as={ReachLink}
+                  to={ROUTES.viewSafe(safe.rolManagerAddress)}
+                >
+                  <Text textStyle="body.regular.md">view safe</Text>
+                </Link>
+              </Td>
             </Tr>
           ))}
         </Tbody>

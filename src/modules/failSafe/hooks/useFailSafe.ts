@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFormik, FormikErrors, FormikTouched } from "formik";
 import dayjs from "dayjs";
-import { ethers } from "ethers";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import { useToast } from "@chakra-ui/react";
 
@@ -9,7 +8,6 @@ import { useToast } from "@chakra-ui/react";
 import { useSignedContract } from "modules/common/hooks/useSignedContract";
 import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
-import REGISTRY_JSON from "modules/common/lib/abis/Registry.json";
 import FACTORY_JSON from "modules/common/lib/abis/Factory.json";
 
 // failSafe
@@ -52,14 +50,9 @@ export const useFailSafe = (): Values => {
   const toast = useToast();
 
   // constants
-  const registryAddress = CONTRACT_ADDRESSES.registry.rinkeby;
   const factoryAddress = CONTRACT_ADDRESSES.factory.rinkeby;
 
   // custom hook
-  const { signedContract: signedRegistryContract } = useSignedContract({
-    contractAddress: registryAddress,
-    contractAbi: REGISTRY_JSON.abi,
-  });
   const { signedContract: signedFactoryContract } = useSignedContract({
     contractAddress: factoryAddress,
     contractAbi: FACTORY_JSON.abi,
@@ -70,15 +63,15 @@ export const useFailSafe = (): Values => {
     try {
       const createdSafesEventFilter =
         await signedFactoryContract?.filters.RolManagerCreated();
-      const createdSafes = await signedFactoryContract?.queryFilter(
-        createdSafesEventFilter
-      );
+      const createdSafes =
+        createdSafesEventFilter &&
+        (await signedFactoryContract?.queryFilter(createdSafesEventFilter));
 
       const createdSafesInfo = createdSafes?.map(
         (item) => item.args && parseFailSafeCreations(item.args)
       );
 
-      const allCreatedSafes = createdSafesInfo.map((item) => {
+      const allCreatedSafes = createdSafesInfo?.map((item) => {
         if (item) {
           return {
             ...item,
@@ -88,16 +81,25 @@ export const useFailSafe = (): Values => {
 
       setRegistries(allCreatedSafes);
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useRegistry.ts ~ line 73 ~ getRegistries ~ error",
-        error
-      );
+      console.log("🚀 ~  ~ error", error);
     }
   };
 
   useEffect(() => {
-    if (signedRegistryContract) getRegistries();
+    if (signedFactoryContract) getRegistries();
   }, []);
+
+  useEffect(() => {
+    if (!signedFactoryContract) return;
+
+    signedFactoryContract.on("RolManagerCreated", (event) => {
+      getRegistries();
+    });
+
+    return () => {
+      signedFactoryContract.removeAllListeners("RolManagerCreated");
+    };
+  });
 
   const onSubmit = async (
     formValues: InitialValuesCreateFailSafe,
@@ -123,10 +125,7 @@ export const useFailSafe = (): Values => {
         position: "top",
       });
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useRegistry.ts ~ line 108 ~ onSubmit ~ error",
-        error
-      );
+      console.log("🚀 ~  error", error);
     }
   };
 

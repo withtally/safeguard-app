@@ -9,17 +9,15 @@ import {
   Button,
   HStack,
   Text,
+  Flex,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 
 // common
 import Avatar from "modules/common/components/Avatar";
-import {
-  UsersInformation,
-  useUserInformation,
-} from "modules/common/hooks/useUserInformation";
-import { getProfileImage, getUsername } from "modules/common/lib/helpers";
+import { useUserInformation } from "modules/common/hooks/useUserInformation";
+import { getUsername } from "modules/common/lib/helpers";
 
 // admin
 import { ROLES } from "modules/admin/lib/constants";
@@ -46,55 +44,55 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
   });
 
   return (
-    <Table variant="simple" size="lg">
-      <Thead>
-        <Tr>
-          <Th>Address</Th>
-          <Th>Role</Th>
-          <Th>Action</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {grantedRoles.map((role, index) => {
-          const roleName = ROLES.find((item) => item.id === role.roleId)?.label;
-          const username = getUsername(usersInformation, role.address, false);
-
-          return (
-            <Tr key={`${role.address}-${index}`}>
-              <Td>
-                <HStack spacing={2}>
-                  <Avatar address={role.address} />
-                  <Text color="gray.500" textStyle="body.regular.md">
-                    {username}
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{roleName}</Td>
-              <Td>
-                <Button
-                  size="md"
-                  variant="error"
-                  onClick={() => revokeRole(role.roleId, role.address)}
-                >
-                  Revoke
-                </Button>
-              </Td>
-            </Tr>
-          );
-        })}
-        {!hasRows ? (
-          <Tr align="center" bg="gray.50" h={16} justify="center" w="full">
-            <Td></Td>
-            <Td>
-              <Text color="gray.600" textStyle="body.bold.sm">
-                No roles granted yet
-              </Text>
-            </Td>
-            <Td></Td>
+    <Flex align="stretch" direction="column" w="full">
+      <Table variant="simple" size="lg">
+        <Thead>
+          <Tr>
+            <Th>Address</Th>
+            <Th>Role</Th>
+            <Th>Action</Th>
           </Tr>
-        ) : null}
-      </Tbody>
-    </Table>
+        </Thead>
+        <Tbody>
+          {grantedRoles.map((role, index) => {
+            const roleName = ROLES.find(
+              (item) => item.id === role.roleId
+            )?.label;
+            const username = getUsername(usersInformation, role.address, false);
+
+            return (
+              <Tr key={`${role.address}-${index}`}>
+                <Td>
+                  <HStack spacing={2}>
+                    <Avatar address={role.address} />
+                    <Text color="gray.500" textStyle="body.regular.md">
+                      {username}
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{roleName}</Td>
+                <Td>
+                  <Button
+                    size="md"
+                    variant="error"
+                    onClick={() => revokeRole(role.roleId, role.address)}
+                  >
+                    Revoke
+                  </Button>
+                </Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
+      {!hasRows ? (
+        <Flex align="center" bg="gray.50" h={16} justify="center" w="full">
+          <Text color="gray.600" textStyle="body.bold.sm">
+            No rows to show
+          </Text>
+        </Flex>
+      ) : null}
+    </Flex>
   );
 };
 

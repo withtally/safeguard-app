@@ -7,7 +7,7 @@ import { useSignedContract } from "modules/common/hooks/useSignedContract";
 import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 
 // admin
 import { GrantedRole } from "modules/admin/lib/types";
@@ -20,7 +20,7 @@ type Values = {
 
 export const useRoles = (): Values => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // react hooks
   const [grantedRoles, setGrantedRoles] = useState<GrantedRole[]>();
@@ -31,8 +31,8 @@ export const useRoles = (): Values => {
 
   // custom hooks
   const { signedContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
   const { hasAdminRole } = useUserInfo();

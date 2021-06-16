@@ -5,12 +5,12 @@ import { useParams } from "@reach/router";
 import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
 import { parseBigNumber, labelNumber } from "modules/common/lib/helpers";
 import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
 
 export const useFundInformation = () => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // react hooks
   const [fundBalance, setFundBalance] = useState("0");
@@ -20,9 +20,9 @@ export const useFundInformation = () => {
   const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
 
   // custom hook
-  const { signedContract: rolManagerSignedContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+  const { signedContract: safeGuardSignedContract } = useSignedContract({
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
   const { signedContract: signedTokenContract } = useSignedContract({
     contractAddress: tokenAddress,
@@ -30,9 +30,9 @@ export const useFundInformation = () => {
   });
 
   const getSafeGuardTokenBalance = useCallback(async () => {
-    // fail safe timelock
+    // SafeGuard timelock
     try {
-      const timelock = await rolManagerSignedContract?.timelock();
+      const timelock = await safeGuardSignedContract?.timelock();
       const bigBalance = await signedTokenContract?.balanceOf(timelock);
       const balance = parseBigNumber(Number(bigBalance.toString()));
       const fundBalanceLabel = labelNumber(balance);
@@ -44,7 +44,7 @@ export const useFundInformation = () => {
         e
       );
     }
-  }, [rolManagerSignedContract, signedTokenContract]);
+  }, [safeGuardSignedContract, signedTokenContract]);
 
   useEffect(() => {
     if (signedTokenContract) getSafeGuardTokenBalance();

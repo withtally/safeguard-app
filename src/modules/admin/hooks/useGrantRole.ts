@@ -6,7 +6,7 @@ import { useParams } from "@reach/router";
 import { useSignedContract } from "modules/common/hooks/useSignedContract";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 
 // admin
 import { InitialValuesRoles } from "modules/admin/lib/types";
@@ -35,15 +35,15 @@ type Values = {
 
 export const useGrantRole = (): Values => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // chakra hooks
   const toast = useToast();
 
   // custom hooks
   const { signedContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
   const { hasAdminRole } = useUserInfo();

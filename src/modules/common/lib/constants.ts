@@ -4,7 +4,7 @@ export const CONTRACT_ADDRESSES = {
     mainnet: "",
   },
   factory: {
-    rinkeby: "0xA6A6c5Ec9A74D913006571A0abc1BE98429125CC",
+    rinkeby: "0x132D74C751A7d9BEeFED5ddE7e29735Aac164a08",
     mainnet: "",
   },
 };

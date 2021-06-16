@@ -60,10 +60,10 @@ const CreateSafeGuardForm: FC<Props> = ({
             </option>
           </FormSelect>
           <FormInput
-            name="safeName"
-            id="safeName"
-            label="Fail Safe name"
-            placeholder="Enter a name for the new fail safe"
+            name="safeGuardName"
+            id="safeGuardName"
+            label="SafeGuard name"
+            placeholder="Enter a name for the new SafeGuard"
             values={values}
             errors={errors}
             touched={touched}

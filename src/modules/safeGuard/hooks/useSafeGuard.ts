@@ -22,7 +22,9 @@ dayjs.extend(advancedFormat);
 
 const initialValues: InitialValuesCreateSafeGuard = {
   delay: "",
-  safeName: "",
+  safeGuardName: "",
+  roles: [],
+  rolesAssignees: [],
 };
 
 type Values = {
@@ -62,7 +64,7 @@ export const useSafeGuard = (): Values => {
   const getRegistries = async () => {
     try {
       const createdSafesEventFilter =
-        await signedFactoryContract?.filters.RolManagerCreated();
+        await signedFactoryContract?.filters.SafeGuardCreated();
       const createdSafes =
         createdSafesEventFilter &&
         (await signedFactoryContract?.queryFilter(createdSafesEventFilter));
@@ -92,12 +94,12 @@ export const useSafeGuard = (): Values => {
   useEffect(() => {
     if (!signedFactoryContract) return;
 
-    signedFactoryContract.on("RolManagerCreated", (event) => {
+    signedFactoryContract.on("SafeGuardCreated", (event) => {
       getRegistries();
     });
 
     return () => {
-      signedFactoryContract.removeAllListeners("RolManagerCreated");
+      signedFactoryContract.removeAllListeners("SafeGuardCreated");
     };
   });
 
@@ -110,7 +112,9 @@ export const useSafeGuard = (): Values => {
 
       const transferTx = await signedFactoryContract?.createSafeGuard(
         formValues.delay,
-        formValues.safeName
+        formValues.safeGuardName,
+        formValues.roles,
+        formValues.rolesAssignees
       );
 
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);

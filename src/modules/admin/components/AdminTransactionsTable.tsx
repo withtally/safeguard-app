@@ -75,7 +75,8 @@ const AdminTransactionsTable: FC<Props> = ({
             );
             const username = getUsername(
               usersInformation,
-              transaction.transferTo
+              transaction.transferTo,
+              false
             );
 
             return (

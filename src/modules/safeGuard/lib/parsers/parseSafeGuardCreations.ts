@@ -8,8 +8,8 @@ export const parseSafeGuardCreations = (
 ): SafeGuard => {
   return {
     admin: safeCreated.admin,
-    rolManagerAddress: safeCreated.rolManagerAddress,
-    safeName: safeCreated.safeName,
+    safeGuardAddress: safeCreated.safeGuardAddress,
+    safeGuardName: safeCreated.safeGuardName,
     timelockAddress: safeCreated.timelockAddress,
   };
 };

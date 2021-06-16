@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import {
   Table,
   Thead,
@@ -9,6 +9,7 @@ import {
   Text,
   Flex,
   Link,
+  HStack,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
@@ -16,6 +17,9 @@ import { Link as ReachLink } from "@reach/router";
 
 // common
 import { ROUTES } from "modules/common/lib/routes";
+import Avatar from "modules/common/components/Avatar";
+import { useUserInformation } from "modules/common/hooks/useUserInformation";
+import { getUsername, getProfileImage } from "modules/common/lib/helpers";
 
 // failSafe
 import { SafeGuard } from "modules/safeGuard/lib/types";
@@ -27,7 +31,17 @@ type Props = {
 };
 
 const SafeGuardTable: FC<Props> = ({ safeList }) => {
+  // constants
+  const addresses = useMemo(
+    () => safeList.map((safe) => safe.safeGuardAddress),
+    [safeList]
+  );
   const hasRows = Boolean(safeList.length);
+
+  // custom hooks
+  const { usersInformation } = useUserInformation({
+    addresses,
+  });
   return (
     <Flex align="stretch" direction="column" w="full">
       <Table variant="simple" size="md">
@@ -40,22 +54,42 @@ const SafeGuardTable: FC<Props> = ({ safeList }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {safeList.map((safe: SafeGuard, index: number) => (
-            <Tr key={`${index}-${safe.rolManagerAddress}`}>
-              <Td>{safe.safeName}</Td>
-              <Td>{safe.rolManagerAddress}</Td>
-              <Td>{safe.admin}</Td>
-              <Td>
-                <Link
-                  _hover={{ textDecor: "none" }}
-                  as={ReachLink}
-                  to={ROUTES.viewSafe(safe.rolManagerAddress)}
-                >
-                  <Text textStyle="body.regular.md">view safe</Text>
-                </Link>
-              </Td>
-            </Tr>
-          ))}
+          {safeList.map((safe: SafeGuard, index: number) => {
+            const profileImage = getProfileImage(usersInformation, safe.admin);
+            const username = getUsername(usersInformation, safe.admin, false);
+
+            return (
+              <Tr key={`${index}-${safe.safeGuardAddress}`}>
+                <Td>
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {safe.safeGuardName}
+                  </Text>
+                </Td>
+                <Td>
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {safe.safeGuardAddress}
+                  </Text>
+                </Td>
+                <Td>
+                  <HStack spacing={2}>
+                    <Avatar address={safe.admin} src={profileImage} />
+                    <Text color="gray.500" textStyle="body.regular.md">
+                      {username}
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>
+                  <Link
+                    _hover={{ textDecor: "none" }}
+                    as={ReachLink}
+                    to={ROUTES.viewSafe(safe.safeGuardAddress)}
+                  >
+                    <Text textStyle="body.regular.md">view safe</Text>
+                  </Link>
+                </Td>
+              </Tr>
+            );
+          })}
         </Tbody>
       </Table>
       {!hasRows ? (

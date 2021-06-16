@@ -20,10 +20,7 @@ const App: FC = () => {
       <Router>
         <PublicRoute component={Home} path="/" />
         <PublicRoute component={SafeGuard} path="/safes" />
-        <PublicRoute
-          component={SafeGuardView}
-          path="/view/:rolManagerAddress"
-        />
+        <PublicRoute component={SafeGuardView} path="/view/:safeGuardAddress" />
       </Router>
     </Layout>
   );

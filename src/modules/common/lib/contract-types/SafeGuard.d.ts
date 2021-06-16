@@ -21,24 +21,38 @@ import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
-interface RolManagerInterface extends ethers.utils.Interface {
+interface SafeGuardInterface extends ethers.utils.Interface {
   functions: {
+    "CANCELER_ROLE()": FunctionFragment;
+    "CREATOR_ROLE()": FunctionFragment;
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "EXECUTOR_ROLE()": FunctionFragment;
     "PROPOSER_ROLE()": FunctionFragment;
-    "ROLMANAGER_ADMIN_ROLE()": FunctionFragment;
+    "SAFEGUARD_ADMIN_ROLE()": FunctionFragment;
     "cancelTransaction(address,uint256,string,bytes,uint256)": FunctionFragment;
     "executeTransaction(address,uint256,string,bytes,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
+    "getRoleMember(bytes32,uint256)": FunctionFragment;
+    "getRoleMemberCount(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
     "queueTransaction(address,uint256,string,bytes,uint256)": FunctionFragment;
+    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
+    "setTimelock(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "timelock()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "CANCELER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "CREATOR_ROLE",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
     values?: undefined
@@ -52,7 +66,7 @@ interface RolManagerInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "ROLMANAGER_ADMIN_ROLE",
+    functionFragment: "SAFEGUARD_ADMIN_ROLE",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -65,6 +79,14 @@ interface RolManagerInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRoleMember",
+    values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRoleMemberCount",
     values: [BytesLike]
   ): string;
   encodeFunctionData(
@@ -80,6 +102,10 @@ interface RolManagerInterface extends ethers.utils.Interface {
     values: [string, BigNumberish, string, BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "queueTransactionWithDescription",
+    values: [string, BigNumberish, string, BytesLike, BigNumberish, string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceRole",
     values: [BytesLike, string]
   ): string;
@@ -87,12 +113,21 @@ interface RolManagerInterface extends ethers.utils.Interface {
     functionFragment: "revokeRole",
     values: [BytesLike, string]
   ): string;
+  encodeFunctionData(functionFragment: "setTimelock", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "timelock", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "CANCELER_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "CREATOR_ROLE",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
     data: BytesLike
@@ -106,7 +141,7 @@ interface RolManagerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "ROLMANAGER_ADMIN_ROLE",
+    functionFragment: "SAFEGUARD_ADMIN_ROLE",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -121,10 +156,22 @@ interface RolManagerInterface extends ethers.utils.Interface {
     functionFragment: "getRoleAdmin",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRoleMember",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRoleMemberCount",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "queueTransaction",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "queueTransactionWithDescription",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -133,23 +180,31 @@ interface RolManagerInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "setTimelock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "timelock", data: BytesLike): Result;
 
   events: {
+    "QueueTransactionWithDescription(bytes32,address,uint256,string,bytes,uint256,string)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
   };
 
+  getEvent(
+    nameOrSignatureOrTopic: "QueueTransactionWithDescription"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
 }
 
-export class RolManager extends Contract {
+export class SafeGuard extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -160,9 +215,17 @@ export class RolManager extends Contract {
   removeAllListeners(eventName: EventFilter | string): this;
   removeListener(eventName: any, listener: Listener): this;
 
-  interface: RolManagerInterface;
+  interface: SafeGuardInterface;
 
   functions: {
+    CANCELER_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+
+    CREATOR_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
@@ -175,9 +238,9 @@ export class RolManager extends Contract {
 
     "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
 
-    ROLMANAGER_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
+    SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    "ROLMANAGER_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+    "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
 
     cancelTransaction(
       target: string,
@@ -222,6 +285,28 @@ export class RolManager extends Contract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getRoleMember(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "getRoleMember(bytes32,uint256)"(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getRoleMemberCount(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "getRoleMemberCount(bytes32)"(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     grantRole(
       role: BytesLike,
       account: string,
@@ -264,6 +349,26 @@ export class RolManager extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    queueTransactionWithDescription(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
     renounceRole(
       role: BytesLike,
       account: string,
@@ -288,6 +393,16 @@ export class RolManager extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    setTimelock(
+      _timelock: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "setTimelock(address)"(
+      _timelock: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -303,6 +418,14 @@ export class RolManager extends Contract {
     "timelock()"(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  CANCELER_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<string>;
+
+  CREATOR_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<string>;
+
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
   "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
@@ -315,9 +438,9 @@ export class RolManager extends Contract {
 
   "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<string>;
 
-  ROLMANAGER_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+  SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  "ROLMANAGER_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
+  "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
 
   cancelTransaction(
     target: string,
@@ -362,6 +485,28 @@ export class RolManager extends Contract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getRoleMember(
+    role: BytesLike,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "getRoleMember(bytes32,uint256)"(
+    role: BytesLike,
+    index: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getRoleMemberCount(
+    role: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "getRoleMemberCount(bytes32)"(
+    role: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   grantRole(
     role: BytesLike,
     account: string,
@@ -404,6 +549,26 @@ export class RolManager extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  queueTransactionWithDescription(
+    target: string,
+    value: BigNumberish,
+    signature: string,
+    data: BytesLike,
+    eta: BigNumberish,
+    description: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+    target: string,
+    value: BigNumberish,
+    signature: string,
+    data: BytesLike,
+    eta: BigNumberish,
+    description: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   renounceRole(
     role: BytesLike,
     account: string,
@@ -428,6 +593,16 @@ export class RolManager extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  setTimelock(
+    _timelock: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "setTimelock(address)"(
+    _timelock: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -443,6 +618,14 @@ export class RolManager extends Contract {
   "timelock()"(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    CANCELER_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<string>;
+
+    CREATOR_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<string>;
+
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
     "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
@@ -455,9 +638,9 @@ export class RolManager extends Contract {
 
     "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<string>;
 
-    ROLMANAGER_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+    SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    "ROLMANAGER_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
+    "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
 
     cancelTransaction(
       target: string,
@@ -502,6 +685,28 @@ export class RolManager extends Contract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getRoleMember(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "getRoleMember(bytes32,uint256)"(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getRoleMemberCount(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getRoleMemberCount(bytes32)"(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     grantRole(
       role: BytesLike,
       account: string,
@@ -544,6 +749,26 @@ export class RolManager extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    queueTransactionWithDescription(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     renounceRole(
       role: BytesLike,
       account: string,
@@ -568,6 +793,13 @@ export class RolManager extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setTimelock(_timelock: string, overrides?: CallOverrides): Promise<void>;
+
+    "setTimelock(address)"(
+      _timelock: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -584,6 +816,16 @@ export class RolManager extends Contract {
   };
 
   filters: {
+    QueueTransactionWithDescription(
+      txHash: BytesLike | null,
+      target: string | null,
+      value: null,
+      signature: null,
+      data: null,
+      eta: null,
+      description: null
+    ): EventFilter;
+
     RoleAdminChanged(
       role: BytesLike | null,
       previousAdminRole: BytesLike | null,
@@ -604,6 +846,14 @@ export class RolManager extends Contract {
   };
 
   estimateGas: {
+    CANCELER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    CREATOR_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -616,9 +866,9 @@ export class RolManager extends Contract {
 
     "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    ROLMANAGER_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+    SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "ROLMANAGER_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+    "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     cancelTransaction(
       target: string,
@@ -666,6 +916,28 @@ export class RolManager extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getRoleMember(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getRoleMember(bytes32,uint256)"(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getRoleMemberCount(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getRoleMemberCount(bytes32)"(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     grantRole(
       role: BytesLike,
       account: string,
@@ -708,6 +980,26 @@ export class RolManager extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    queueTransactionWithDescription(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     renounceRole(
       role: BytesLike,
       account: string,
@@ -729,6 +1021,13 @@ export class RolManager extends Contract {
     "revokeRole(bytes32,address)"(
       role: BytesLike,
       account: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    setTimelock(_timelock: string, overrides?: Overrides): Promise<BigNumber>;
+
+    "setTimelock(address)"(
+      _timelock: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -748,6 +1047,14 @@ export class RolManager extends Contract {
   };
 
   populateTransaction: {
+    CANCELER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    CREATOR_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     DEFAULT_ADMIN_ROLE(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -764,11 +1071,11 @@ export class RolManager extends Contract {
 
     "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    ROLMANAGER_ADMIN_ROLE(
+    SAFEGUARD_ADMIN_ROLE(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    "ROLMANAGER_ADMIN_ROLE()"(
+    "SAFEGUARD_ADMIN_ROLE()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -818,6 +1125,28 @@ export class RolManager extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getRoleMember(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getRoleMember(bytes32,uint256)"(
+      role: BytesLike,
+      index: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getRoleMemberCount(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getRoleMemberCount(bytes32)"(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     grantRole(
       role: BytesLike,
       account: string,
@@ -860,6 +1189,26 @@ export class RolManager extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    queueTransactionWithDescription(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+      target: string,
+      value: BigNumberish,
+      signature: string,
+      data: BytesLike,
+      eta: BigNumberish,
+      description: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
     renounceRole(
       role: BytesLike,
       account: string,
@@ -881,6 +1230,16 @@ export class RolManager extends Contract {
     "revokeRole(bytes32,address)"(
       role: BytesLike,
       account: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    setTimelock(
+      _timelock: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "setTimelock(address)"(
+      _timelock: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 

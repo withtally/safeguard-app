@@ -13,7 +13,7 @@ import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
 import { RequestPaymentValidationSchema } from "modules/common/lib/validations";
 import { useFundInformation } from "modules/common/hooks/useFundInformation";
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
 import TIMELOCK_JSON from "modules/common/lib/abis/Timelock.json";
 
@@ -53,7 +53,7 @@ type Values = {
 
 export const usePayments = (): Values => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // react hooks
   const [isSubmitting, setSubmitting] = useState(false);
@@ -71,8 +71,8 @@ export const usePayments = (): Values => {
     contractAbi: TIMELOCK_JSON.abi,
   });
   const { signedContract: signedRolContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
   const { hasExecutorRole, hasProposerRole } = useUserInfo();
@@ -146,14 +146,15 @@ export const usePayments = (): Values => {
         ethers.utils.parseEther(formValues.amount),
       ]);
 
-      const transferTx = await signedRolContract?.queueTransaction(
-        target,
-        value,
-        transferSignature,
-        transferCallData,
-        currentETA,
-        formValues.description
-      );
+      const transferTx =
+        await signedRolContract?.queueTransactionWithDescription(
+          target,
+          value,
+          transferSignature,
+          transferCallData,
+          currentETA,
+          formValues.description
+        );
 
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
 

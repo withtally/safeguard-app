@@ -62,7 +62,7 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
               usersInformation,
               role.address
             );
-            const username = getUsername(usersInformation, role.address);
+            const username = getUsername(usersInformation, role.address, false);
 
             return (
               <Tr key={`${role.address}-${index}`}>
@@ -74,7 +74,11 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
                     </Text>
                   </HStack>
                 </Td>
-                <Td>{roleName}</Td>
+                <Td>
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {roleName}
+                  </Text>
+                </Td>
                 <Td>
                   <Button
                     size="md"

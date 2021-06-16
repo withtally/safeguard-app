@@ -1,11 +1,13 @@
 export type InitialValuesCreateSafeGuard = {
   delay: string;
-  safeName: string;
+  safeGuardName: string;
+  roles: string[];
+  rolesAssignees: string[];
 };
 
 export type SafeGuard = {
   admin: string;
-  rolManagerAddress: string;
-  safeName: string;
+  safeGuardAddress: string;
+  safeGuardName: string;
   timelockAddress: string;
 };

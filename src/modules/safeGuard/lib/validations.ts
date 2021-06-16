@@ -8,12 +8,12 @@ export const CreateSafeGuardValidationSchema = (
 ) => {
   const errors: FormikErrors<InitialValuesCreateSafeGuard> = {};
 
-  if (!values.safeName) {
-    errors.safeName = "Required";
+  if (!values.safeGuardName) {
+    errors.safeGuardName = "Required";
   }
 
   if (!values.delay) {
-    errors.safeName = "Required";
+    errors.safeGuardName = "Required";
   }
 
   return errors;

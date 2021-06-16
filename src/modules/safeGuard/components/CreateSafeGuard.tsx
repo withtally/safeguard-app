@@ -47,7 +47,7 @@ const CreateSafeGuard: FC<FlexProps & Props> = ({
         <HStack spacing={1.5} mb={9}>
           <Icon as={IoAddCircleOutline} w={6} h={6} />
           <Text color="gray.800" flex={1} mb={4} textStyle="paragraph">
-            Create a new fail safe
+            Create a new SafeGuard
           </Text>
         </HStack>
         <CreateSafeGuardForm

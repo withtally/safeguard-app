@@ -5,14 +5,14 @@ export const ROLES_INFORMATION = [
   {
     role: "Administrator",
     description:
-      "The general manager of all the roles in the FailSafe has the power to grant or revoke any role in the app.",
+      "The general manager of all the roles in the SafeGuard has the power to grant or revoke any role in the app.",
     assignmentTime:
-      "This role can only be assigned when we deploy the FailSafe contract.",
+      "This role can only be assigned when we deploy the SafeGuard contract.",
   },
   {
     role: "Proposer",
     description:
-      "This role is can make payment request to the FailSafe, the request will be queued in the timelock.",
+      "This role is can make payment request to the SafeGuard, the request will be queued in the timelock.",
     assignmentTime: "Anytime if we have the Administrator role",
   },
   {
@@ -24,7 +24,7 @@ export const ROLES_INFORMATION = [
   {
     role: "Canceler",
     description:
-      "This role is can audit the payments requests made to the FailSafe. It can cancel payments request if they are not adequate.",
+      "This role is can audit the payments requests made to the SafeGuard. It can cancel payments request if they are not adequate.",
     assignmentTime: "Anytime if we have the Administrator role",
   },
 ];

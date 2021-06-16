@@ -19,13 +19,13 @@ import Manage from "modules/admin/components/Manage";
 // manager
 import Payments from "modules/manager/components/Payments";
 
-const FailSafeView: FC = () => {
+const SafeGuardView: FC = () => {
   // custom hooks
   const { transactions } = useTransactions();
 
   return (
     <Flex direction="column" w="full">
-      <PageHeader title="View FailSafe" />
+      <PageHeader title="View SafeGuard" />
       <Tabs>
         <TabList>
           <Tab>Roles</Tab>
@@ -49,4 +49,4 @@ const FailSafeView: FC = () => {
   );
 };
 
-export default FailSafeView;
+export default SafeGuardView;

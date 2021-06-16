@@ -1,5 +1,5 @@
 export const PaymentsFlowSteps = [
-  { type: "Step 1", description: "Request a payment from the FailSafe." },
+  { type: "Step 1", description: "Request a payment from the SafeGuard." },
   {
     type: "Step 2",
     description:

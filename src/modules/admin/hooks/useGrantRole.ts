@@ -64,7 +64,7 @@ export const useGrantRole = (): Values => {
       formikInfo.setSubmitting(true);
       const transferTx = await signedContract?.grantRole(
         formValues.role,
-        formValues.address
+        formValues.address.toLowerCase()
       );
       const receipt = await web3.waitForTransaction(transferTx.hash, 2);
       formikInfo.setSubmitting(false);

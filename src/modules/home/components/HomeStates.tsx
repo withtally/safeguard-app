@@ -26,7 +26,7 @@ const HomeStates: FC = () => {
         </Text>
         <Text color="gray.500" textStyle="body.regular.lg">
           These are the states in which a payment request can fall into in the
-          FailSafe flow.
+          SafeGuard flow.
         </Text>
       </Stack>
       <Flex shadow="gray.card" bg="white" direction="column">

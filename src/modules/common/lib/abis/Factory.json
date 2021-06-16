@@ -71,7 +71,7 @@
             "type": "string"
           }
         ],
-        "name": "createFailSafe",
+        "name": "createSafeGuard",
         "outputs": [
           {
             "internalType": "address",

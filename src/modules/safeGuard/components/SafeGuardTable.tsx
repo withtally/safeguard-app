@@ -18,29 +18,29 @@ import { Link as ReachLink } from "@reach/router";
 import { ROUTES } from "modules/common/lib/routes";
 
 // failSafe
-import { FailSafe } from "modules/failSafe/lib/types";
+import { SafeGuard } from "modules/safeGuard/lib/types";
 
 dayjs.extend(advancedFormat);
 
 type Props = {
-  safeList: FailSafe[];
+  safeList: SafeGuard[];
 };
 
-const FailSafeTable: FC<Props> = ({ safeList }) => {
+const SafeGuardTable: FC<Props> = ({ safeList }) => {
   const hasRows = Boolean(safeList.length);
   return (
     <Flex align="stretch" direction="column" w="full">
       <Table variant="simple" size="md">
         <Thead>
           <Tr>
-            <Th>FailSafe Name</Th>
-            <Th>FailSafe Address</Th>
+            <Th>SafeGuard Name</Th>
+            <Th>SafeGuard Address</Th>
             <Th>Admin Address</Th>
             <Th>View</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {safeList.map((safe: FailSafe, index: number) => (
+          {safeList.map((safe: SafeGuard, index: number) => (
             <Tr key={`${index}-${safe.rolManagerAddress}`}>
               <Td>{safe.safeName}</Td>
               <Td>{safe.rolManagerAddress}</Td>
@@ -69,4 +69,4 @@ const FailSafeTable: FC<Props> = ({ safeList }) => {
   );
 };
 
-export default FailSafeTable;
+export default SafeGuardTable;

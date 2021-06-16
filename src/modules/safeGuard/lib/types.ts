@@ -1,9 +1,9 @@
-export type InitialValuesCreateFailSafe = {
+export type InitialValuesCreateSafeGuard = {
   delay: string;
   safeName: string;
 };
 
-export type FailSafe = {
+export type SafeGuard = {
   admin: string;
   rolManagerAddress: string;
   safeName: string;

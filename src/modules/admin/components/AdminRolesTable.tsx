@@ -17,7 +17,7 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 // common
 import Avatar from "modules/common/components/Avatar";
 import { useUserInformation } from "modules/common/hooks/useUserInformation";
-import { getUsername } from "modules/common/lib/helpers";
+import { getUsername, getProfileImage } from "modules/common/lib/helpers";
 
 // admin
 import { ROLES } from "modules/admin/lib/constants";
@@ -58,13 +58,17 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
             const roleName = ROLES.find(
               (item) => item.id === role.roleId
             )?.label;
-            const username = getUsername(usersInformation, role.address, false);
+            const profileImage = getProfileImage(
+              usersInformation,
+              role.address
+            );
+            const username = getUsername(usersInformation, role.address);
 
             return (
               <Tr key={`${role.address}-${index}`}>
                 <Td>
                   <HStack spacing={2}>
-                    <Avatar address={role.address} />
+                    <Avatar address={role.address} src={profileImage} />
                     <Text color="gray.500" textStyle="body.regular.md">
                       {username}
                     </Text>

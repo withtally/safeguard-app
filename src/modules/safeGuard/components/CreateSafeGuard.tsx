@@ -4,11 +4,11 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { FormikErrors, FormikTouched } from "formik";
 
 // failsafe
-import CreateFailSafeForm from "modules/failSafe/components/CreateFailSafeForm";
-import { InitialValuesCreateFailSafe } from "modules/failSafe/lib/types";
+import CreateSafeGuardForm from "modules/safeGuard/components/CreateSafeGuardForm";
+import { InitialValuesCreateSafeGuard } from "modules/safeGuard/lib/types";
 
 type Props = {
-  values: InitialValuesCreateFailSafe;
+  values: InitialValuesCreateSafeGuard;
   submitForm: () => Promise<any>;
   handleChange: {
     (e: React.ChangeEvent<any>): void;
@@ -19,11 +19,11 @@ type Props = {
       : (e: string | React.ChangeEvent<any>) => void;
   };
   formSubmitting: boolean;
-  errors: FormikErrors<InitialValuesCreateFailSafe>;
-  touched: FormikTouched<InitialValuesCreateFailSafe>;
+  errors: FormikErrors<InitialValuesCreateSafeGuard>;
+  touched: FormikTouched<InitialValuesCreateSafeGuard>;
 };
 
-const CreateFailSafe: FC<FlexProps & Props> = ({
+const CreateSafeGuard: FC<FlexProps & Props> = ({
   values,
   errors,
   touched,
@@ -50,7 +50,7 @@ const CreateFailSafe: FC<FlexProps & Props> = ({
             Create a new fail safe
           </Text>
         </HStack>
-        <CreateFailSafeForm
+        <CreateSafeGuardForm
           values={values}
           errors={errors}
           touched={touched}
@@ -63,4 +63,4 @@ const CreateFailSafe: FC<FlexProps & Props> = ({
   );
 };
 
-export default CreateFailSafe;
+export default CreateSafeGuard;

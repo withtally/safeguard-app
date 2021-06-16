@@ -7,10 +7,10 @@ import FormInput from "modules/common/components/FormInput";
 import FormSelect from "modules/common/components/FormSelect";
 
 // failsafe
-import { InitialValuesCreateFailSafe } from "modules/failSafe/lib/types";
+import { InitialValuesCreateSafeGuard } from "modules/safeGuard/lib/types";
 
 type Props = {
-  values: InitialValuesCreateFailSafe;
+  values: InitialValuesCreateSafeGuard;
   submitForm: () => Promise<any>;
   handleChange: {
     (e: React.ChangeEvent<any>): void;
@@ -21,11 +21,11 @@ type Props = {
       : (e: string | React.ChangeEvent<any>) => void;
   };
   formSubmitting: boolean;
-  errors: FormikErrors<InitialValuesCreateFailSafe>;
-  touched: FormikTouched<InitialValuesCreateFailSafe>;
+  errors: FormikErrors<InitialValuesCreateSafeGuard>;
+  touched: FormikTouched<InitialValuesCreateSafeGuard>;
 };
 
-const CreateFailSafeForm: FC<Props> = ({
+const CreateSafeGuardForm: FC<Props> = ({
   values,
   errors,
   touched,
@@ -84,4 +84,4 @@ const CreateFailSafeForm: FC<Props> = ({
   );
 };
 
-export default CreateFailSafeForm;
+export default CreateSafeGuardForm;

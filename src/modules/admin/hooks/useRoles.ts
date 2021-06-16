@@ -52,27 +52,36 @@ export const useRoles = (): Values => {
 
     const members = [];
     for (let i = 0; i < proposersCount; ++i) {
-      const proposerAddress = await signedContract?.getRoleMember(
+      const proposerAddress = (await signedContract?.getRoleMember(
         proposerRole,
         i
-      );
-      members.push({ address: proposerAddress, roleId: proposerRole });
+      )) as string;
+      members.push({
+        address: proposerAddress.toLowerCase(),
+        roleId: proposerRole,
+      });
     }
 
     for (let i = 0; i < executersCount; ++i) {
-      const executerAddress = await signedContract?.getRoleMember(
+      const executerAddress = (await signedContract?.getRoleMember(
         executorRole,
         i
-      );
-      members.push({ address: executerAddress, roleId: executorRole });
+      )) as string;
+      members.push({
+        address: executerAddress.toLowerCase(),
+        roleId: executorRole,
+      });
     }
 
     for (let i = 0; i < cancelersCount; ++i) {
-      const cancelerAddress = await signedContract?.getRoleMember(
+      const cancelerAddress = (await signedContract?.getRoleMember(
         cancelerRole,
         i
-      );
-      members.push({ address: cancelerAddress, roleId: cancelerRole });
+      )) as string;
+      members.push({
+        address: cancelerAddress.toLowerCase(),
+        roleId: cancelerRole,
+      });
     }
 
     setGrantedRoles(members);

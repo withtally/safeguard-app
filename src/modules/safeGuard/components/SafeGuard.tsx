@@ -5,11 +5,11 @@ import { Flex } from "@chakra-ui/react";
 import PageHeader from "modules/common/components/PageHeader";
 
 // failSafe
-import FailSafeList from "modules/failSafe/components/FailSafeList";
-import CreateFailSafe from "modules/failSafe/components/CreateFailSafe";
-import { useFailSafe } from "modules/failSafe/hooks/useFailSafe";
+import SafeGuardList from "modules/safeGuard/components/SafeGuardList";
+import CreateSafeGuard from "modules/safeGuard/components/CreateSafeGuard";
+import { useSafeGuard } from "modules/safeGuard/hooks/useSafeGuard";
 
-const FailSafe: FC = () => {
+const SafeGuard: FC = () => {
   // custom hooks
   const {
     createdSafes,
@@ -19,11 +19,11 @@ const FailSafe: FC = () => {
     formSubmitting,
     errors,
     touched,
-  } = useFailSafe();
+  } = useSafeGuard();
   return (
     <Flex direction="column" w="full">
-      <PageHeader title="Created FailSafes" />
-      <CreateFailSafe
+      <PageHeader title="Created SafeGuards" />
+      <CreateSafeGuard
         values={values}
         errors={errors}
         touched={touched}
@@ -31,9 +31,9 @@ const FailSafe: FC = () => {
         handleChange={handleChange}
         formSubmitting={formSubmitting}
       />
-      <FailSafeList safeList={createdSafes} />
+      <SafeGuardList safeList={createdSafes} />
     </Flex>
   );
 };
 
-export default FailSafe;
+export default SafeGuard;

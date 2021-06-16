@@ -12,22 +12,22 @@ import FACTORY_JSON from "modules/common/lib/abis/Factory.json";
 
 // failSafe
 import {
-  InitialValuesCreateFailSafe,
-  FailSafe,
-} from "modules/failSafe/lib/types";
-import { CreateFailSafeValidationSchema } from "modules/failSafe/lib/validations";
-import { parseFailSafeCreations } from "modules/failSafe/lib/parsers/parseFailSafeCreations";
+  InitialValuesCreateSafeGuard,
+  SafeGuard,
+} from "modules/safeGuard/lib/types";
+import { CreateSafeGuardValidationSchema } from "modules/safeGuard/lib/validations";
+import { parseSafeGuardCreations } from "modules/safeGuard/lib/parsers/parseSafeGuardCreations";
 
 dayjs.extend(advancedFormat);
 
-const initialValues: InitialValuesCreateFailSafe = {
+const initialValues: InitialValuesCreateSafeGuard = {
   delay: "",
   safeName: "",
 };
 
 type Values = {
-  createdSafes?: FailSafe[];
-  values: InitialValuesCreateFailSafe;
+  createdSafes?: SafeGuard[];
+  values: InitialValuesCreateSafeGuard;
   submitForm: () => Promise<any>;
   handleChange: {
     (e: React.ChangeEvent<any>): void;
@@ -38,13 +38,13 @@ type Values = {
       : (e: string | React.ChangeEvent<any>) => void;
   };
   formSubmitting: boolean;
-  errors: FormikErrors<InitialValuesCreateFailSafe>;
-  touched: FormikTouched<InitialValuesCreateFailSafe>;
+  errors: FormikErrors<InitialValuesCreateSafeGuard>;
+  touched: FormikTouched<InitialValuesCreateSafeGuard>;
 };
 
-export const useFailSafe = (): Values => {
+export const useSafeGuard = (): Values => {
   // react hooks
-  const [registries, setRegistries] = useState<FailSafe[]>();
+  const [registries, setRegistries] = useState<SafeGuard[]>();
 
   // chakra hooks
   const toast = useToast();
@@ -68,7 +68,7 @@ export const useFailSafe = (): Values => {
         (await signedFactoryContract?.queryFilter(createdSafesEventFilter));
 
       const createdSafesInfo = createdSafes?.map(
-        (item) => item.args && parseFailSafeCreations(item.args)
+        (item) => item.args && parseSafeGuardCreations(item.args)
       );
 
       const allCreatedSafes = createdSafesInfo?.map((item) => {
@@ -77,7 +77,7 @@ export const useFailSafe = (): Values => {
             ...item,
           };
         }
-      }) as FailSafe[];
+      }) as SafeGuard[];
 
       setRegistries(allCreatedSafes);
     } catch (error) {
@@ -102,13 +102,13 @@ export const useFailSafe = (): Values => {
   });
 
   const onSubmit = async (
-    formValues: InitialValuesCreateFailSafe,
+    formValues: InitialValuesCreateSafeGuard,
     formikInfo: any
   ) => {
     try {
       formikInfo.setSubmitting(true);
 
-      const transferTx = await signedFactoryContract?.createFailSafe(
+      const transferTx = await signedFactoryContract?.createSafeGuard(
         formValues.delay,
         formValues.safeName
       );
@@ -119,7 +119,7 @@ export const useFailSafe = (): Values => {
       formikInfo.resetForm();
       toast({
         title: "Success",
-        description: "FailSafe created!",
+        description: "SafeGuard created!",
         status: "success",
         isClosable: true,
         position: "top",
@@ -140,7 +140,7 @@ export const useFailSafe = (): Values => {
   } = useFormik({
     initialValues,
     onSubmit,
-    validate: CreateFailSafeValidationSchema,
+    validate: CreateSafeGuardValidationSchema,
   });
 
   return {

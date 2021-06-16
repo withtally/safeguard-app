@@ -1,9 +1,11 @@
 import { utils } from "ethers";
 
 // failSafe
-import { FailSafe } from "modules/failSafe/lib/types";
+import { SafeGuard } from "modules/safeGuard/lib/types";
 
-export const parseFailSafeCreations = (safeCreated: utils.Result): FailSafe => {
+export const parseSafeGuardCreations = (
+  safeCreated: utils.Result
+): SafeGuard => {
   return {
     admin: safeCreated.admin,
     rolManagerAddress: safeCreated.rolManagerAddress,

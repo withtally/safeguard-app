@@ -29,7 +29,7 @@ export const useFundInformation = () => {
     contractAbi: TOKEN_JSON.abi,
   });
 
-  const getFailSafeTokenBalance = useCallback(async () => {
+  const getSafeGuardTokenBalance = useCallback(async () => {
     // fail safe timelock
     try {
       const timelock = await rolManagerSignedContract?.timelock();
@@ -40,19 +40,19 @@ export const useFundInformation = () => {
       setTimelockAddress(timelock);
     } catch (e) {
       console.log(
-        "🚀 ~ file: useFundInformation.ts ~ line 27 ~ getFailSafeTokenBalance ~ e",
+        "🚀 ~ file: useFundInformation.ts ~ line 27 ~ getSafeGuardTokenBalance ~ e",
         e
       );
     }
   }, [rolManagerSignedContract, signedTokenContract]);
 
   useEffect(() => {
-    if (signedTokenContract) getFailSafeTokenBalance();
-  }, [signedTokenContract, getFailSafeTokenBalance]);
+    if (signedTokenContract) getSafeGuardTokenBalance();
+  }, [signedTokenContract, getSafeGuardTokenBalance]);
 
   return {
     fundBalance,
     timelockAddress,
-    getFailSafeTokenBalance,
+    getSafeGuardTokenBalance,
   };
 };

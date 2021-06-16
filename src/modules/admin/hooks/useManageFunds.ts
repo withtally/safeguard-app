@@ -44,7 +44,7 @@ export const useManageFunds = (): Values => {
   const toast = useToast();
 
   // custom hook
-  const { timelockAddress, getFailSafeTokenBalance, fundBalance } =
+  const { timelockAddress, getSafeGuardTokenBalance, fundBalance } =
     useFundInformation();
   const { signedContract: signedTokenContract } = useSignedContract({
     contractAddress: tokenAddress,
@@ -76,7 +76,7 @@ export const useManageFunds = (): Values => {
         ethers.utils.parseEther(formValues.amount)
       );
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-      await getFailSafeTokenBalance();
+      await getSafeGuardTokenBalance();
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
     } catch (error) {

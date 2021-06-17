@@ -42,7 +42,8 @@ export const useSafeGuard = (): Values => {
   const toast = useToast();
 
   // constants
-  const factoryAddress = CONTRACT_ADDRESSES.factory.rinkeby;
+  const factoryAddress =
+    CONTRACT_ADDRESSES.factory[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
   const { signedContract: signedFactoryContract } = useSignedContract({

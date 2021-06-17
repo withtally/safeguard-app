@@ -62,7 +62,8 @@ export const usePayments = (): Values => {
   const toast = useToast();
 
   // constants
-  const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
+  const tokenAddress =
+    CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
   const { timelockAddress } = useFundInformation();

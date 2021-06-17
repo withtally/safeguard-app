@@ -38,7 +38,8 @@ type Values = {
 
 export const useManageFunds = (): Values => {
   // constant
-  const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
+  const tokenAddress =
+    CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // chakra hooks
   const toast = useToast();

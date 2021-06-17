@@ -17,7 +17,8 @@ export const useFundInformation = () => {
   const [timelockAddress, setTimelockAddress] = useState("");
 
   // constant
-  const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
+  const tokenAddress =
+    CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
   const { signedContract: safeGuardSignedContract } = useSignedContract({

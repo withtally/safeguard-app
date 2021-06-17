@@ -1,35 +1,24 @@
 import { FC } from "react";
 import { Text, Flex, FlexProps, HStack, Icon } from "@chakra-ui/react";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { FormikErrors, FormikTouched } from "formik";
+import { FormikHelpers } from "formik";
 
-// failsafe
+// safeGuard
 import CreateSafeGuardForm from "modules/safeGuard/components/CreateSafeGuardForm";
 import { InitialValuesCreateSafeGuard } from "modules/safeGuard/lib/types";
 
 type Props = {
-  values: InitialValuesCreateSafeGuard;
-  submitForm: () => Promise<any>;
-  handleChange: {
-    (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
-  formSubmitting: boolean;
-  errors: FormikErrors<InitialValuesCreateSafeGuard>;
-  touched: FormikTouched<InitialValuesCreateSafeGuard>;
+  initialValues: InitialValuesCreateSafeGuard;
+  formSubmitingFormik: (
+    formValues: InitialValuesCreateSafeGuard,
+    actions: FormikHelpers<InitialValuesCreateSafeGuard>
+  ) => Promise<void>;
 };
 
 const CreateSafeGuard: FC<FlexProps & Props> = ({
-  values,
-  errors,
-  touched,
-  handleChange,
-  submitForm,
-  formSubmitting,
+  initialValues,
+
+  formSubmitingFormik,
   ...flexProps
 }) => {
   return (
@@ -51,12 +40,8 @@ const CreateSafeGuard: FC<FlexProps & Props> = ({
           </Text>
         </HStack>
         <CreateSafeGuardForm
-          values={values}
-          errors={errors}
-          touched={touched}
-          submitForm={submitForm}
-          handleChange={handleChange}
-          formSubmitting={formSubmitting}
+          initialValues={initialValues}
+          formSubmitingFormik={formSubmitingFormik}
         />
       </Flex>
     </Flex>

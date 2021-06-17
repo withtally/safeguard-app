@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useFormik, FormikErrors, FormikTouched } from "formik";
+import { useFormik, FormikErrors, FormikTouched, FormikHelpers } from "formik";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import { useToast } from "@chakra-ui/react";
@@ -10,12 +10,11 @@ import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import FACTORY_JSON from "modules/common/lib/abis/Factory.json";
 
-// failSafe
+// safeGuard
 import {
   InitialValuesCreateSafeGuard,
   SafeGuard,
 } from "modules/safeGuard/lib/types";
-import { CreateSafeGuardValidationSchema } from "modules/safeGuard/lib/validations";
 import { parseSafeGuardCreations } from "modules/safeGuard/lib/parsers/parseSafeGuardCreations";
 
 dayjs.extend(advancedFormat);
@@ -23,25 +22,16 @@ dayjs.extend(advancedFormat);
 const initialValues: InitialValuesCreateSafeGuard = {
   delay: "",
   safeGuardName: "",
-  roles: [],
-  rolesAssignees: [],
+  rolesAssignations: [{ role: "", address: "" }],
 };
 
 type Values = {
   createdSafes?: SafeGuard[];
-  values: InitialValuesCreateSafeGuard;
-  submitForm: () => Promise<any>;
-  handleChange: {
-    (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
-      ? void
-      : (e: string | React.ChangeEvent<any>) => void;
-  };
-  formSubmitting: boolean;
-  errors: FormikErrors<InitialValuesCreateSafeGuard>;
-  touched: FormikTouched<InitialValuesCreateSafeGuard>;
+  initialValues: InitialValuesCreateSafeGuard;
+  formSubmitingFormik: (
+    formValues: InitialValuesCreateSafeGuard,
+    actions: FormikHelpers<InitialValuesCreateSafeGuard>
+  ) => Promise<void>;
 };
 
 export const useSafeGuard = (): Values => {
@@ -59,7 +49,7 @@ export const useSafeGuard = (): Values => {
     contractAddress: factoryAddress,
     contractAbi: FACTORY_JSON.abi,
   });
-  const { web3 } = useWeb3();
+  const { web3, signerAddress } = useWeb3();
 
   const getRegistries = async () => {
     try {
@@ -103,24 +93,31 @@ export const useSafeGuard = (): Values => {
     };
   });
 
-  const onSubmit = async (
+  const formSubmitingFormik = async (
     formValues: InitialValuesCreateSafeGuard,
-    formikInfo: any
+    actions: FormikHelpers<InitialValuesCreateSafeGuard>
   ) => {
+    console.log("🚀 ~  useSafeGuard ~ formSubmitingFormik ~ entro?");
     try {
-      formikInfo.setSubmitting(true);
+      actions.setSubmitting(true);
+
+      const roles = formValues.rolesAssignations.map(({ role }) => role);
+      const rolesAssignees = formValues.rolesAssignations.map(
+        ({ address }) => address
+      );
 
       const transferTx = await signedFactoryContract?.createSafeGuard(
         formValues.delay,
         formValues.safeGuardName,
-        formValues.roles,
-        formValues.rolesAssignees
+        signerAddress,
+        roles,
+        rolesAssignees
       );
 
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
 
-      formikInfo.setSubmitting(false);
-      formikInfo.resetForm();
+      actions.setSubmitting(false);
+      actions.resetForm();
       toast({
         title: "Success",
         description: "SafeGuard created!",
@@ -133,27 +130,9 @@ export const useSafeGuard = (): Values => {
     }
   };
 
-  // formik hooks
-  const {
-    values,
-    handleChange,
-    submitForm,
-    isSubmitting: formSubmitting,
-    errors,
-    touched,
-  } = useFormik({
-    initialValues,
-    onSubmit,
-    validate: CreateSafeGuardValidationSchema,
-  });
-
   return {
     createdSafes: registries,
-    values,
-    handleChange,
-    submitForm,
-    formSubmitting,
-    errors,
-    touched,
+    initialValues,
+    formSubmitingFormik,
   };
 };

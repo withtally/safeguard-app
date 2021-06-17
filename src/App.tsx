@@ -10,7 +10,7 @@ import PublicRoute from "modules/common/lib/router/PublicRoute";
 // home
 import Home from "modules/home/components/Home";
 
-// failSafe
+// safeGuard
 import SafeGuard from "modules/safeGuard/components/SafeGuard";
 import SafeGuardView from "modules/safeGuard/components/SafeGuardView";
 

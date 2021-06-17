@@ -23,11 +23,11 @@ type Props = {
   onChange: HandleChange;
   label: string;
   name: string;
-  value: string;
   placeholder: string;
   selectProps?: SelectProps;
-  errors: FormikErrors<FormikValues>;
-  touched: FormikTouched<FormikValues>;
+  errors?: FormikErrors<FormikValues>;
+  touched?: FormikTouched<FormikValues>;
+  values?: FormikValues;
 };
 
 const FormSelect: FC<Props & FormControlProps> = ({
@@ -35,10 +35,10 @@ const FormSelect: FC<Props & FormControlProps> = ({
   name,
   children,
   placeholder,
-  value,
   selectProps,
   errors,
   touched,
+  values,
   onChange,
   ...formControlProps
 }) => (
@@ -55,7 +55,7 @@ const FormSelect: FC<Props & FormControlProps> = ({
       name={name}
       borderRadius="sm"
       placeholder={placeholder}
-      value={value}
+      value={values?.[name]}
       onChange={onChange}
       {...selectProps}
     >

@@ -21,9 +21,9 @@ type HandleChange = Pick<FormikHandlers, "handleChange">["handleChange"];
 
 type Props = {
   onChange: HandleChange;
-  errors: FormikErrors<FormikValues>;
-  values: FormikValues;
-  touched: FormikTouched<FormikValues>;
+  errors?: FormikErrors<FormikValues>;
+  values?: FormikValues;
+  touched?: FormikTouched<FormikValues>;
   placeholder: string;
   name: string;
   label: string;

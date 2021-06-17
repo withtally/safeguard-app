@@ -11,7 +11,7 @@ export const CONTRACT_ADDRESSES = {
 
 export const ROLES_HASHES = {
   adminRole:
-    "0x95c635045ba2ff79d717ac1815074771bdf7fddb40217415c477a5dc34189cb5",
+    "0x4d24ab45748a6ecc89bf952130c4a24a2898c348055b933e3c31ea6a0388765f",
   proposerRole:
     "0xb09aa5aeb3702cfd50b6b62bc4532604938f21248a27a1d5ca736082b6819cc1",
   executorRole:

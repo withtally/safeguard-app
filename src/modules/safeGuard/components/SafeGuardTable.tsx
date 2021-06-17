@@ -21,7 +21,7 @@ import Avatar from "modules/common/components/Avatar";
 import { useUserInformation } from "modules/common/hooks/useUserInformation";
 import { getUsername, getProfileImage } from "modules/common/lib/helpers";
 
-// failSafe
+// safeGuard
 import { SafeGuard } from "modules/safeGuard/lib/types";
 
 dayjs.extend(advancedFormat);

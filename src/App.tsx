@@ -10,17 +10,17 @@ import PublicRoute from "modules/common/lib/router/PublicRoute";
 // home
 import Home from "modules/home/components/Home";
 
-// failSafe
-import FailSafe from "modules/failSafe/components/FailSafe";
-import FailSafeView from "modules/failSafe/components/FailSafeView";
+// safeGuard
+import SafeGuard from "modules/safeGuard/components/SafeGuard";
+import SafeGuardView from "modules/safeGuard/components/SafeGuardView";
 
 const App: FC = () => {
   return (
     <Layout>
       <Router>
         <PublicRoute component={Home} path="/" />
-        <PublicRoute component={FailSafe} path="/safes" />
-        <PublicRoute component={FailSafeView} path="/view/:rolManagerAddress" />
+        <PublicRoute component={SafeGuard} path="/safes" />
+        <PublicRoute component={SafeGuardView} path="/view/:safeGuardAddress" />
       </Router>
     </Layout>
   );

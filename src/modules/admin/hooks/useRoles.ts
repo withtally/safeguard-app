@@ -7,7 +7,7 @@ import { useSignedContract } from "modules/common/hooks/useSignedContract";
 import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 
 // admin
 import { GrantedRole } from "modules/admin/lib/types";
@@ -20,7 +20,7 @@ type Values = {
 
 export const useRoles = (): Values => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // react hooks
   const [grantedRoles, setGrantedRoles] = useState<GrantedRole[]>();
@@ -31,8 +31,8 @@ export const useRoles = (): Values => {
 
   // custom hooks
   const { signedContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
   const { hasAdminRole } = useUserInfo();
@@ -52,27 +52,36 @@ export const useRoles = (): Values => {
 
     const members = [];
     for (let i = 0; i < proposersCount; ++i) {
-      const proposerAddress = await signedContract?.getRoleMember(
+      const proposerAddress = (await signedContract?.getRoleMember(
         proposerRole,
         i
-      );
-      members.push({ address: proposerAddress, roleId: proposerRole });
+      )) as string;
+      members.push({
+        address: proposerAddress.toLowerCase(),
+        roleId: proposerRole,
+      });
     }
 
     for (let i = 0; i < executersCount; ++i) {
-      const executerAddress = await signedContract?.getRoleMember(
+      const executerAddress = (await signedContract?.getRoleMember(
         executorRole,
         i
-      );
-      members.push({ address: executerAddress, roleId: executorRole });
+      )) as string;
+      members.push({
+        address: executerAddress.toLowerCase(),
+        roleId: executorRole,
+      });
     }
 
     for (let i = 0; i < cancelersCount; ++i) {
-      const cancelerAddress = await signedContract?.getRoleMember(
+      const cancelerAddress = (await signedContract?.getRoleMember(
         cancelerRole,
         i
-      );
-      members.push({ address: cancelerAddress, roleId: cancelerRole });
+      )) as string;
+      members.push({
+        address: cancelerAddress.toLowerCase(),
+        roleId: cancelerRole,
+      });
     }
 
     setGrantedRoles(members);

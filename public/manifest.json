@@ -1,7 +1,11 @@
 {
-  "short_name": "FailSafe App",
-  "name": "FailSafe App",
-  "description": "Administrate your FailSafe here",
+  "short_name": "SafeGuard App",
+  "name": "SafeGuard App",
+  "description": "Administrate your SafeGuard here",
+  "providedBy": {
+    "name": "Tally", 
+    "url": "https://withtally.com"
+  },
   "iconPath": "logo.svg",
   "icons": [
     {

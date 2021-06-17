@@ -2,15 +2,15 @@ import { FC } from "react";
 import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
 import { IoSettingsOutline } from "react-icons/io5";
 
-// failSafe
-import FailSafeTable from "modules/failSafe/components/FailSafeTable";
-import { FailSafe } from "modules/failSafe/lib/types";
+// safeGuard
+import SafeGuardTable from "modules/safeGuard/components/SafeGuardTable";
+import { SafeGuard } from "modules/safeGuard/lib/types";
 
 type Props = {
-  safeList?: FailSafe[];
+  safeList?: SafeGuard[];
 };
 
-const FailSafeList: FC<Props> = ({ safeList }) => {
+const SafeGuardList: FC<Props> = ({ safeList }) => {
   return (
     <Stack
       as="section"
@@ -25,14 +25,14 @@ const FailSafeList: FC<Props> = ({ safeList }) => {
       <HStack spacing={1.5}>
         <Icon as={IoSettingsOutline} w={6} h={6} />
         <Text color="gray.800" flex={1} mb={4} textStyle="paragraph">
-          List of created FailSafe
+          List of created SafeGuard
         </Text>
       </HStack>
       <Flex border="gray.dark" bg="white" direction="column">
-        {safeList && <FailSafeTable safeList={safeList} />}
+        {safeList && <SafeGuardTable safeList={safeList} />}
       </Flex>
     </Stack>
   );
 };
 
-export default FailSafeList;
+export default SafeGuardList;

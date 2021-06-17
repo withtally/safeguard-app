@@ -4,6 +4,7 @@ import {
   FormikValues,
   FormikHandlers,
   FormikTouched,
+  getIn,
 } from "formik";
 
 import {
@@ -23,11 +24,11 @@ type Props = {
   onChange: HandleChange;
   label: string;
   name: string;
-  value: string;
   placeholder: string;
   selectProps?: SelectProps;
-  errors: FormikErrors<FormikValues>;
-  touched: FormikTouched<FormikValues>;
+  errors?: FormikErrors<FormikValues>;
+  touched?: FormikTouched<FormikValues>;
+  values?: FormikValues;
 };
 
 const FormSelect: FC<Props & FormControlProps> = ({
@@ -35,34 +36,35 @@ const FormSelect: FC<Props & FormControlProps> = ({
   name,
   children,
   placeholder,
-  value,
   selectProps,
   errors,
   touched,
+  values,
   onChange,
   ...formControlProps
-}) => (
-  <FormControl
-    isInvalid={Boolean(touched?.[name] && errors?.[name])}
-    {...formControlProps}
-  >
-    <FormLabel htmlFor={name}>{label}</FormLabel>
-    <Select
-      _focus={{
-        boxShadow: "outline",
-      }}
-      id={name}
-      name={name}
-      borderRadius="sm"
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      {...selectProps}
-    >
-      {children}
-    </Select>
-    <FormErrorMessage>{errors?.[name]}</FormErrorMessage>
-  </FormControl>
-);
+}) => {
+  const error = getIn(errors, name);
+  const touch = getIn(touched, name);
 
+  return (
+    <FormControl isInvalid={Boolean(touch && error)} {...formControlProps}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <Select
+        _focus={{
+          boxShadow: "outline",
+        }}
+        id={name}
+        name={name}
+        borderRadius="sm"
+        placeholder={placeholder}
+        value={values?.[name]}
+        onChange={onChange}
+        {...selectProps}
+      >
+        {children}
+      </Select>
+      <FormErrorMessage>{error}</FormErrorMessage>
+    </FormControl>
+  );
+};
 export default FormSelect;

@@ -8,7 +8,10 @@ export const ROLES = [
 ];
 
 export const FundManagementSteps = [
-  { type: "Step 1", description: "Review the payments requested to FailSafe." },
+  {
+    type: "Step 1",
+    description: "Review the payments requested to SafeGuard.",
+  },
   {
     type: "Step 2",
     description:
@@ -20,7 +23,7 @@ export const ROLE_TYPES_INFO = [
   {
     type: "Proposer",
     description:
-      "The proposer role is the one that can make payment request to the FailSafe, this request will be queued in the timelock.",
+      "The proposer role is the one that can make payment request to the SafeGuard, this request will be queued in the timelock.",
   },
   {
     type: "Executor",
@@ -30,6 +33,6 @@ export const ROLE_TYPES_INFO = [
   {
     type: "Canceler",
     description:
-      "The canceler role is the one that will audit the payments requests made to the FailSafe. This role can cancel payments request if they are not adequate.",
+      "The canceler role is the one that will audit the payments requests made to the SafeGuard. This role can cancel payments request if they are not adequate.",
   },
 ];

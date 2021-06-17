@@ -9,7 +9,7 @@ import { useWeb3 } from "modules/common/hooks/useWeb3";
 
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
 
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 
 // admin
 import { Transaction } from "modules/admin/lib/types";
@@ -22,14 +22,14 @@ type Values = {
 
 export const useCancelRequest = (): Values => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // chakra hooks
   const toast = useToast();
 
   const { signedContract: signedRolContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
   const { hasCancelerRole } = useUserInfo();

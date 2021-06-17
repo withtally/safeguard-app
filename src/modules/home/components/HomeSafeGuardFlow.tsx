@@ -2,9 +2,9 @@ import { FC } from "react";
 import { Flex, Image } from "@chakra-ui/react";
 
 // assets
-import FailFlow from "assets/images/fail-flow.png";
+import SafeGuardFlow from "assets/images/safeGuard-flow.png";
 
-const HomeFailFlow: FC = () => {
+const HomeSafeGuardFlow: FC = () => {
   return (
     <Flex
       shadow="gray.card"
@@ -14,9 +14,9 @@ const HomeFailFlow: FC = () => {
       px={6}
       py={7}
     >
-      <Image src={FailFlow} />
+      <Image src={SafeGuardFlow} />
     </Flex>
   );
 };
 
-export default HomeFailFlow;
+export default HomeSafeGuardFlow;

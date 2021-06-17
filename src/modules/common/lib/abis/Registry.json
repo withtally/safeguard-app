@@ -49,7 +49,7 @@
             "type": "uint256"
           }
         ],
-        "name": "getFailSafe",
+        "name": "getSafeGuard",
         "outputs": [
           {
             "internalType": "address",
@@ -62,7 +62,7 @@
       },
       {
         "inputs": [],
-        "name": "getFailSafeCount",
+        "name": "getSafeGuardCount",
         "outputs": [
           {
             "internalType": "uint256",

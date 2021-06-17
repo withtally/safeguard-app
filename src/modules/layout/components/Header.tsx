@@ -23,7 +23,7 @@ const Header: FC = () => {
       >
         <Box>
           <Link _hover={{ textDecor: "none" }} as={ReachLink} to={ROUTES.home}>
-            <Text textStyle="h4">FailSafe</Text>
+            <Text textStyle="h4">SafeGuard</Text>
           </Link>
         </Box>
         <HStack spacing={4}>

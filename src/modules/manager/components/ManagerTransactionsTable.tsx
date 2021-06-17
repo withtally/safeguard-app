@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import {
   Table,
   Thead,
@@ -18,6 +18,8 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 import { parseBigNumber } from "modules/common/lib/helpers";
 import StatusTag from "modules/common/components/StatusTag";
 import Avatar from "modules/common/components/Avatar";
+import { useUserInformation } from "modules/common/hooks/useUserInformation";
+import { getUsername, getProfileImage } from "modules/common/lib/helpers";
 
 // admin
 import { Transaction } from "modules/admin/lib/types";
@@ -36,7 +38,17 @@ const ManagerTransactionsTable: FC<Props> = ({
   transactions,
   executeTransaction,
 }) => {
+  // constants
+  const addresses = useMemo(
+    () => transactions.map((transaction) => transaction.transferTo),
+    [transactions]
+  );
   const hasRows = Boolean(transactions.length);
+
+  // custom hooks
+  const { usersInformation } = useUserInformation({
+    addresses,
+  });
   return (
     <Flex align="stretch" direction="column" w="full">
       <Table variant="simple" size="md">
@@ -57,22 +69,49 @@ const ManagerTransactionsTable: FC<Props> = ({
             const etaMeet = transaction.eta <= dayjs().format("X");
             const btnDisabled =
               !transaction.currentlyQueued || !etaMeet || transaction.stale;
+
+            const profileImage = getProfileImage(
+              usersInformation,
+              transaction.transferTo
+            );
+            const username = getUsername(
+              usersInformation,
+              transaction.transferTo,
+              false
+            );
             return (
               <Tr key={`${index}-${transaction.txHash}`}>
                 <Td>
                   <HStack spacing={2}>
-                    <Avatar address={transaction.transferTo} />
+                    <Avatar
+                      address={transaction.transferTo}
+                      src={profileImage}
+                    />
                     <Text color="gray.500" textStyle="body.regular.md">
-                      {transaction.transferTo}
+                      {username}
                     </Text>
                   </HStack>
                 </Td>
-                <Td>{transaction.description}</Td>
-                <Td isNumeric>
-                  {parseBigNumber(Number(transaction.rawAmount))} UNI
+                <Td>
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {transaction.description}{" "}
+                  </Text>
                 </Td>
-                <Td>{transaction.date}</Td>
-                <Td>{transaction.expireDate}</Td>
+                <Td isNumeric>
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {parseBigNumber(Number(transaction.rawAmount))} UNI{" "}
+                  </Text>
+                </Td>
+                <Td>
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {transaction.date}
+                  </Text>
+                </Td>
+                <Td>
+                  <Text color="gray.500" textStyle="body.regular.md">
+                    {transaction.expireDate}
+                  </Text>
+                </Td>
                 <Td>
                   <StatusTag size="sm" status={status} />
                 </Td>

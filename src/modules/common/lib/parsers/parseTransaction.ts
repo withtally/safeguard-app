@@ -35,11 +35,11 @@ export const parseTransaction = (
   return {
     txHash: transaction.txHash,
     signature: transaction.signature,
-    target: transaction.target,
+    target: transaction.target.toLowerCase(),
     data: transaction.data,
     value: transaction.value,
     eta: transaction.eta.toString(),
-    transferTo: decodedInfo?.dst,
+    transferTo: decodedInfo?.dst.toLowerCase(),
     rawAmount: decodedInfo?.rawAmount.toString(),
     description: transaction.description,
     date: dayjs(transaction.eta * 1000).format("MM/DD/YYYY hh:mm:ss A"),

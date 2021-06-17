@@ -21,7 +21,7 @@ const GrantRoleForm: FC = () => {
             id="role"
             name="role"
             label="Role"
-            value={values.role}
+            values={values}
             placeholder="Select role"
             onChange={handleChange}
             errors={errors}

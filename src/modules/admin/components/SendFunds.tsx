@@ -30,7 +30,7 @@ const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
         <HStack spacing={1.5} mb={12}>
           <Icon as={IoAddCircleOutline} w={6} h={6} />
           <Text color="gray.800" flex={1} mb={4} textStyle="paragraph">
-            Fund the Failsafe
+            Fund the SafeGuard
           </Text>
         </HStack>
 

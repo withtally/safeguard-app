@@ -5,7 +5,7 @@ import { useParams } from "@reach/router";
 import { ROLES_HASHES } from "modules/common/lib/constants";
 import { useWeb3 } from "modules/common/hooks/useWeb3";
 import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 
 type Values = {
   hasAdminRole: boolean;
@@ -16,7 +16,7 @@ type Values = {
 
 export const useUserInfo = (): Values => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // react hooks
   const [hasAdminRole, setHasAdminRole] = useState(false);
@@ -27,8 +27,8 @@ export const useUserInfo = (): Values => {
   // custom hooks
   const { signerAddress } = useWeb3();
   const { signedContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
 
   useEffect(() => {

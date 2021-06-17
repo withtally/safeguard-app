@@ -14,7 +14,7 @@ import { parseTransaction } from "modules/common/lib/parsers/parseTransaction";
 import { useUserInfo } from "modules/common/hooks/useUserInfo";
 import { RequestPaymentValidationSchema } from "modules/common/lib/validations";
 import { useFundInformation } from "modules/common/hooks/useFundInformation";
-import ROLMANAGER_JSON from "modules/common/lib/abis/RolManager.json";
+import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
 import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
 import TIMELOCK_JSON from "modules/common/lib/abis/Timelock.json";
 
@@ -55,7 +55,7 @@ type Values = {
 
 export const useTransactions = (): Values => {
   // router hooks
-  const { rolManagerAddress } = useParams();
+  const { safeGuardAddress } = useParams();
 
   // react hooks
   const [transactions, setTransactions] = useState<Transaction[]>();
@@ -65,7 +65,8 @@ export const useTransactions = (): Values => {
   const toast = useToast();
 
   // constants
-  const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
+  const tokenAddress =
+    CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
   const { timelockAddress } = useFundInformation();
@@ -74,8 +75,8 @@ export const useTransactions = (): Values => {
     contractAbi: TIMELOCK_JSON.abi,
   });
   const { signedContract: signedRolContract } = useSignedContract({
-    contractAddress: rolManagerAddress,
-    contractAbi: ROLMANAGER_JSON.abi,
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
   const { hasCancelerRole, hasExecutorRole, hasProposerRole } = useUserInfo();
@@ -83,7 +84,7 @@ export const useTransactions = (): Values => {
   const getTimelockEvents = async () => {
     try {
       const queuedEventFilter =
-        await signedRolContract?.filters.QueueTransaction();
+        await signedRolContract?.filters.QueueTransactionWithDescription();
       const queuedTransactions =
         queuedEventFilter &&
         (await signedRolContract?.queryFilter(queuedEventFilter));

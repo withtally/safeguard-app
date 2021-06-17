@@ -22,7 +22,7 @@ const HomeRoles: FC = () => {
           Roles
         </Text>
         <Text color="gray.500" textStyle="body.regular.lg">
-          These are the roles that exists in the FailSafe app.
+          These are the roles that exists in the SafeGuard app.
         </Text>
       </Stack>
       <Flex shadow="gray.card" bg="white" direction="column">

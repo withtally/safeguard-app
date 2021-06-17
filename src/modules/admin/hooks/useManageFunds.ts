@@ -38,13 +38,14 @@ type Values = {
 
 export const useManageFunds = (): Values => {
   // constant
-  const tokenAddress = CONTRACT_ADDRESSES.token.rinkeby;
+  const tokenAddress =
+    CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // chakra hooks
   const toast = useToast();
 
   // custom hook
-  const { timelockAddress, getFailSafeTokenBalance, fundBalance } =
+  const { timelockAddress, getSafeGuardTokenBalance, fundBalance } =
     useFundInformation();
   const { signedContract: signedTokenContract } = useSignedContract({
     contractAddress: tokenAddress,
@@ -76,7 +77,7 @@ export const useManageFunds = (): Values => {
         ethers.utils.parseEther(formValues.amount)
       );
       const receipt = await web3.waitForTransaction(transferTx.hash, 3);
-      await getFailSafeTokenBalance();
+      await getSafeGuardTokenBalance();
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
     } catch (error) {

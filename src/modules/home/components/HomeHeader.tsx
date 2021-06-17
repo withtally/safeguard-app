@@ -20,7 +20,7 @@ const HomeHeader: FC = () => (
         Welcome!
       </Text>
       <Text textStyle="paragraph" textAlign="center">
-        This flow overview will help you understand the SafeApp{" "}
+        This flow overview will help you understand the SafeGuard App{" "}
         <span role="img" aria-label="spaceship">
           🚀
         </span>

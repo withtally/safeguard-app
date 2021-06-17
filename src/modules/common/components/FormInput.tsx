@@ -4,6 +4,7 @@ import {
   FormikValues,
   FormikHandlers,
   FormikTouched,
+  getIn,
 } from "formik";
 import {
   FormControl,
@@ -42,32 +43,36 @@ const FormInput: FC<Props & FlexProps> = ({
   inputProps,
   isDisabled = false,
   ...flexProps
-}) => (
-  <Flex w="full" {...flexProps}>
-    <FormControl isInvalid={Boolean(touched?.[name] && errors?.[name])}>
-      <FormLabel htmlFor={name}>{label}</FormLabel>
-      <Input
-        _focus={{
-          boxShadow: "outline",
-        }}
-        _placeholder={{
-          color: "gray.400",
-        }}
-        border="gray.dark"
-        borderColor="auto"
-        color="gray.500"
-        id={name}
-        isDisabled={isDisabled}
-        name={name}
-        onChange={onChange}
-        placeholder={placeholder}
-        type="text"
-        value={values?.[name]}
-        {...inputProps}
-      />
-      <FormErrorMessage>{errors?.[name]}</FormErrorMessage>
-    </FormControl>
-  </Flex>
-);
+}) => {
+  const error = getIn(errors, name);
+  const touch = getIn(touched, name);
+  return (
+    <Flex w="full" {...flexProps}>
+      <FormControl isInvalid={Boolean(touch && error)}>
+        <FormLabel htmlFor={name}>{label}</FormLabel>
+        <Input
+          _focus={{
+            boxShadow: "outline",
+          }}
+          _placeholder={{
+            color: "gray.400",
+          }}
+          border="gray.dark"
+          borderColor="auto"
+          color="gray.500"
+          id={name}
+          isDisabled={isDisabled}
+          name={name}
+          onChange={onChange}
+          placeholder={placeholder}
+          type="text"
+          value={values?.[name]}
+          {...inputProps}
+        />
+        <FormErrorMessage>{error}</FormErrorMessage>
+      </FormControl>
+    </Flex>
+  );
+};
 
 export default FormInput;

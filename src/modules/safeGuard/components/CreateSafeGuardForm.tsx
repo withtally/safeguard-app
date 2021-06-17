@@ -13,8 +13,6 @@ import { CreateSafeGuardValidationSchema } from "modules/safeGuard/lib/validatio
 // admin
 import { ROLES } from "modules/admin/lib/constants";
 
-const emptyRolAssignation = { role: "", address: "" };
-
 type Props = {
   initialValues: InitialValuesCreateSafeGuard;
   formSubmitingFormik: (
@@ -27,6 +25,7 @@ const CreateSafeGuardForm: FC<Props> = ({
   initialValues,
   formSubmitingFormik,
 }) => {
+  const emptyRolAssignation = { role: "", address: "" };
   return (
     <Formik
       initialValues={initialValues}
@@ -86,7 +85,7 @@ const CreateSafeGuardForm: FC<Props> = ({
                     <Text textStyle="h6">Rol assigment list</Text>
                     <Button
                       size="md"
-                      variant="secondary"
+                      variant="tertiary"
                       onClick={() => push(emptyRolAssignation)}
                     >
                       Add a new role
@@ -139,9 +138,6 @@ const CreateSafeGuardForm: FC<Props> = ({
             <Button size="md" variant="primary" type="submit" maxW={44}>
               Create
             </Button>
-            <Text textStyle="body.regular.md">
-              {JSON.stringify({ values, errors })}
-            </Text>
           </Stack>
         </form>
       )}

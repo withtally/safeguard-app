@@ -4,6 +4,7 @@ import {
   FormikValues,
   FormikHandlers,
   FormikTouched,
+  getIn,
 } from "formik";
 
 import {
@@ -41,28 +42,29 @@ const FormSelect: FC<Props & FormControlProps> = ({
   values,
   onChange,
   ...formControlProps
-}) => (
-  <FormControl
-    isInvalid={Boolean(touched?.[name] && errors?.[name])}
-    {...formControlProps}
-  >
-    <FormLabel htmlFor={name}>{label}</FormLabel>
-    <Select
-      _focus={{
-        boxShadow: "outline",
-      }}
-      id={name}
-      name={name}
-      borderRadius="sm"
-      placeholder={placeholder}
-      value={values?.[name]}
-      onChange={onChange}
-      {...selectProps}
-    >
-      {children}
-    </Select>
-    <FormErrorMessage>{errors?.[name]}</FormErrorMessage>
-  </FormControl>
-);
+}) => {
+  const error = getIn(errors, name);
+  const touch = getIn(touched, name);
 
+  return (
+    <FormControl isInvalid={Boolean(touch && error)} {...formControlProps}>
+      <FormLabel htmlFor={name}>{label}</FormLabel>
+      <Select
+        _focus={{
+          boxShadow: "outline",
+        }}
+        id={name}
+        name={name}
+        borderRadius="sm"
+        placeholder={placeholder}
+        value={values?.[name]}
+        onChange={onChange}
+        {...selectProps}
+      >
+        {children}
+      </Select>
+      <FormErrorMessage>{error}</FormErrorMessage>
+    </FormControl>
+  );
+};
 export default FormSelect;

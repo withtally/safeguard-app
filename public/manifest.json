@@ -2,6 +2,10 @@
   "short_name": "SafeGuard App",
   "name": "SafeGuard App",
   "description": "Administrate your SafeGuard here",
+  "providedBy": {
+    "name": "Tally", 
+    "url": "https://withtally.com"
+  },
   "iconPath": "logo.svg",
   "icons": [
     {

@@ -9,7 +9,7 @@ import { InitialValuesCreateSafeGuard } from "modules/safeGuard/lib/types";
 
 type Props = {
   initialValues: InitialValuesCreateSafeGuard;
-  formSubmitingFormik: (
+  formSubmit: (
     formValues: InitialValuesCreateSafeGuard,
     actions: FormikHelpers<InitialValuesCreateSafeGuard>
   ) => Promise<void>;
@@ -18,7 +18,7 @@ type Props = {
 const CreateSafeGuard: FC<FlexProps & Props> = ({
   initialValues,
 
-  formSubmitingFormik,
+  formSubmit,
   ...flexProps
 }) => {
   return (
@@ -41,7 +41,7 @@ const CreateSafeGuard: FC<FlexProps & Props> = ({
         </HStack>
         <CreateSafeGuardForm
           initialValues={initialValues}
-          formSubmitingFormik={formSubmitingFormik}
+          formSubmit={formSubmit}
         />
       </Flex>
     </Flex>

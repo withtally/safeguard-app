@@ -11,15 +11,12 @@ import { useSafeGuard } from "modules/safeGuard/hooks/useSafeGuard";
 
 const SafeGuard: FC = () => {
   // custom hooks
-  const { createdSafes, initialValues, formSubmitingFormik } = useSafeGuard();
+  const { createdSafes, initialValues, formSubmit } = useSafeGuard();
 
   return (
     <Flex direction="column" w="full">
       <PageHeader title="Created SafeGuards" />
-      <CreateSafeGuard
-        initialValues={initialValues}
-        formSubmitingFormik={formSubmitingFormik}
-      />
+      <CreateSafeGuard initialValues={initialValues} formSubmit={formSubmit} />
       <SafeGuardList safeList={createdSafes} />
     </Flex>
   );

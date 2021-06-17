@@ -28,7 +28,7 @@ const initialValues: InitialValuesCreateSafeGuard = {
 type Values = {
   createdSafes?: SafeGuard[];
   initialValues: InitialValuesCreateSafeGuard;
-  formSubmitingFormik: (
+  formSubmit: (
     formValues: InitialValuesCreateSafeGuard,
     actions: FormikHelpers<InitialValuesCreateSafeGuard>
   ) => Promise<void>;
@@ -93,11 +93,10 @@ export const useSafeGuard = (): Values => {
     };
   });
 
-  const formSubmitingFormik = async (
+  const formSubmit = async (
     formValues: InitialValuesCreateSafeGuard,
     actions: FormikHelpers<InitialValuesCreateSafeGuard>
   ) => {
-    console.log("🚀 ~  useSafeGuard ~ formSubmitingFormik ~ entro?");
     try {
       actions.setSubmitting(true);
 
@@ -133,6 +132,6 @@ export const useSafeGuard = (): Values => {
   return {
     createdSafes: registries,
     initialValues,
-    formSubmitingFormik,
+    formSubmit,
   };
 };

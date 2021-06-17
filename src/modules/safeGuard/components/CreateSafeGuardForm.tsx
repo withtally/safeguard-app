@@ -15,23 +15,18 @@ import { ROLES } from "modules/admin/lib/constants";
 
 type Props = {
   initialValues: InitialValuesCreateSafeGuard;
-  formSubmitingFormik: (
+  formSubmit: (
     formValues: InitialValuesCreateSafeGuard,
     actions: FormikHelpers<InitialValuesCreateSafeGuard>
   ) => Promise<void>;
 };
 
-const CreateSafeGuardForm: FC<Props> = ({
-  initialValues,
-  formSubmitingFormik,
-}) => {
+const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
   const emptyRolAssignation = { role: "", address: "" };
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={async (values, actions) =>
-        await formSubmitingFormik(values, actions)
-      }
+      onSubmit={async (values, actions) => await formSubmit(values, actions)}
       validationSchema={CreateSafeGuardValidationSchema}
     >
       {({ values, errors, touched, handleChange, handleSubmit }) => (

@@ -1,11 +1,11 @@
 export const CONTRACT_ADDRESSES = {
   token: {
     rinkeby: "0xB0926c1BC534813Aa51f209b91Bc0AA60feC7624",
-    mainnet: "",
+    mainnet: "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
   },
   factory: {
     rinkeby: "0x91Acf8e304cfA6864c80E9bc38F264F95eBE377c",
-    mainnet: "",
+    mainnet: "0x34E9F192f0e6299Bd8C295371fBfe4Ab9043d688",
   },
 };
 

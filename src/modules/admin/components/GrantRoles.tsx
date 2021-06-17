@@ -1,13 +1,13 @@
-import { FC } from "react";
-import { Text, Flex, FlexProps, HStack, Icon } from "@chakra-ui/react";
-import { IoAddCircleOutline } from "react-icons/io5";
+import { FC } from 'react';
+import { Text, Flex, FlexProps, HStack, Icon } from '@chakra-ui/react';
+import { IoAddCircleOutline } from 'react-icons/io5';
 
 // common
-import InstructionList from "modules/common/components/InstructionList";
+import InstructionList from 'modules/common/components/InstructionList';
 
 // admin
-import GrantRoleForm from "modules/admin/components/GrantRoleForm";
-import { ROLE_TYPES_INFO } from "modules/admin/lib/constants";
+import GrantRoleForm from 'modules/admin/components/GrantRoleForm';
+import { ROLE_TYPES_INFO } from 'modules/admin/lib/constants';
 
 const GrantRoles: FC<FlexProps> = ({ ...flexProps }) => {
   return (

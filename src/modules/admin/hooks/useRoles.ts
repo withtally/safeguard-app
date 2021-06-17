@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { useToast } from "@chakra-ui/react";
-import { useParams } from "@reach/router";
+import { useState, useEffect } from 'react';
+import { useToast } from '@chakra-ui/react';
+import { useParams } from '@reach/router';
 
 // common
-import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import { ROLES_HASHES } from "modules/common/lib/constants";
-import { useWeb3 } from "modules/common/hooks/useWeb3";
-import { useUserInfo } from "modules/common/hooks/useUserInfo";
-import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
+import { ROLES_HASHES } from 'modules/common/lib/constants';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
+import { useUserInfo } from 'modules/common/hooks/useUserInfo';
+import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
 // admin
-import { GrantedRole } from "modules/admin/lib/types";
+import { GrantedRole } from 'modules/admin/lib/types';
 
 type Values = {
   grantedRoles: GrantedRole[] | undefined;
@@ -39,23 +39,14 @@ export const useRoles = (): Values => {
 
   const getGrantedRoles = async () => {
     const { proposerRole, executorRole, cancelerRole } = ROLES_HASHES;
-    const proposersCount = await signedContract?.getRoleMemberCount(
-      proposerRole
-    );
-    const executersCount = await signedContract?.getRoleMemberCount(
-      executorRole
-    );
+    const proposersCount = await signedContract?.getRoleMemberCount(proposerRole);
+    const executersCount = await signedContract?.getRoleMemberCount(executorRole);
 
-    const cancelersCount = await signedContract?.getRoleMemberCount(
-      cancelerRole
-    );
+    const cancelersCount = await signedContract?.getRoleMemberCount(cancelerRole);
 
     const members = [];
     for (let i = 0; i < proposersCount; ++i) {
-      const proposerAddress = (await signedContract?.getRoleMember(
-        proposerRole,
-        i
-      )) as string;
+      const proposerAddress = (await signedContract?.getRoleMember(proposerRole, i)) as string;
       members.push({
         address: proposerAddress.toLowerCase(),
         roleId: proposerRole,
@@ -63,10 +54,7 @@ export const useRoles = (): Values => {
     }
 
     for (let i = 0; i < executersCount; ++i) {
-      const executerAddress = (await signedContract?.getRoleMember(
-        executorRole,
-        i
-      )) as string;
+      const executerAddress = (await signedContract?.getRoleMember(executorRole, i)) as string;
       members.push({
         address: executerAddress.toLowerCase(),
         roleId: executorRole,
@@ -74,10 +62,7 @@ export const useRoles = (): Values => {
     }
 
     for (let i = 0; i < cancelersCount; ++i) {
-      const cancelerAddress = (await signedContract?.getRoleMember(
-        cancelerRole,
-        i
-      )) as string;
+      const cancelerAddress = (await signedContract?.getRoleMember(cancelerRole, i)) as string;
       members.push({
         address: cancelerAddress.toLowerCase(),
         roleId: cancelerRole,
@@ -94,16 +79,16 @@ export const useRoles = (): Values => {
   useEffect(() => {
     if (!signedContract) return;
 
-    signedContract.on("RoleGranted", (event) => {
+    signedContract.on('RoleGranted', (event) => {
       getGrantedRoles();
     });
 
-    signedContract.on("RoleRevoked", (event) => {
+    signedContract.on('RoleRevoked', (event) => {
       getGrantedRoles();
     });
     return () => {
-      signedContract.removeAllListeners("RoleGranted");
-      signedContract.removeAllListeners("RoleRevoked");
+      signedContract.removeAllListeners('RoleGranted');
+      signedContract.removeAllListeners('RoleRevoked');
     };
   });
 
@@ -111,28 +96,28 @@ export const useRoles = (): Values => {
   const revokeRole = async (role: string, address: string) => {
     if (!hasAdminRole) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: "You don't have the role needed for this action",
-        status: "error",
+        status: 'error',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
       return;
     }
     try {
       setRevokingRole(true);
       const transferTx = await signedContract?.revokeRole(role, address);
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
       setRevokingRole(false);
       toast({
-        title: "Success",
-        description: "Role revoked!",
-        status: "success",
+        title: 'Success',
+        description: 'Role revoked!',
+        status: 'success',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
     } catch (error) {
-      console.log("🚀 ~  ~ error", error);
+      console.log('🚀 ~  ~ error', error);
     }
   };
 

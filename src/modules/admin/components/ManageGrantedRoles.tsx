@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
-import { IoSettingsOutline } from "react-icons/io5";
+import { FC } from 'react';
+import { HStack, Text, Flex, Stack, Icon } from '@chakra-ui/react';
+import { IoSettingsOutline } from 'react-icons/io5';
 
 // admin
-import AdminRolesTable from "modules/admin/components/AdminRolesTable";
-import { useRoles } from "modules/admin/hooks/useRoles";
+import AdminRolesTable from 'modules/admin/components/AdminRolesTable';
+import { useRoles } from 'modules/admin/hooks/useRoles';
 
 const ManageGrantedRoles: FC = () => {
   // custom hooks
@@ -28,12 +28,7 @@ const ManageGrantedRoles: FC = () => {
         </Text>
       </HStack>
       <Flex border="gray.dark" bg="white" direction="column">
-        {grantedRoles && (
-          <AdminRolesTable
-            grantedRoles={grantedRoles}
-            revokeRole={revokeRole}
-          />
-        )}
+        {grantedRoles && <AdminRolesTable grantedRoles={grantedRoles} revokeRole={revokeRole} />}
       </Flex>
     </Stack>
   );

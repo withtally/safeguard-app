@@ -5,12 +5,7 @@ export type Routes = {
   manager: string[];
 };
 
-export type ProposalStatus =
-  | "canceled"
-  | "expired"
-  | "executed"
-  | "pending"
-  | "available";
+export type ProposalStatus = 'canceled' | 'expired' | 'executed' | 'pending' | 'available';
 
 export type Instruction = {
   type: string;

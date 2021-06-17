@@ -4,19 +4,19 @@ body {
   width: 100vw;
 }
 
-label [aria-hidden="true"] {
+label [aria-hidden='true'] {
   border: 1px solid #cbd5e0 !important;
 }
 
-div [aria-hidden="true"] {
+div [aria-hidden='true'] {
   border: inherit;
 }
 
-div [type="radio"] > span {
+div [type='radio'] > span {
   background-color: white;
 }
 
-.no-current-page[aria-current="page"] {
+.no-current-page[aria-current='page'] {
   font-weight: inherit !important;
   color: inherit !important;
 }
@@ -26,7 +26,7 @@ div [type="radio"] > span {
 }
 
 .proposal-description > * {
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   word-break: break-word;
 }
 
@@ -106,7 +106,7 @@ body::-webkit-scrollbar-thumb {
   filter: drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.1));
 }
 
-[aria-current="page"] {
+[aria-current='page'] {
   font-weight: 600 !important;
   line-height: 1.5rem !important;
   color: #4a5568 !important;
@@ -149,7 +149,7 @@ body::-webkit-scrollbar-thumb {
   margin-right: 0;
 }
 
-label [aria-hidden="true"] {
+label [aria-hidden='true'] {
   border: 1px solid black;
 }
 

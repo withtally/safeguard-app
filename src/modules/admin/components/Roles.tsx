@@ -1,9 +1,9 @@
-import { FC } from "react";
-import { Flex } from "@chakra-ui/react";
+import { FC } from 'react';
+import { Flex } from '@chakra-ui/react';
 
 // admin
-import ManageGrantedRoles from "modules/admin/components/ManageGrantedRoles";
-import GrantRoles from "modules/admin/components/GrantRoles";
+import ManageGrantedRoles from 'modules/admin/components/ManageGrantedRoles';
+import GrantRoles from 'modules/admin/components/GrantRoles';
 
 const Roles: FC = () => {
   return (

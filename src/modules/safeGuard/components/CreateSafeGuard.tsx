@@ -1,17 +1,17 @@
-import { FC } from "react";
-import { Text, Flex, FlexProps, HStack, Icon } from "@chakra-ui/react";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { FormikHelpers } from "formik";
+import { FC } from 'react';
+import { Text, Flex, FlexProps, HStack, Icon } from '@chakra-ui/react';
+import { IoAddCircleOutline } from 'react-icons/io5';
+import { FormikHelpers } from 'formik';
 
 // safeGuard
-import CreateSafeGuardForm from "modules/safeGuard/components/CreateSafeGuardForm";
-import { InitialValuesCreateSafeGuard } from "modules/safeGuard/lib/types";
+import CreateSafeGuardForm from 'modules/safeGuard/components/CreateSafeGuardForm';
+import { InitialValuesCreateSafeGuard } from 'modules/safeGuard/lib/types';
 
 type Props = {
   initialValues: InitialValuesCreateSafeGuard;
   formSubmit: (
     formValues: InitialValuesCreateSafeGuard,
-    actions: FormikHelpers<InitialValuesCreateSafeGuard>
+    actions: FormikHelpers<InitialValuesCreateSafeGuard>,
   ) => Promise<void>;
 };
 
@@ -39,10 +39,7 @@ const CreateSafeGuard: FC<FlexProps & Props> = ({
             Create a new SafeGuard
           </Text>
         </HStack>
-        <CreateSafeGuardForm
-          initialValues={initialValues}
-          formSubmit={formSubmit}
-        />
+        <CreateSafeGuardForm initialValues={initialValues} formSubmit={formSubmit} />
       </Flex>
     </Flex>
   );

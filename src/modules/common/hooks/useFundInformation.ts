@@ -1,24 +1,23 @@
-import { useState, useEffect, useCallback } from "react";
-import { useParams } from "@reach/router";
+import { useState, useEffect, useCallback } from 'react';
+import { useParams } from '@reach/router';
 
 // common
-import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
-import { parseBigNumber, labelNumber } from "modules/common/lib/helpers";
-import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
-import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
+import { CONTRACT_ADDRESSES } from 'modules/common/lib/constants';
+import { parseBigNumber, labelNumber } from 'modules/common/lib/helpers';
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
+import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
+import TOKEN_JSON from 'modules/common/lib/abis/Comp.json';
 
 export const useFundInformation = () => {
   // router hooks
   const { safeGuardAddress } = useParams();
 
   // react hooks
-  const [fundBalance, setFundBalance] = useState("0");
-  const [timelockAddress, setTimelockAddress] = useState("");
+  const [fundBalance, setFundBalance] = useState('0');
+  const [timelockAddress, setTimelockAddress] = useState('');
 
   // constant
-  const tokenAddress =
-    CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
+  const tokenAddress = CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
   const { signedContract: safeGuardSignedContract } = useSignedContract({
@@ -40,10 +39,7 @@ export const useFundInformation = () => {
       if (bigBalance) setFundBalance(fundBalanceLabel);
       setTimelockAddress(timelock);
     } catch (e) {
-      console.log(
-        "🚀 ~ file: useFundInformation.ts ~ line 27 ~ getSafeGuardTokenBalance ~ e",
-        e
-      );
+      console.log('🚀 ~ file: useFundInformation.ts ~ line 27 ~ getSafeGuardTokenBalance ~ e', e);
     }
   }, [safeGuardSignedContract, signedTokenContract]);
 

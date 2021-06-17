@@ -1,28 +1,28 @@
-import { FC } from "react";
-import { Button, HStack, Text, Stack, Flex } from "@chakra-ui/react";
-import { Formik, FieldArray, FormikHelpers } from "formik";
+import { FC } from 'react';
+import { Button, HStack, Text, Stack, Flex } from '@chakra-ui/react';
+import { Formik, FieldArray, FormikHelpers } from 'formik';
 
 // common
-import FormInput from "modules/common/components/FormInput";
-import FormSelect from "modules/common/components/FormSelect";
+import FormInput from 'modules/common/components/FormInput';
+import FormSelect from 'modules/common/components/FormSelect';
 
 // safeGuard
-import { InitialValuesCreateSafeGuard } from "modules/safeGuard/lib/types";
-import { CreateSafeGuardValidationSchema } from "modules/safeGuard/lib/validations";
+import { InitialValuesCreateSafeGuard } from 'modules/safeGuard/lib/types';
+import { CreateSafeGuardValidationSchema } from 'modules/safeGuard/lib/validations';
 
 // admin
-import { ROLES } from "modules/admin/lib/constants";
+import { ROLES, DAYSINSECONDS } from 'modules/admin/lib/constants';
 
 type Props = {
   initialValues: InitialValuesCreateSafeGuard;
   formSubmit: (
     formValues: InitialValuesCreateSafeGuard,
-    actions: FormikHelpers<InitialValuesCreateSafeGuard>
+    actions: FormikHelpers<InitialValuesCreateSafeGuard>,
   ) => Promise<void>;
 };
 
 const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
-  const emptyRolAssignation = { role: "", address: "" };
+  const emptyRolAssignation = { role: '', address: '' };
   return (
     <Formik
       initialValues={initialValues}
@@ -51,15 +51,11 @@ const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
                 w={52}
                 h="6.125rem"
               >
-                <option key="1" value="40">
-                  1 day
-                </option>
-                <option key="2" value="60">
-                  2 days
-                </option>
-                <option key="3" value="80">
-                  3 days
-                </option>
+                {DAYSINSECONDS.map((day) => (
+                  <option key={day.seconds} value={day.seconds}>
+                    {day.label}
+                  </option>
+                ))}
               </FormSelect>
               <FormInput
                 name="safeGuardName"
@@ -78,11 +74,7 @@ const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
                 <Flex direction="column">
                   <HStack spacing={4} w="2xl" align="center" mb={5}>
                     <Text textStyle="h6">Rol assigment list</Text>
-                    <Button
-                      size="md"
-                      variant="tertiary"
-                      onClick={() => push(emptyRolAssignation)}
-                    >
+                    <Button size="md" variant="tertiary" onClick={() => push(emptyRolAssignation)}>
                       Add a new role
                     </Button>
                   </HStack>
@@ -118,11 +110,7 @@ const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
                         onChange={handleChange}
                         h="6.125rem"
                       />
-                      <Button
-                        size="md"
-                        variant="secondary"
-                        onClick={() => remove(index)}
-                      >
+                      <Button size="md" variant="secondary" onClick={() => remove(index)}>
                         Remove
                       </Button>
                     </HStack>

@@ -1,23 +1,16 @@
-import { FC } from "react";
-import {
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Flex,
-} from "@chakra-ui/react";
+import { FC } from 'react';
+import { Tabs, TabList, TabPanels, Tab, TabPanel, Flex } from '@chakra-ui/react';
 
 // common
-import PageHeader from "modules/common/components/PageHeader";
-import { useTransactions } from "modules/common/hooks/useTransactions";
+import PageHeader from 'modules/common/components/PageHeader';
+import { useTransactions } from 'modules/common/hooks/useTransactions';
 
 // admin
-import Roles from "modules/admin/components/Roles";
-import Manage from "modules/admin/components/Manage";
+import Roles from 'modules/admin/components/Roles';
+import Manage from 'modules/admin/components/Manage';
 
 // manager
-import Payments from "modules/manager/components/Payments";
+import Payments from 'modules/manager/components/Payments';
 
 const SafeGuardView: FC = () => {
   // custom hooks

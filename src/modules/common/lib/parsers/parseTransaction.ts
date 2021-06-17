@@ -1,9 +1,9 @@
-import { utils } from "ethers";
-import dayjs from "dayjs";
-import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
+import { utils } from 'ethers';
+import dayjs from 'dayjs';
+import TOKEN_JSON from 'modules/common/lib/abis/Comp.json';
 
 // common
-import { unhashCalldata } from "modules/common/lib/helpers";
+import { unhashCalldata } from 'modules/common/lib/helpers';
 
 type Transaction = {
   txHash: string;
@@ -20,15 +20,8 @@ type Transaction = {
   description: string;
 };
 
-export const parseTransaction = (
-  transaction: utils.Result,
-  gracePeriod: number
-): Transaction => {
-  const decodedInfo = unhashCalldata(
-    transaction.data,
-    TOKEN_JSON.abi,
-    "transfer"
-  );
+export const parseTransaction = (transaction: utils.Result, gracePeriod: number): Transaction => {
+  const decodedInfo = unhashCalldata(transaction.data, TOKEN_JSON.abi, 'transfer');
 
   const executableTime = gracePeriod + Number(transaction.eta.toString());
 
@@ -42,8 +35,8 @@ export const parseTransaction = (
     transferTo: decodedInfo?.dst.toLowerCase(),
     rawAmount: decodedInfo?.rawAmount.toString(),
     description: transaction.description,
-    date: dayjs(transaction.eta * 1000).format("MM/DD/YYYY hh:mm:ss A"),
-    expireDate: dayjs(executableTime * 1000).format("MM/DD/YYYY hh:mm:ss A"),
+    date: dayjs(transaction.eta * 1000).format('MM/DD/YYYY hh:mm:ss A'),
+    expireDate: dayjs(executableTime * 1000).format('MM/DD/YYYY hh:mm:ss A'),
     executableTime,
   };
 };

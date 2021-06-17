@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { useParams } from "@reach/router";
+import { useState, useEffect } from 'react';
+import { useParams } from '@reach/router';
 
 // common
-import { ROLES_HASHES } from "modules/common/lib/constants";
-import { useWeb3 } from "modules/common/hooks/useWeb3";
-import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
+import { ROLES_HASHES } from 'modules/common/lib/constants';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
+import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
 type Values = {
   hasAdminRole: boolean;
@@ -33,24 +33,14 @@ export const useUserInfo = (): Values => {
 
   useEffect(() => {
     const getUserRole = async () => {
-      const { adminRole, proposerRole, executorRole, cancelerRole } =
-        ROLES_HASHES;
+      const { adminRole, proposerRole, executorRole, cancelerRole } = ROLES_HASHES;
       const admin = await signedContract?.hasRole(adminRole, signerAddress);
 
-      const proposer = await signedContract?.hasRole(
-        proposerRole,
-        signerAddress
-      );
+      const proposer = await signedContract?.hasRole(proposerRole, signerAddress);
 
-      const executor = await signedContract?.hasRole(
-        executorRole,
-        signerAddress
-      );
+      const executor = await signedContract?.hasRole(executorRole, signerAddress);
 
-      const canceler = await signedContract?.hasRole(
-        cancelerRole,
-        signerAddress
-      );
+      const canceler = await signedContract?.hasRole(cancelerRole, signerAddress);
 
       setHasAdminRole(Boolean(admin));
       setHasProposerRole(Boolean(proposer));

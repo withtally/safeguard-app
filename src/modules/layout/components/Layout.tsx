@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { Flex } from "@chakra-ui/react";
+import { FC } from 'react';
+import { Flex } from '@chakra-ui/react';
 
 // layout
-import Header from "modules/layout/components/Header";
-import Body from "modules/layout/components/Body";
-import Footer from "modules/layout/components/Footer";
+import Header from 'modules/layout/components/Header';
+import Body from 'modules/layout/components/Body';
+import Footer from 'modules/layout/components/Footer';
 
 const Layout: FC = ({ children }) => {
   return (

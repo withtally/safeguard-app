@@ -1,19 +1,19 @@
-import { FC } from "react";
-import { Flex } from "@chakra-ui/react";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
+import { FC } from 'react';
+import { Flex } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 // common
 
-import FundInformationCard from "modules/common/components/FundInformationCard";
+import FundInformationCard from 'modules/common/components/FundInformationCard';
 
 // manager
-import ManageRequestedPayments from "modules/manager/components/ManageRequestedPayments";
-import RequestPayment from "modules/manager/components/RequestPayment";
-import { usePayments } from "modules/manager/hooks/usePayments";
+import ManageRequestedPayments from 'modules/manager/components/ManageRequestedPayments';
+import RequestPayment from 'modules/manager/components/RequestPayment';
+import { usePayments } from 'modules/manager/hooks/usePayments';
 
 // admin
-import { Transaction } from "modules/admin/lib/types";
+import { Transaction } from 'modules/admin/lib/types';
 
 dayjs.extend(advancedFormat);
 
@@ -23,15 +23,8 @@ type Props = {
 
 const Payments: FC<Props> = ({ transactions }) => {
   // custom hooks
-  const {
-    executeTransaction,
-    formSubmitting,
-    values,
-    handleChange,
-    submitForm,
-    errors,
-    touched,
-  } = usePayments();
+  const { executeTransaction, formSubmitting, values, handleChange, submitForm, errors, touched } =
+    usePayments();
 
   return (
     <Flex direction="column" w="full">

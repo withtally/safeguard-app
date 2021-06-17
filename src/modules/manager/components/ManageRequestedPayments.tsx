@@ -1,22 +1,19 @@
-import { FC } from "react";
-import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
-import { IoListOutline } from "react-icons/io5";
+import { FC } from 'react';
+import { HStack, Text, Flex, Stack, Icon } from '@chakra-ui/react';
+import { IoListOutline } from 'react-icons/io5';
 
 // manager
-import ManagerTransactionsTable from "modules/manager/components/ManagerTransactionsTable";
+import ManagerTransactionsTable from 'modules/manager/components/ManagerTransactionsTable';
 
 // admin
-import { Transaction } from "modules/admin/lib/types";
+import { Transaction } from 'modules/admin/lib/types';
 
 type Props = {
   transactions?: Transaction[];
   executeTransaction: (transaction: Transaction) => Promise<void>;
 };
 
-const ManageRequestedPayments: FC<Props> = ({
-  transactions,
-  executeTransaction,
-}) => {
+const ManageRequestedPayments: FC<Props> = ({ transactions, executeTransaction }) => {
   return (
     <Stack
       as="section"

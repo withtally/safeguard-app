@@ -1,7 +1,7 @@
-import { Contract } from "ethers";
+import { Contract } from 'ethers';
 
 // common
-import { useWeb3 } from "modules/common/hooks/useWeb3";
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
 type Values = {
   signedContract?: Contract;
@@ -12,15 +12,11 @@ type Props = {
   contractAbi: any;
 };
 
-export const useSignedContract = ({
-  contractAddress,
-  contractAbi,
-}: Props): Values => {
+export const useSignedContract = ({ contractAddress, contractAbi }: Props): Values => {
   const { signer } = useWeb3();
 
-  const signedContract = contractAddress
-    ? new Contract(contractAddress, contractAbi, signer)
-    : undefined;
+  const signedContract =
+    contractAddress && signer ? new Contract(contractAddress, contractAbi, signer) : undefined;
 
   return { signedContract };
 };

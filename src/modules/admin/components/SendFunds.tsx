@@ -1,19 +1,18 @@
-import { FC } from "react";
-import { Text, Flex, FlexProps, HStack, Icon, Button } from "@chakra-ui/react";
-import { IoAddCircleOutline } from "react-icons/io5";
+import { FC } from 'react';
+import { Text, Flex, FlexProps, HStack, Icon, Button } from '@chakra-ui/react';
+import { IoAddCircleOutline } from 'react-icons/io5';
 
 // common
-import FormAmountInput from "modules/common/components/FormAmountInput";
+import FormAmountInput from 'modules/common/components/FormAmountInput';
 
 // admin
-import { useManageFunds } from "modules/admin/hooks/useManageFunds";
-import { FundManagementSteps } from "modules/admin/lib/constants";
-import InstructionList from "modules/common/components/InstructionList";
+import { useManageFunds } from 'modules/admin/hooks/useManageFunds';
+import { FundManagementSteps } from 'modules/admin/lib/constants';
+import InstructionList from 'modules/common/components/InstructionList';
 
 const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
   // custom hooks
-  const { values, handleChange, submitForm, isSubmitting, errors, touched } =
-    useManageFunds();
+  const { values, handleChange, submitForm, isSubmitting, errors, touched } = useManageFunds();
 
   return (
     <Flex
@@ -47,20 +46,12 @@ const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
             w={64}
             h="6.125rem"
           />
-          <Button
-            isLoading={isSubmitting}
-            onClick={submitForm}
-            size="md"
-            variant="primary"
-          >
+          <Button isLoading={isSubmitting} onClick={submitForm} size="md" variant="primary">
             Send Funds
           </Button>
         </HStack>
       </Flex>
-      <InstructionList
-        title="Process flow"
-        instructions={FundManagementSteps}
-      />
+      <InstructionList title="Process flow" instructions={FundManagementSteps} />
     </Flex>
   );
 };

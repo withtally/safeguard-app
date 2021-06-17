@@ -1,19 +1,15 @@
-import { FC } from "react";
-import { Button, ButtonProps, Icon, IconProps } from "@chakra-ui/react";
-import { IoCopySharp } from "react-icons/io5";
+import { FC } from 'react';
+import { Button, ButtonProps, Icon, IconProps } from '@chakra-ui/react';
+import { IoCopySharp } from 'react-icons/io5';
 
 type Props = {
   size: number;
   iconProps?: IconProps;
 };
 
-type ButtonPropsChakra = Omit<ButtonProps, "size">;
+type ButtonPropsChakra = Omit<ButtonProps, 'size'>;
 
-const CopyButton: FC<ButtonPropsChakra & Props> = ({
-  size,
-  iconProps,
-  ...buttonProps
-}) => (
+const CopyButton: FC<ButtonPropsChakra & Props> = ({ size, iconProps, ...buttonProps }) => (
   <Button
     alignItems="center"
     bg="transparent"

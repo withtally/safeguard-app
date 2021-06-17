@@ -1,20 +1,20 @@
-import { useFormik, FormikErrors, FormikTouched } from "formik";
-import { useToast } from "@chakra-ui/react";
-import { useParams } from "@reach/router";
+import { useFormik, FormikErrors, FormikTouched } from 'formik';
+import { useToast } from '@chakra-ui/react';
+import { useParams } from '@reach/router';
 
 // common
-import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import { useWeb3 } from "modules/common/hooks/useWeb3";
-import { useUserInfo } from "modules/common/hooks/useUserInfo";
-import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
+import { useUserInfo } from 'modules/common/hooks/useUserInfo';
+import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
 // admin
-import { InitialValuesRoles } from "modules/admin/lib/types";
-import { GrantRoleValidationSchema } from "modules/admin/lib/validations";
+import { InitialValuesRoles } from 'modules/admin/lib/types';
+import { GrantRoleValidationSchema } from 'modules/admin/lib/validations';
 
 const initialValues: InitialValuesRoles = {
-  role: "",
-  address: "",
+  role: '',
+  address: '',
 };
 
 type Values = {
@@ -22,9 +22,7 @@ type Values = {
   submitForm: () => Promise<any>;
   handleChange: {
     (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
+    <T_1 = string | React.ChangeEvent<any>>(field: T_1): T_1 extends React.ChangeEvent<any>
       ? void
       : (e: string | React.ChangeEvent<any>) => void;
   };
@@ -52,11 +50,11 @@ export const useGrantRole = (): Values => {
   const onSubmit = async (formValues: InitialValuesRoles, formikInfo: any) => {
     if (!hasAdminRole) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: "You don't have the role needed for this action",
-        status: "error",
+        status: 'error',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
       return;
     }
@@ -64,20 +62,20 @@ export const useGrantRole = (): Values => {
       formikInfo.setSubmitting(true);
       const transferTx = await signedContract?.grantRole(
         formValues.role,
-        formValues.address.toLowerCase()
+        formValues.address.toLowerCase(),
       );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 2);
+      const receipt = await web3?.waitForTransaction(transferTx.hash, 2);
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
       toast({
-        title: "Success",
-        description: "Role granted!",
-        status: "success",
+        title: 'Success',
+        description: 'Role granted!',
+        status: 'success',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
     } catch (error) {
-      console.log("🚀 ~ ~ error", error);
+      console.log('🚀 ~ ~ error', error);
     }
   };
 

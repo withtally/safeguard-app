@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { Box } from "@chakra-ui/react";
+import React, { FC } from 'react';
+import { Box } from '@chakra-ui/react';
 
 const HeaderTopBorder: FC = () => (
   <Box

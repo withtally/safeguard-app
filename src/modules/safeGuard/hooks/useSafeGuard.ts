@@ -1,28 +1,25 @@
-import { useState, useEffect } from "react";
-import { useFormik, FormikErrors, FormikTouched, FormikHelpers } from "formik";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { useToast } from "@chakra-ui/react";
+import { useState, useEffect } from 'react';
+import { FormikHelpers } from 'formik';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { useToast } from '@chakra-ui/react';
 
 // common
-import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
-import { useWeb3 } from "modules/common/hooks/useWeb3";
-import FACTORY_JSON from "modules/common/lib/abis/Factory.json";
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
+import { CONTRACT_ADDRESSES } from 'modules/common/lib/constants';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
+import FACTORY_JSON from 'modules/common/lib/abis/Factory.json';
 
 // safeGuard
-import {
-  InitialValuesCreateSafeGuard,
-  SafeGuard,
-} from "modules/safeGuard/lib/types";
-import { parseSafeGuardCreations } from "modules/safeGuard/lib/parsers/parseSafeGuardCreations";
+import { InitialValuesCreateSafeGuard, SafeGuard } from 'modules/safeGuard/lib/types';
+import { parseSafeGuardCreations } from 'modules/safeGuard/lib/parsers/parseSafeGuardCreations';
 
 dayjs.extend(advancedFormat);
 
 const initialValues: InitialValuesCreateSafeGuard = {
-  delay: "",
-  safeGuardName: "",
-  rolesAssignations: [{ role: "", address: "" }],
+  delay: '',
+  safeGuardName: '',
+  rolesAssignations: [{ role: '', address: '' }],
 };
 
 type Values = {
@@ -30,7 +27,7 @@ type Values = {
   initialValues: InitialValuesCreateSafeGuard;
   formSubmit: (
     formValues: InitialValuesCreateSafeGuard,
-    actions: FormikHelpers<InitialValuesCreateSafeGuard>
+    actions: FormikHelpers<InitialValuesCreateSafeGuard>,
   ) => Promise<void>;
 };
 
@@ -42,8 +39,7 @@ export const useSafeGuard = (): Values => {
   const toast = useToast();
 
   // constants
-  const factoryAddress =
-    CONTRACT_ADDRESSES.factory[process.env.REACT_APP_ETHEREUM_NETWORK];
+  const factoryAddress = CONTRACT_ADDRESSES.factory[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
   const { signedContract: signedFactoryContract } = useSignedContract({
@@ -54,14 +50,13 @@ export const useSafeGuard = (): Values => {
 
   const getRegistries = async () => {
     try {
-      const createdSafesEventFilter =
-        await signedFactoryContract?.filters.SafeGuardCreated();
+      const createdSafesEventFilter = await signedFactoryContract?.filters.SafeGuardCreated();
       const createdSafes =
         createdSafesEventFilter &&
         (await signedFactoryContract?.queryFilter(createdSafesEventFilter));
 
       const createdSafesInfo = createdSafes?.map(
-        (item) => item.args && parseSafeGuardCreations(item.args)
+        (item) => item.args && parseSafeGuardCreations(item.args),
       );
 
       const allCreatedSafes = createdSafesInfo?.map((item) => {
@@ -74,7 +69,7 @@ export const useSafeGuard = (): Values => {
 
       setRegistries(allCreatedSafes);
     } catch (error) {
-      console.log("🚀 ~  ~ error", error);
+      console.log('🚀 ~  ~ error', error);
     }
   };
 
@@ -85,48 +80,46 @@ export const useSafeGuard = (): Values => {
   useEffect(() => {
     if (!signedFactoryContract) return;
 
-    signedFactoryContract.on("SafeGuardCreated", (event) => {
+    signedFactoryContract.on('SafeGuardCreated', (event) => {
       getRegistries();
     });
 
     return () => {
-      signedFactoryContract.removeAllListeners("SafeGuardCreated");
+      signedFactoryContract.removeAllListeners('SafeGuardCreated');
     };
   });
 
   const formSubmit = async (
     formValues: InitialValuesCreateSafeGuard,
-    actions: FormikHelpers<InitialValuesCreateSafeGuard>
+    actions: FormikHelpers<InitialValuesCreateSafeGuard>,
   ) => {
     try {
       actions.setSubmitting(true);
 
       const roles = formValues.rolesAssignations.map(({ role }) => role);
-      const rolesAssignees = formValues.rolesAssignations.map(
-        ({ address }) => address
-      );
+      const rolesAssignees = formValues.rolesAssignations.map(({ address }) => address);
 
       const transferTx = await signedFactoryContract?.createSafeGuard(
         formValues.delay,
         formValues.safeGuardName,
         signerAddress,
         roles,
-        rolesAssignees
+        rolesAssignees,
       );
 
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
 
       actions.setSubmitting(false);
       actions.resetForm();
       toast({
-        title: "Success",
-        description: "SafeGuard created!",
-        status: "success",
+        title: 'Success',
+        description: 'SafeGuard created!',
+        status: 'success',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
     } catch (error) {
-      console.log("🚀 ~  error", error);
+      console.log('🚀 ~  error', error);
     }
   };
 

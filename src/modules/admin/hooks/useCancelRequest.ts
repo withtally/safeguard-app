@@ -1,18 +1,18 @@
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { useToast } from "@chakra-ui/react";
-import { useParams } from "@reach/router";
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { useToast } from '@chakra-ui/react';
+import { useParams } from '@reach/router';
 
 // common
-import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import { useWeb3 } from "modules/common/hooks/useWeb3";
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
-import { useUserInfo } from "modules/common/hooks/useUserInfo";
+import { useUserInfo } from 'modules/common/hooks/useUserInfo';
 
-import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
+import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
 // admin
-import { Transaction } from "modules/admin/lib/types";
+import { Transaction } from 'modules/admin/lib/types';
 
 dayjs.extend(advancedFormat);
 
@@ -27,22 +27,23 @@ export const useCancelRequest = (): Values => {
   // chakra hooks
   const toast = useToast();
 
+  const { web3 } = useWeb3();
+
   const { signedContract: signedRolContract } = useSignedContract({
     contractAddress: safeGuardAddress,
     contractAbi: SAFEGUARD_JSON.abi,
   });
-  const { web3 } = useWeb3();
   const { hasCancelerRole } = useUserInfo();
 
   // handlers
   const cancelTransaction = async (transaction: Transaction) => {
     if (!hasCancelerRole) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: "You don't have the role needed for this action",
-        status: "error",
+        status: 'error',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
       return;
     }
@@ -52,21 +53,18 @@ export const useCancelRequest = (): Values => {
         transaction.value,
         transaction.signature,
         transaction.data,
-        transaction.eta
+        transaction.eta,
       );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
       toast({
-        title: "Success",
-        description: "Transaction canceled!",
-        status: "success",
+        title: 'Success',
+        description: 'Transaction canceled!',
+        status: 'success',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
-        error
-      );
+      console.log('🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error', error);
     }
   };
 

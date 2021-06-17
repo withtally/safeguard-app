@@ -1,18 +1,8 @@
-import { FC } from "react";
-import {
-  Text,
-  Stack,
-  Flex,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-} from "@chakra-ui/react";
+import { FC } from 'react';
+import { Text, Stack, Flex, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 // home
-import { ROLES_INFORMATION } from "modules/home/lib/constants";
+import { ROLES_INFORMATION } from 'modules/home/lib/constants';
 
 const HomeRoles: FC = () => {
   return (

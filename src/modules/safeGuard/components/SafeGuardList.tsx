@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { HStack, Text, Flex, Stack, Icon } from "@chakra-ui/react";
-import { IoSettingsOutline } from "react-icons/io5";
+import { FC } from 'react';
+import { HStack, Text, Flex, Stack, Icon } from '@chakra-ui/react';
+import { IoSettingsOutline } from 'react-icons/io5';
 
 // safeGuard
-import SafeGuardTable from "modules/safeGuard/components/SafeGuardTable";
-import { SafeGuard } from "modules/safeGuard/lib/types";
+import SafeGuardTable from 'modules/safeGuard/components/SafeGuardTable';
+import { SafeGuard } from 'modules/safeGuard/lib/types';
 
 type Props = {
   safeList?: SafeGuard[];

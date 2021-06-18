@@ -11,7 +11,7 @@ import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import { CONTRACT_ADDRESSES } from 'modules/common/lib/constants';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
 import { parseTransaction } from 'modules/common/lib/parsers/parseTransaction';
-import { useUserInfo } from 'modules/common/hooks/useUserInfo';
+import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
 import { RequestPaymentValidationSchema } from 'modules/common/lib/validations';
 import { useFundInformation } from 'modules/common/hooks/useFundInformation';
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
@@ -76,7 +76,7 @@ export const useTransactions = (): Values => {
     contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
-  const { hasCancelerRole, hasExecutorRole, hasProposerRole } = useUserInfo();
+  const { hasCancelerRole, hasExecutorRole, hasProposerRole } = useUserContractRoles();
 
   const getTimelockEvents = async () => {
     try {

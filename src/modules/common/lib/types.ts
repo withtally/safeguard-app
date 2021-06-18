@@ -11,3 +11,5 @@ export type Instruction = {
   type: string;
   description: string;
 };
+
+export type Role = 'admin' | 'proposer' | 'executer' | 'canceler' | 'viewer';

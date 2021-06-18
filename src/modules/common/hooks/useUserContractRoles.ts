@@ -6,15 +6,17 @@ import { ROLES_HASHES } from 'modules/common/lib/constants';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
+import { Role } from 'modules/common/lib/types';
 
 type Values = {
   hasAdminRole: boolean;
   hasProposerRole: boolean;
   hasCancelerRole: boolean;
   hasExecutorRole: boolean;
+  roles: Role[];
 };
 
-export const useUserInfo = (): Values => {
+export const useUserContractRoles = (): Values => {
   // router hooks
   const { safeGuardAddress } = useParams();
 
@@ -23,6 +25,7 @@ export const useUserInfo = (): Values => {
   const [hasProposerRole, setHasProposerRole] = useState(false);
   const [hasExecutorRole, setHasExecutorRole] = useState(false);
   const [hasCancelerRole, setHasCancelerRole] = useState(false);
+  const [roles, setRoles] = useState<Role[]>([]);
 
   // custom hooks
   const { signerAddress } = useWeb3();
@@ -46,6 +49,23 @@ export const useUserInfo = (): Values => {
       setHasProposerRole(Boolean(proposer));
       setHasExecutorRole(Boolean(executor));
       setHasCancelerRole(Boolean(canceler));
+
+      const userRoles = [
+        { name: 'admin', active: Boolean(admin) },
+        { name: 'proposer', active: Boolean(proposer) },
+        { name: 'executor', active: Boolean(executor) },
+        { name: 'canceler', active: Boolean(canceler) },
+        {
+          name: 'viewer',
+          active: Boolean(!admin) && Boolean(!proposer) && Boolean(!executor) && Boolean(!canceler),
+        },
+      ];
+
+      const userAssignedRoles = userRoles
+        .filter((role) => role.active)
+        .map((role) => role.name) as Role[];
+
+      setRoles(userAssignedRoles);
     };
 
     if (signerAddress) getUserRole();
@@ -56,5 +76,6 @@ export const useUserInfo = (): Values => {
     hasProposerRole,
     hasExecutorRole,
     hasCancelerRole,
+    roles,
   };
 };

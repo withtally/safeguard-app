@@ -15,7 +15,7 @@ const SafeGuard: FC = () => {
 
   return (
     <Flex direction="column" w="full">
-      <PageHeader title="Created SafeGuards" />
+      <PageHeader title="" />
       <CreateSafeGuard initialValues={initialValues} formSubmit={formSubmit} />
       <SafeGuardList safeList={createdSafes} />
     </Flex>

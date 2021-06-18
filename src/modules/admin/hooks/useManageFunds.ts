@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react';
 // common
 import { CONTRACT_ADDRESSES } from 'modules/common/lib/constants';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
-import { useUserInfo } from 'modules/common/hooks/useUserInfo';
+import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import { useFundInformation } from 'modules/common/hooks/useFundInformation';
 import TOKEN_JSON from 'modules/common/lib/abis/Comp.json';
@@ -48,7 +48,7 @@ export const useManageFunds = (): Values => {
     contractAbi: TOKEN_JSON.abi,
   });
   const { web3 } = useWeb3();
-  const { hasAdminRole } = useUserInfo();
+  const { hasAdminRole } = useUserContractRoles();
 
   // handlers
   const onSubmit = async (formValues: InitialValuesSendValues, formikInfo: any) => {

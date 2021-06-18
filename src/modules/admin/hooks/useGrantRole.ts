@@ -5,7 +5,7 @@ import { useParams } from '@reach/router';
 // common
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
-import { useUserInfo } from 'modules/common/hooks/useUserInfo';
+import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
 // admin
@@ -44,7 +44,7 @@ export const useGrantRole = (): Values => {
     contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
-  const { hasAdminRole } = useUserInfo();
+  const { hasAdminRole } = useUserContractRoles();
 
   // handlers
   const onSubmit = async (formValues: InitialValuesRoles, formikInfo: any) => {

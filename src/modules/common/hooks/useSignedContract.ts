@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Contract } from 'ethers';
 
 // common
@@ -15,8 +16,11 @@ type Props = {
 export const useSignedContract = ({ contractAddress, contractAbi }: Props): Values => {
   const { signer } = useWeb3();
 
-  const signedContract =
-    contractAddress && signer ? new Contract(contractAddress, contractAbi, signer) : undefined;
+  const signedContract = useMemo(
+    () =>
+      contractAddress && signer ? new Contract(contractAddress, contractAbi, signer) : undefined,
+    [contractAbi, contractAddress, signer],
+  );
 
   return { signedContract };
 };

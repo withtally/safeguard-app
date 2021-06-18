@@ -19,7 +19,7 @@ dayjs.extend(advancedFormat);
 const initialValues: InitialValuesCreateSafeGuard = {
   delay: '',
   safeGuardName: '',
-  rolesAssignations: [{ role: '', address: '' }],
+  rolesAssignations: [],
 };
 
 type Values = {

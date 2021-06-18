@@ -7,7 +7,7 @@ import { useParams } from '@reach/router';
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
-import { useUserInfo } from 'modules/common/hooks/useUserInfo';
+import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
 
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
@@ -33,7 +33,7 @@ export const useCancelRequest = (): Values => {
     contractAddress: safeGuardAddress,
     contractAbi: SAFEGUARD_JSON.abi,
   });
-  const { hasCancelerRole } = useUserInfo();
+  const { hasCancelerRole } = useUserContractRoles();
 
   // handlers
   const cancelTransaction = async (transaction: Transaction) => {

@@ -25,7 +25,7 @@ const SafeGuardList: FC<Props> = ({ safeList }) => {
       <HStack spacing={1.5}>
         <Icon as={IoSettingsOutline} w={6} h={6} />
         <Text color="gray.800" flex={1} mb={4} textStyle="paragraph">
-          List of created SafeGuard
+          List of created SafeGuards
         </Text>
       </HStack>
       <Flex border="gray.dark" bg="white" direction="column">

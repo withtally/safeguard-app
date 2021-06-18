@@ -12,13 +12,17 @@ import Manage from 'modules/admin/components/Manage';
 // manager
 import Payments from 'modules/manager/components/Payments';
 
+// safeGuard
+import SafeGuardViewRoleList from 'modules/safeGuard/components/SafeGuardViewRoleList';
+
 const SafeGuardView: FC = () => {
   // custom hooks
   const { transactions } = useTransactions();
 
   return (
     <Flex direction="column" w="full">
-      <PageHeader title="View SafeGuard" />
+      <PageHeader title="" />
+      <SafeGuardViewRoleList />
       <Tabs>
         <TabList>
           <Tab>Roles</Tab>

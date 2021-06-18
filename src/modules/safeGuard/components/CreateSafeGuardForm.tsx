@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Button, HStack, Text, Stack, Flex } from '@chakra-ui/react';
 import { Formik, FieldArray, FormikHelpers } from 'formik';
+import { IoAddCircleOutline } from 'react-icons/io5';
 
 // common
 import FormInput from 'modules/common/components/FormInput';
@@ -73,8 +74,13 @@ const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
               {({ push, remove }) => (
                 <Flex direction="column">
                   <HStack spacing={4} w="2xl" align="center" mb={5}>
-                    <Text textStyle="h6">Rol assigment list</Text>
-                    <Button size="md" variant="tertiary" onClick={() => push(emptyRolAssignation)}>
+                    <Text textStyle="h6">Assign roles</Text>
+                    <Button
+                      leftIcon={<IoAddCircleOutline />}
+                      size="md"
+                      variant="tertiary"
+                      onClick={() => push(emptyRolAssignation)}
+                    >
                       Add a new role
                     </Button>
                   </HStack>

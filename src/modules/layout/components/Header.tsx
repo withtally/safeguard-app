@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { HStack, Link, Box, Flex, Text, Button, Stack } from '@chakra-ui/react';
+import { HStack, Link, Box, Flex, Text, Button } from '@chakra-ui/react';
 import { Link as ReachLink } from '@reach/router';
 
 // common

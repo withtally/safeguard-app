@@ -1,4 +1,15 @@
-# My Safe App
+# tally SafeGuard
+
+## Project Abstract
+
+SafeGuard governance accountability tool built around the Gnosis Safe multisig. It's a multisig system that allows governance to retain veto power over Gnosis Safe contracts, and allows governance to reclaim funds entrusted to multsig holders without requiring multisig signatories approval.
+
+Example use cases include giving final veto power on the execution of multisig transactions to token holders, and the ability to reclaim funds from a multisig where the signatories are unable or unwilling to sign a refund transaction.
+
+## More information about SafeGuard
+
+- Go to SafeGuard contracts repo to get more information about the implementation and flows
+  - [SafeGuard contract repo](https://github.com/withtally/failsafe)
 
 ## Getting Started
 
@@ -21,31 +32,9 @@ Then:
 - Go to Apps -> Manage Apps -> Add Custom App
 - Paste your localhost URL, default is https://localhost:3000/
 - You should see Safe App Starter as a new app
-- Develop your app from there
-
-## Features
-
-Gnosis Safe App Starter combines recommendations described in the following repositories:
-
-- [Safe Apps SDK](https://github.com/gnosis/safe-apps-sdk)
-- [safe-react-components](https://github.com/gnosis/safe-react-components)
-
-You can use the `useSafe` React hook to interact with the Safe Apps SDK
-
-```
-const safe = useSafe();
-console.log(safe.info);
-```
-
-Safe React Components are also integrated and ready to use. [See all components](https://components.gnosis-safe.io/).
+- Review your changes from there
 
 ## Dependencies
 
-### Included
-- [`@gnosis.pm/safe-react-components`](https://github.com/gnosis/safe-react-components) (UI components themed for the Safe Multisig interface)
-- [`@rmeissner/safe-apps-react-sdk`](https://github.com/rmeissner/safe-sdks-js/tree/master/safe-apps-react-sdk) (React hook for the Safe Apps SDK)
-
-### Recommended
 - [`ethers`](https://github.com/ethers-io/ethers.js) (Library for interacting with Ethereum)
-- [`web3`](https://github.com/ethereum/web3.js/) (Library for interacting with Ethereum)
-- [`@studydefi/money-legos`](https://github.com/studydefi/money-legos) (Library for DeFi interactions)
+- [`onboardJS`](https://github.com/blocknative/onboard) (Library for enable wallet selection)

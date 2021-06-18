@@ -1,6 +1,4 @@
 import { useMemo, useState, useEffect } from 'react';
-import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
-import { SafeAppProvider } from '@gnosis.pm/safe-apps-provider';
 import { ethers, providers } from 'ethers';
 import { JsonRpcSigner } from '@ethersproject/providers/lib/json-rpc-provider';
 import constate from 'constate';
@@ -28,15 +26,6 @@ const useWeb3Constate = (): Values => {
   const [isWeb3Ready, setIsWeb3Ready] = useState<boolean>(false);
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(undefined);
   const [onboard, setOnboard] = useState<API | undefined>(undefined);
-
-  // // gnosis hooks
-  // const { sdk, safe } = useSafeAppsSDK();
-
-  // // variables
-  // const web3Provider = useMemo(
-  //   () => new ethers.providers.Web3Provider(new SafeAppProvider(safe, sdk)),
-  //   [sdk, safe]
-  // );
 
   const getPreviousWallet = async () => {
     try {

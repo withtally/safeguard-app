@@ -2,206 +2,110 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import {
-  ethers,
-  EventFilter,
-  Signer,
-  BigNumber,
-  BigNumberish,
-  PopulatedTransaction,
-} from "ethers";
+import { ethers, EventFilter, Signer, BigNumber, BigNumberish, PopulatedTransaction } from 'ethers';
 import {
   Contract,
   ContractTransaction,
   Overrides,
   PayableOverrides,
   CallOverrides,
-} from "@ethersproject/contracts";
-import { BytesLike } from "@ethersproject/bytes";
-import { Listener, Provider } from "@ethersproject/providers";
-import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
+} from '@ethersproject/contracts';
+import { BytesLike } from '@ethersproject/bytes';
+import { Listener, Provider } from '@ethersproject/providers';
+import { FunctionFragment, EventFragment, Result } from '@ethersproject/abi';
 
 interface SafeGuardInterface extends ethers.utils.Interface {
   functions: {
-    "CANCELER_ROLE()": FunctionFragment;
-    "CREATOR_ROLE()": FunctionFragment;
-    "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "EXECUTOR_ROLE()": FunctionFragment;
-    "PROPOSER_ROLE()": FunctionFragment;
-    "SAFEGUARD_ADMIN_ROLE()": FunctionFragment;
-    "cancelTransaction(address,uint256,string,bytes,uint256)": FunctionFragment;
-    "executeTransaction(address,uint256,string,bytes,uint256)": FunctionFragment;
-    "getRoleAdmin(bytes32)": FunctionFragment;
-    "getRoleMember(bytes32,uint256)": FunctionFragment;
-    "getRoleMemberCount(bytes32)": FunctionFragment;
-    "grantRole(bytes32,address)": FunctionFragment;
-    "hasRole(bytes32,address)": FunctionFragment;
-    "queueTransaction(address,uint256,string,bytes,uint256)": FunctionFragment;
-    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)": FunctionFragment;
-    "renounceRole(bytes32,address)": FunctionFragment;
-    "revokeRole(bytes32,address)": FunctionFragment;
-    "setTimelock(address)": FunctionFragment;
-    "supportsInterface(bytes4)": FunctionFragment;
-    "timelock()": FunctionFragment;
+    'CANCELER_ROLE()': FunctionFragment;
+    'CREATOR_ROLE()': FunctionFragment;
+    'DEFAULT_ADMIN_ROLE()': FunctionFragment;
+    'EXECUTOR_ROLE()': FunctionFragment;
+    'PROPOSER_ROLE()': FunctionFragment;
+    'SAFEGUARD_ADMIN_ROLE()': FunctionFragment;
+    'cancelTransaction(address,uint256,string,bytes,uint256)': FunctionFragment;
+    'executeTransaction(address,uint256,string,bytes,uint256)': FunctionFragment;
+    'getRoleAdmin(bytes32)': FunctionFragment;
+    'getRoleMember(bytes32,uint256)': FunctionFragment;
+    'getRoleMemberCount(bytes32)': FunctionFragment;
+    'grantRole(bytes32,address)': FunctionFragment;
+    'hasRole(bytes32,address)': FunctionFragment;
+    'queueTransaction(address,uint256,string,bytes,uint256)': FunctionFragment;
+    'queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)': FunctionFragment;
+    'renounceRole(bytes32,address)': FunctionFragment;
+    'revokeRole(bytes32,address)': FunctionFragment;
+    'setTimelock(address)': FunctionFragment;
+    'supportsInterface(bytes4)': FunctionFragment;
+    'timelock()': FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: 'CANCELER_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'CREATOR_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'DEFAULT_ADMIN_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'EXECUTOR_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'PROPOSER_ROLE', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'SAFEGUARD_ADMIN_ROLE', values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "CANCELER_ROLE",
-    values?: undefined
+    functionFragment: 'cancelTransaction',
+    values: [string, BigNumberish, string, BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "CREATOR_ROLE",
-    values?: undefined
+    functionFragment: 'executeTransaction',
+    values: [string, BigNumberish, string, BytesLike, BigNumberish],
+  ): string;
+  encodeFunctionData(functionFragment: 'getRoleAdmin', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'getRoleMember', values: [BytesLike, BigNumberish]): string;
+  encodeFunctionData(functionFragment: 'getRoleMemberCount', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'grantRole', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'hasRole', values: [BytesLike, string]): string;
+  encodeFunctionData(
+    functionFragment: 'queueTransaction',
+    values: [string, BigNumberish, string, BytesLike, BigNumberish],
   ): string;
   encodeFunctionData(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
-    values?: undefined
+    functionFragment: 'queueTransactionWithDescription',
+    values: [string, BigNumberish, string, BytesLike, BigNumberish, string],
   ): string;
-  encodeFunctionData(
-    functionFragment: "EXECUTOR_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PROPOSER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "SAFEGUARD_ADMIN_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "cancelTransaction",
-    values: [string, BigNumberish, string, BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "executeTransaction",
-    values: [string, BigNumberish, string, BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleAdmin",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleMember",
-    values: [BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleMemberCount",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "grantRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "hasRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "queueTransaction",
-    values: [string, BigNumberish, string, BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "queueTransactionWithDescription",
-    values: [string, BigNumberish, string, BytesLike, BigNumberish, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "renounceRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "revokeRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(functionFragment: "setTimelock", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "supportsInterface",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(functionFragment: "timelock", values?: undefined): string;
+  encodeFunctionData(functionFragment: 'renounceRole', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'revokeRole', values: [BytesLike, string]): string;
+  encodeFunctionData(functionFragment: 'setTimelock', values: [string]): string;
+  encodeFunctionData(functionFragment: 'supportsInterface', values: [BytesLike]): string;
+  encodeFunctionData(functionFragment: 'timelock', values?: undefined): string;
 
+  decodeFunctionResult(functionFragment: 'CANCELER_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'CREATOR_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'DEFAULT_ADMIN_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'EXECUTOR_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'PROPOSER_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'SAFEGUARD_ADMIN_ROLE', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'cancelTransaction', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'executeTransaction', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoleAdmin', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoleMember', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getRoleMemberCount', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'grantRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'hasRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'queueTransaction', data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "CANCELER_ROLE",
-    data: BytesLike
+    functionFragment: 'queueTransactionWithDescription',
+    data: BytesLike,
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "CREATOR_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "EXECUTOR_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "PROPOSER_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "SAFEGUARD_ADMIN_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "cancelTransaction",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "executeTransaction",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleAdmin",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleMember",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleMemberCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "queueTransaction",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "queueTransactionWithDescription",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceRole",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "setTimelock",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "supportsInterface",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "timelock", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'renounceRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'revokeRole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'setTimelock', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'supportsInterface', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'timelock', data: BytesLike): Result;
 
   events: {
-    "QueueTransactionWithDescription(bytes32,address,uint256,string,bytes,uint256,string)": EventFragment;
-    "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
-    "RoleGranted(bytes32,address,address)": EventFragment;
-    "RoleRevoked(bytes32,address,address)": EventFragment;
+    'QueueTransactionWithDescription(bytes32,address,uint256,string,bytes,uint256,string)': EventFragment;
+    'RoleAdminChanged(bytes32,bytes32,bytes32)': EventFragment;
+    'RoleGranted(bytes32,address,address)': EventFragment;
+    'RoleRevoked(bytes32,address,address)': EventFragment;
   };
 
-  getEvent(
-    nameOrSignatureOrTopic: "QueueTransactionWithDescription"
-  ): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'QueueTransactionWithDescription'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RoleAdminChanged'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RoleGranted'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: 'RoleRevoked'): EventFragment;
 }
 
 export class SafeGuard extends Contract {
@@ -220,27 +124,27 @@ export class SafeGuard extends Contract {
   functions: {
     CANCELER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+    'CANCELER_ROLE()'(overrides?: CallOverrides): Promise<[string]>;
 
     CREATOR_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+    'CREATOR_ROLE()'(overrides?: CallOverrides): Promise<[string]>;
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+    'DEFAULT_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<[string]>;
 
     EXECUTOR_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    "EXECUTOR_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+    'EXECUTOR_ROLE()'(overrides?: CallOverrides): Promise<[string]>;
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+    'PROPOSER_ROLE()'(overrides?: CallOverrides): Promise<[string]>;
 
     SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<[string]>;
+    'SAFEGUARD_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<[string]>;
 
     cancelTransaction(
       target: string,
@@ -248,16 +152,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    "cancelTransaction(address,uint256,string,bytes,uint256)"(
+    'cancelTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
     executeTransaction(
@@ -266,69 +170,56 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: PayableOverrides
+      overrides?: PayableOverrides,
     ): Promise<ContractTransaction>;
 
-    "executeTransaction(address,uint256,string,bytes,uint256)"(
+    'executeTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       _value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: PayableOverrides
+      overrides?: PayableOverrides,
     ): Promise<ContractTransaction>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
-    "getRoleAdmin(bytes32)"(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+    'getRoleAdmin(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     getRoleMember(
       role: BytesLike,
       index: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
-    "getRoleMember(bytes32,uint256)"(
+    'getRoleMember(bytes32,uint256)'(
       role: BytesLike,
       index: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[string]>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    "getRoleMemberCount(bytes32)"(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    'getRoleMemberCount(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     grantRole(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    "grantRole(bytes32,address)"(
+    'grantRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    "hasRole(bytes32,address)"(
+    'hasRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[boolean]>;
 
     queueTransaction(
@@ -337,16 +228,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    "queueTransaction(address,uint256,string,bytes,uint256)"(
+    'queueTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
     queueTransactionWithDescription(
@@ -356,91 +247,82 @@ export class SafeGuard extends Contract {
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+    'queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
     renounceRole(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    "renounceRole(bytes32,address)"(
+    'renounceRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
     revokeRole(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    "revokeRole(bytes32,address)"(
+    'revokeRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<ContractTransaction>;
 
-    setTimelock(
-      _timelock: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
+    setTimelock(_timelock: string, overrides?: Overrides): Promise<ContractTransaction>;
 
-    "setTimelock(address)"(
-      _timelock: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
+    'setTimelock(address)'(_timelock: string, overrides?: Overrides): Promise<ContractTransaction>;
 
-    supportsInterface(
+    supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+
+    'supportsInterface(bytes4)'(
       interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    "supportsInterface(bytes4)"(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<[boolean]>;
 
     timelock(overrides?: CallOverrides): Promise<[string]>;
 
-    "timelock()"(overrides?: CallOverrides): Promise<[string]>;
+    'timelock()'(overrides?: CallOverrides): Promise<[string]>;
   };
 
   CANCELER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<string>;
+  'CANCELER_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
   CREATOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<string>;
+  'CREATOR_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
+  'DEFAULT_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
   EXECUTOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  "EXECUTOR_ROLE()"(overrides?: CallOverrides): Promise<string>;
+  'EXECUTOR_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
   PROPOSER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<string>;
+  'PROPOSER_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
   SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
+  'SAFEGUARD_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
   cancelTransaction(
     target: string,
@@ -448,16 +330,16 @@ export class SafeGuard extends Contract {
     signature: string,
     data: BytesLike,
     eta: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
-  "cancelTransaction(address,uint256,string,bytes,uint256)"(
+  'cancelTransaction(address,uint256,string,bytes,uint256)'(
     target: string,
     value: BigNumberish,
     signature: string,
     data: BytesLike,
     eta: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
   executeTransaction(
@@ -466,69 +348,48 @@ export class SafeGuard extends Contract {
     signature: string,
     data: BytesLike,
     eta: BigNumberish,
-    overrides?: PayableOverrides
+    overrides?: PayableOverrides,
   ): Promise<ContractTransaction>;
 
-  "executeTransaction(address,uint256,string,bytes,uint256)"(
+  'executeTransaction(address,uint256,string,bytes,uint256)'(
     target: string,
     _value: BigNumberish,
     signature: string,
     data: BytesLike,
     eta: BigNumberish,
-    overrides?: PayableOverrides
+    overrides?: PayableOverrides,
   ): Promise<ContractTransaction>;
 
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-  "getRoleAdmin(bytes32)"(
-    role: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<string>;
+  'getRoleAdmin(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-  getRoleMember(
+  getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  'getRoleMember(bytes32,uint256)'(
     role: BytesLike,
     index: BigNumberish,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<string>;
 
-  "getRoleMember(bytes32,uint256)"(
-    role: BytesLike,
-    index: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
+  getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-  getRoleMemberCount(
-    role: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  'getRoleMemberCount(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-  "getRoleMemberCount(bytes32)"(
-    role: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  grantRole(role: BytesLike, account: string, overrides?: Overrides): Promise<ContractTransaction>;
 
-  grantRole(
+  'grantRole(bytes32,address)'(
     role: BytesLike,
     account: string,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
-  "grantRole(bytes32,address)"(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
+  hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
-  hasRole(
+  'hasRole(bytes32,address)'(
     role: BytesLike,
     account: string,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "hasRole(bytes32,address)"(
-    role: BytesLike,
-    account: string,
-    overrides?: CallOverrides
+    overrides?: CallOverrides,
   ): Promise<boolean>;
 
   queueTransaction(
@@ -537,16 +398,16 @@ export class SafeGuard extends Contract {
     signature: string,
     data: BytesLike,
     eta: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
-  "queueTransaction(address,uint256,string,bytes,uint256)"(
+  'queueTransaction(address,uint256,string,bytes,uint256)'(
     target: string,
     value: BigNumberish,
     signature: string,
     data: BytesLike,
     eta: BigNumberish,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
   queueTransactionWithDescription(
@@ -556,91 +417,75 @@ export class SafeGuard extends Contract {
     data: BytesLike,
     eta: BigNumberish,
     description: string,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
-  "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+  'queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)'(
     target: string,
     value: BigNumberish,
     signature: string,
     data: BytesLike,
     eta: BigNumberish,
     description: string,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
   renounceRole(
     role: BytesLike,
     account: string,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
-  "renounceRole(bytes32,address)"(
+  'renounceRole(bytes32,address)'(
     role: BytesLike,
     account: string,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
-  revokeRole(
+  revokeRole(role: BytesLike, account: string, overrides?: Overrides): Promise<ContractTransaction>;
+
+  'revokeRole(bytes32,address)'(
     role: BytesLike,
     account: string,
-    overrides?: Overrides
+    overrides?: Overrides,
   ): Promise<ContractTransaction>;
 
-  "revokeRole(bytes32,address)"(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
+  setTimelock(_timelock: string, overrides?: Overrides): Promise<ContractTransaction>;
 
-  setTimelock(
-    _timelock: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
+  'setTimelock(address)'(_timelock: string, overrides?: Overrides): Promise<ContractTransaction>;
 
-  "setTimelock(address)"(
-    _timelock: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
+  supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
-  supportsInterface(
-    interfaceId: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  "supportsInterface(bytes4)"(
-    interfaceId: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  'supportsInterface(bytes4)'(interfaceId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   timelock(overrides?: CallOverrides): Promise<string>;
 
-  "timelock()"(overrides?: CallOverrides): Promise<string>;
+  'timelock()'(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     CANCELER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<string>;
+    'CANCELER_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
     CREATOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<string>;
+    'CREATOR_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
+    'DEFAULT_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
     EXECUTOR_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    "EXECUTOR_ROLE()"(overrides?: CallOverrides): Promise<string>;
+    'EXECUTOR_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<string>;
+    'PROPOSER_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
     SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<string>;
+    'SAFEGUARD_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<string>;
 
     cancelTransaction(
       target: string,
@@ -648,16 +493,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
-    "cancelTransaction(address,uint256,string,bytes,uint256)"(
+    'cancelTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     executeTransaction(
@@ -666,69 +511,48 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
-    "executeTransaction(address,uint256,string,bytes,uint256)"(
+    'executeTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       _value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-    "getRoleAdmin(bytes32)"(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<string>;
+    'getRoleAdmin(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
-    getRoleMember(
+    getRoleMember(role: BytesLike, index: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    'getRoleMember(bytes32,uint256)'(
       role: BytesLike,
       index: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<string>;
 
-    "getRoleMember(bytes32,uint256)"(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    'getRoleMemberCount(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    "getRoleMemberCount(bytes32)"(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    grantRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
-    grantRole(
+    'grantRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
-    "grantRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<boolean>;
 
-    hasRole(
+    'hasRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    "hasRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<boolean>;
 
     queueTransaction(
@@ -737,16 +561,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
-    "queueTransaction(address,uint256,string,bytes,uint256)"(
+    'queueTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     queueTransactionWithDescription(
@@ -756,63 +580,49 @@ export class SafeGuard extends Contract {
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
-    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+    'queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
-    renounceRole(
+    renounceRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
+
+    'renounceRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
-    "renounceRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    revokeRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<void>;
 
-    revokeRole(
+    'revokeRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "revokeRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<void>;
 
     setTimelock(_timelock: string, overrides?: CallOverrides): Promise<void>;
 
-    "setTimelock(address)"(
-      _timelock: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    'setTimelock(address)'(_timelock: string, overrides?: CallOverrides): Promise<void>;
 
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
-    "supportsInterface(bytes4)"(
+    'supportsInterface(bytes4)'(
       interfaceId: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<boolean>;
 
     timelock(overrides?: CallOverrides): Promise<string>;
 
-    "timelock()"(overrides?: CallOverrides): Promise<string>;
+    'timelock()'(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
@@ -823,52 +633,44 @@ export class SafeGuard extends Contract {
       signature: null,
       data: null,
       eta: null,
-      description: null
+      description: null,
     ): EventFilter;
 
     RoleAdminChanged(
       role: BytesLike | null,
       previousAdminRole: BytesLike | null,
-      newAdminRole: BytesLike | null
+      newAdminRole: BytesLike | null,
     ): EventFilter;
 
-    RoleGranted(
-      role: BytesLike | null,
-      account: string | null,
-      sender: string | null
-    ): EventFilter;
+    RoleGranted(role: BytesLike | null, account: string | null, sender: string | null): EventFilter;
 
-    RoleRevoked(
-      role: BytesLike | null,
-      account: string | null,
-      sender: string | null
-    ): EventFilter;
+    RoleRevoked(role: BytesLike | null, account: string | null, sender: string | null): EventFilter;
   };
 
   estimateGas: {
     CANCELER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+    'CANCELER_ROLE()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     CREATOR_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+    'CREATOR_ROLE()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "DEFAULT_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+    'DEFAULT_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     EXECUTOR_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "EXECUTOR_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+    'EXECUTOR_ROLE()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+    'PROPOSER_ROLE()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "SAFEGUARD_ADMIN_ROLE()"(overrides?: CallOverrides): Promise<BigNumber>;
+    'SAFEGUARD_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<BigNumber>;
 
     cancelTransaction(
       target: string,
@@ -876,16 +678,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
-    "cancelTransaction(address,uint256,string,bytes,uint256)"(
+    'cancelTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
     executeTransaction(
@@ -894,72 +696,52 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: PayableOverrides
+      overrides?: PayableOverrides,
     ): Promise<BigNumber>;
 
-    "executeTransaction(address,uint256,string,bytes,uint256)"(
+    'executeTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       _value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: PayableOverrides
+      overrides?: PayableOverrides,
     ): Promise<BigNumber>;
 
-    getRoleAdmin(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    "getRoleAdmin(bytes32)"(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    'getRoleAdmin(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     getRoleMember(
       role: BytesLike,
       index: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
-    "getRoleMember(bytes32,uint256)"(
+    'getRoleMember(bytes32,uint256)'(
       role: BytesLike,
       index: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    "getRoleMemberCount(bytes32)"(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    'getRoleMemberCount(bytes32)'(role: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    grantRole(
+    grantRole(role: BytesLike, account: string, overrides?: Overrides): Promise<BigNumber>;
+
+    'grantRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
-    "grantRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
+    hasRole(role: BytesLike, account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    hasRole(
+    'hasRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "hasRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     queueTransaction(
@@ -968,16 +750,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
-    "queueTransaction(address,uint256,string,bytes,uint256)"(
+    'queueTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
     queueTransactionWithDescription(
@@ -987,97 +769,75 @@ export class SafeGuard extends Contract {
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
-    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+    'queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
-    renounceRole(
+    renounceRole(role: BytesLike, account: string, overrides?: Overrides): Promise<BigNumber>;
+
+    'renounceRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
-    "renounceRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
+    revokeRole(role: BytesLike, account: string, overrides?: Overrides): Promise<BigNumber>;
 
-    revokeRole(
+    'revokeRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "revokeRole(bytes32,address)"(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<BigNumber>;
 
     setTimelock(_timelock: string, overrides?: Overrides): Promise<BigNumber>;
 
-    "setTimelock(address)"(
-      _timelock: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
+    'setTimelock(address)'(_timelock: string, overrides?: Overrides): Promise<BigNumber>;
 
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    supportsInterface(interfaceId: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
-    "supportsInterface(bytes4)"(
+    'supportsInterface(bytes4)'(
       interfaceId: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
     timelock(overrides?: CallOverrides): Promise<BigNumber>;
 
-    "timelock()"(overrides?: CallOverrides): Promise<BigNumber>;
+    'timelock()'(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     CANCELER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "CANCELER_ROLE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    'CANCELER_ROLE()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     CREATOR_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "CREATOR_ROLE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    'CREATOR_ROLE()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    DEFAULT_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "DEFAULT_ADMIN_ROLE()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    'DEFAULT_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     EXECUTOR_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "EXECUTOR_ROLE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    'EXECUTOR_ROLE()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     PROPOSER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "PROPOSER_ROLE()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    'PROPOSER_ROLE()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    SAFEGUARD_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    SAFEGUARD_ADMIN_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "SAFEGUARD_ADMIN_ROLE()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    'SAFEGUARD_ADMIN_ROLE()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     cancelTransaction(
       target: string,
@@ -1085,16 +845,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
-    "cancelTransaction(address,uint256,string,bytes,uint256)"(
+    'cancelTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
     executeTransaction(
@@ -1103,72 +863,66 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: PayableOverrides
+      overrides?: PayableOverrides,
     ): Promise<PopulatedTransaction>;
 
-    "executeTransaction(address,uint256,string,bytes,uint256)"(
+    'executeTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       _value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: PayableOverrides
+      overrides?: PayableOverrides,
     ): Promise<PopulatedTransaction>;
 
-    getRoleAdmin(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "getRoleAdmin(bytes32)"(
+    'getRoleAdmin(bytes32)'(
       role: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     getRoleMember(
       role: BytesLike,
       index: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
-    "getRoleMember(bytes32,uint256)"(
+    'getRoleMember(bytes32,uint256)'(
       role: BytesLike,
       index: BigNumberish,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    getRoleMemberCount(role: BytesLike, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "getRoleMemberCount(bytes32)"(
+    'getRoleMemberCount(bytes32)'(
       role: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     grantRole(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
-    "grantRole(bytes32,address)"(
+    'grantRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
     hasRole(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
-    "hasRole(bytes32,address)"(
+    'hasRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     queueTransaction(
@@ -1177,16 +931,16 @@ export class SafeGuard extends Contract {
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
-    "queueTransaction(address,uint256,string,bytes,uint256)"(
+    'queueTransaction(address,uint256,string,bytes,uint256)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
     queueTransactionWithDescription(
@@ -1196,65 +950,59 @@ export class SafeGuard extends Contract {
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
-    "queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)"(
+    'queueTransactionWithDescription(address,uint256,string,bytes,uint256,string)'(
       target: string,
       value: BigNumberish,
       signature: string,
       data: BytesLike,
       eta: BigNumberish,
       description: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
     renounceRole(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
-    "renounceRole(bytes32,address)"(
+    'renounceRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
     revokeRole(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
-    "revokeRole(bytes32,address)"(
+    'revokeRole(bytes32,address)'(
       role: BytesLike,
       account: string,
-      overrides?: Overrides
+      overrides?: Overrides,
     ): Promise<PopulatedTransaction>;
 
-    setTimelock(
-      _timelock: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
+    setTimelock(_timelock: string, overrides?: Overrides): Promise<PopulatedTransaction>;
 
-    "setTimelock(address)"(
-      _timelock: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
+    'setTimelock(address)'(_timelock: string, overrides?: Overrides): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
-    "supportsInterface(bytes4)"(
+    'supportsInterface(bytes4)'(
       interfaceId: BytesLike,
-      overrides?: CallOverrides
+      overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
     timelock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    "timelock()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    'timelock()'(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

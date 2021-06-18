@@ -1,25 +1,23 @@
-import { FC } from "react";
-import { Text, Flex, FlexProps, HStack, Icon, Button } from "@chakra-ui/react";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { FormikErrors, FormikTouched } from "formik";
+import { FC } from 'react';
+import { Text, Flex, FlexProps, HStack, Icon, Button } from '@chakra-ui/react';
+import { IoAddCircleOutline } from 'react-icons/io5';
+import { FormikErrors, FormikTouched } from 'formik';
 
 // common
-import FormAmountInput from "modules/common/components/FormAmountInput";
-import FormInput from "modules/common/components/FormInput";
-import InstructionList from "modules/common/components/InstructionList";
+import FormAmountInput from 'modules/common/components/FormAmountInput';
+import FormInput from 'modules/common/components/FormInput';
+import InstructionList from 'modules/common/components/InstructionList';
 
 // manager
-import { InitialValuesRequestFunds } from "modules/manager/lib/types";
-import { PaymentsFlowSteps } from "modules/manager/lib/constants";
+import { InitialValuesRequestFunds } from 'modules/manager/lib/types';
+import { PaymentsFlowSteps } from 'modules/manager/lib/constants';
 
 type Props = {
   values: InitialValuesRequestFunds;
   submitForm: () => Promise<any>;
   handleChange: {
     (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
+    <T_1 = string | React.ChangeEvent<any>>(field: T_1): T_1 extends React.ChangeEvent<any>
       ? void
       : (e: string | React.ChangeEvent<any>) => void;
   };
@@ -92,12 +90,7 @@ const RequestPayment: FC<FlexProps & Props> = ({
             maxW="xs"
             h="6.125rem"
           />
-          <Button
-            isLoading={isSubmitting}
-            onClick={submitForm}
-            variant="primary"
-            size="md"
-          >
+          <Button isLoading={isSubmitting} onClick={submitForm} variant="primary" size="md">
             Request payment
           </Button>
         </HStack>

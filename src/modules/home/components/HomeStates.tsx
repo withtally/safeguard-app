@@ -1,21 +1,11 @@
-import { FC } from "react";
-import {
-  Text,
-  Stack,
-  Flex,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-} from "@chakra-ui/react";
+import { FC } from 'react';
+import { Text, Stack, Flex, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 // common
-import StatusTag from "modules/common/components/StatusTag";
+import StatusTag from 'modules/common/components/StatusTag';
 
 // home
-import { STATES_INFORMATION } from "modules/home/lib/constants";
+import { STATES_INFORMATION } from 'modules/home/lib/constants';
 
 const HomeStates: FC = () => {
   return (
@@ -25,8 +15,7 @@ const HomeStates: FC = () => {
           Payment Request States
         </Text>
         <Text color="gray.500" textStyle="body.regular.lg">
-          These are the states in which a payment request can fall into in the
-          SafeGuard flow.
+          These are the states in which a payment request can fall into in the SafeGuard flow.
         </Text>
       </Stack>
       <Flex shadow="gray.card" bg="white" direction="column">

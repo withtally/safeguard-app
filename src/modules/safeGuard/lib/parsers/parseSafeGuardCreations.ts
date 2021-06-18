@@ -1,11 +1,9 @@
-import { utils } from "ethers";
+import { utils } from 'ethers';
 
 // safeGuard
-import { SafeGuard } from "modules/safeGuard/lib/types";
+import { SafeGuard } from 'modules/safeGuard/lib/types';
 
-export const parseSafeGuardCreations = (
-  safeCreated: utils.Result
-): SafeGuard => {
+export const parseSafeGuardCreations = (safeCreated: utils.Result): SafeGuard => {
   return {
     admin: safeCreated.admin.toLowerCase(),
     safeGuardAddress: safeCreated.safeGuardAddress,

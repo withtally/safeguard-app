@@ -1,5 +1,5 @@
 // common
-import { ProposalStatus } from "modules/common/lib/types";
+import { ProposalStatus } from 'modules/common/lib/types';
 
 export type StateInfo = {
   state: ProposalStatus;

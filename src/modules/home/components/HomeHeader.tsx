@@ -1,8 +1,8 @@
-import { FC } from "react";
-import { Flex, Stack, Text } from "@chakra-ui/react";
+import { FC } from 'react';
+import { Flex, Stack, Text } from '@chakra-ui/react';
 
 // common
-import WavesBackground from "modules/common/components/WavesBackground";
+import WavesBackground from 'modules/common/components/WavesBackground';
 
 const HomeHeader: FC = () => (
   <Flex
@@ -20,7 +20,7 @@ const HomeHeader: FC = () => (
         Welcome!
       </Text>
       <Text textStyle="paragraph" textAlign="center">
-        This flow overview will help you understand the SafeGuard App{" "}
+        This flow overview will help you understand the SafeGuard App{' '}
         <span role="img" aria-label="spaceship">
           🚀
         </span>

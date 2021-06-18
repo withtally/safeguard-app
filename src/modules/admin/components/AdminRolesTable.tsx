@@ -1,27 +1,16 @@
-import { FC, useMemo } from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Button,
-  HStack,
-  Text,
-  Flex,
-} from "@chakra-ui/react";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
+import { FC, useMemo } from 'react';
+import { Table, Thead, Tbody, Tr, Th, Td, Button, HStack, Text, Flex } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 // common
-import Avatar from "modules/common/components/Avatar";
-import { useUserInformation } from "modules/common/hooks/useUserInformation";
-import { getUsername, getProfileImage } from "modules/common/lib/helpers";
+import Avatar from 'modules/common/components/Avatar';
+import { useUserInformation } from 'modules/common/hooks/useUserInformation';
+import { getUsername, getProfileImage } from 'modules/common/lib/helpers';
 
 // admin
-import { ROLES } from "modules/admin/lib/constants";
-import { GrantedRole } from "modules/admin/lib/types";
+import { ROLES } from 'modules/admin/lib/constants';
+import { GrantedRole } from 'modules/admin/lib/types';
 
 dayjs.extend(advancedFormat);
 
@@ -32,10 +21,7 @@ type Props = {
 
 const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
   // constants
-  const addresses = useMemo(
-    () => grantedRoles.map((role) => role.address),
-    [grantedRoles]
-  );
+  const addresses = useMemo(() => grantedRoles.map((role) => role.address), [grantedRoles]);
   const hasRows = Boolean(grantedRoles.length);
 
   // custom hooks
@@ -55,13 +41,8 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
         </Thead>
         <Tbody>
           {grantedRoles.map((role, index) => {
-            const roleName = ROLES.find(
-              (item) => item.id === role.roleId
-            )?.label;
-            const profileImage = getProfileImage(
-              usersInformation,
-              role.address
-            );
+            const roleName = ROLES.find((item) => item.id === role.roleId)?.label;
+            const profileImage = getProfileImage(usersInformation, role.address);
             const username = getUsername(usersInformation, role.address, false);
 
             return (

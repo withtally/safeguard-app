@@ -1,31 +1,20 @@
-import { FC, useMemo } from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Button,
-  HStack,
-  Text,
-  Flex,
-} from "@chakra-ui/react";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
+import { FC, useMemo } from 'react';
+import { Table, Thead, Tbody, Tr, Th, Td, Button, HStack, Text, Flex } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 // common
-import { parseBigNumber } from "modules/common/lib/helpers";
-import StatusTag from "modules/common/components/StatusTag";
-import Avatar from "modules/common/components/Avatar";
-import { useUserInformation } from "modules/common/hooks/useUserInformation";
-import { getUsername, getProfileImage } from "modules/common/lib/helpers";
+import { parseBigNumber } from 'modules/common/lib/helpers';
+import StatusTag from 'modules/common/components/StatusTag';
+import Avatar from 'modules/common/components/Avatar';
+import { useUserInformation } from 'modules/common/hooks/useUserInformation';
+import { getUsername, getProfileImage } from 'modules/common/lib/helpers';
 
 // admin
-import { Transaction } from "modules/admin/lib/types";
+import { Transaction } from 'modules/admin/lib/types';
 
 // manager
-import { getTransactionStatus } from "modules/manager/lib/helpers";
+import { getTransactionStatus } from 'modules/manager/lib/helpers';
 
 dayjs.extend(advancedFormat);
 
@@ -34,14 +23,11 @@ type Props = {
   executeTransaction: (transaction: Transaction) => Promise<void>;
 };
 
-const ManagerTransactionsTable: FC<Props> = ({
-  transactions,
-  executeTransaction,
-}) => {
+const ManagerTransactionsTable: FC<Props> = ({ transactions, executeTransaction }) => {
   // constants
   const addresses = useMemo(
     () => transactions.map((transaction) => transaction.transferTo),
-    [transactions]
+    [transactions],
   );
   const hasRows = Boolean(transactions.length);
 
@@ -66,27 +52,16 @@ const ManagerTransactionsTable: FC<Props> = ({
         <Tbody>
           {transactions.map((transaction: Transaction, index: number) => {
             const status = getTransactionStatus(transaction);
-            const etaMeet = transaction.eta <= dayjs().format("X");
-            const btnDisabled =
-              !transaction.currentlyQueued || !etaMeet || transaction.stale;
+            const etaMeet = transaction.eta <= dayjs().format('X');
+            const btnDisabled = !transaction.currentlyQueued || !etaMeet || transaction.stale;
 
-            const profileImage = getProfileImage(
-              usersInformation,
-              transaction.transferTo
-            );
-            const username = getUsername(
-              usersInformation,
-              transaction.transferTo,
-              false
-            );
+            const profileImage = getProfileImage(usersInformation, transaction.transferTo);
+            const username = getUsername(usersInformation, transaction.transferTo, false);
             return (
               <Tr key={`${index}-${transaction.txHash}`}>
                 <Td>
                   <HStack spacing={2}>
-                    <Avatar
-                      address={transaction.transferTo}
-                      src={profileImage}
-                    />
+                    <Avatar address={transaction.transferTo} src={profileImage} />
                     <Text color="gray.500" textStyle="body.regular.md">
                       {username}
                     </Text>
@@ -94,12 +69,12 @@ const ManagerTransactionsTable: FC<Props> = ({
                 </Td>
                 <Td>
                   <Text color="gray.500" textStyle="body.regular.md">
-                    {transaction.description}{" "}
+                    {transaction.description}{' '}
                   </Text>
                 </Td>
                 <Td isNumeric>
                   <Text color="gray.500" textStyle="body.regular.md">
-                    {parseBigNumber(Number(transaction.rawAmount))} UNI{" "}
+                    {parseBigNumber(Number(transaction.rawAmount))} UNI{' '}
                   </Text>
                 </Td>
                 <Td>

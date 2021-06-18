@@ -1,18 +1,17 @@
-import { FC } from "react";
-import { Button, HStack } from "@chakra-ui/react";
+import { FC } from 'react';
+import { Button, HStack } from '@chakra-ui/react';
 
 // common
-import FormInput from "modules/common/components/FormInput";
-import FormSelect from "modules/common/components/FormSelect";
+import FormInput from 'modules/common/components/FormInput';
+import FormSelect from 'modules/common/components/FormSelect';
 
 // admin
-import { ROLES } from "modules/admin/lib/constants";
-import { useGrantRole } from "modules/admin/hooks/useGrantRole";
+import { ROLES } from 'modules/admin/lib/constants';
+import { useGrantRole } from 'modules/admin/hooks/useGrantRole';
 
 const GrantRoleForm: FC = () => {
   // custom hooks
-  const { handleChange, values, submitForm, formSubmitting, errors, touched } =
-    useGrantRole();
+  const { handleChange, values, submitForm, formSubmitting, errors, touched } = useGrantRole();
   return (
     <form id="grantRoleForm">
       <HStack spacing={4} mb={10} w="full">
@@ -47,12 +46,7 @@ const GrantRoleForm: FC = () => {
             h="6.125rem"
           />
         </HStack>
-        <Button
-          onClick={submitForm}
-          size="md"
-          variant="primary"
-          isLoading={formSubmitting}
-        >
+        <Button onClick={submitForm} size="md" variant="primary" isLoading={formSubmitting}>
           Grant role
         </Button>
       </HStack>

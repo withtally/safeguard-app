@@ -1,28 +1,17 @@
-import { FC, useMemo } from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Text,
-  Flex,
-  Link,
-  HStack,
-} from "@chakra-ui/react";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { Link as ReachLink } from "@reach/router";
+import { FC, useMemo } from 'react';
+import { Table, Thead, Tbody, Tr, Th, Td, Text, Flex, Link, HStack } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { Link as ReachLink } from '@reach/router';
 
 // common
-import { ROUTES } from "modules/common/lib/routes";
-import Avatar from "modules/common/components/Avatar";
-import { useUserInformation } from "modules/common/hooks/useUserInformation";
-import { getUsername, getProfileImage } from "modules/common/lib/helpers";
+import { ROUTES } from 'modules/common/lib/routes';
+import Avatar from 'modules/common/components/Avatar';
+import { useUserInformation } from 'modules/common/hooks/useUserInformation';
+import { getUsername, getProfileImage } from 'modules/common/lib/helpers';
 
 // safeGuard
-import { SafeGuard } from "modules/safeGuard/lib/types";
+import { SafeGuard } from 'modules/safeGuard/lib/types';
 
 dayjs.extend(advancedFormat);
 
@@ -32,10 +21,7 @@ type Props = {
 
 const SafeGuardTable: FC<Props> = ({ safeList }) => {
   // constants
-  const addresses = useMemo(
-    () => safeList.map((safe) => safe.safeGuardAddress),
-    [safeList]
-  );
+  const addresses = useMemo(() => safeList.map((safe) => safe.admin), [safeList]);
   const hasRows = Boolean(safeList.length);
 
   // custom hooks
@@ -80,7 +66,7 @@ const SafeGuardTable: FC<Props> = ({ safeList }) => {
                 </Td>
                 <Td>
                   <Link
-                    _hover={{ textDecor: "none" }}
+                    _hover={{ textDecor: 'none' }}
                     as={ReachLink}
                     to={ROUTES.viewSafe(safe.safeGuardAddress)}
                   >

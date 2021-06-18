@@ -1,8 +1,8 @@
-import { createIcon } from "@chakra-ui/icon";
+import { createIcon } from '@chakra-ui/icon';
 
 const UniswapIcon = createIcon({
-  displayName: "UniswapIcon",
-  viewBox: "0 0 104 104",
+  displayName: 'UniswapIcon',
+  viewBox: '0 0 104 104',
   path: (
     <g>
       <path

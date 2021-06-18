@@ -1,31 +1,20 @@
-import { FC, useMemo } from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Button,
-  HStack,
-  Text,
-  Flex,
-} from "@chakra-ui/react";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
+import { FC, useMemo } from 'react';
+import { Table, Thead, Tbody, Tr, Th, Td, Button, HStack, Text, Flex } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 // common
-import { parseBigNumber } from "modules/common/lib/helpers";
-import StatusTag from "modules/common/components/StatusTag";
-import Avatar from "modules/common/components/Avatar";
-import { useUserInformation } from "modules/common/hooks/useUserInformation";
-import { getUsername, getProfileImage } from "modules/common/lib/helpers";
+import { parseBigNumber } from 'modules/common/lib/helpers';
+import StatusTag from 'modules/common/components/StatusTag';
+import Avatar from 'modules/common/components/Avatar';
+import { useUserInformation } from 'modules/common/hooks/useUserInformation';
+import { getUsername, getProfileImage } from 'modules/common/lib/helpers';
 
 // admin
-import { Transaction } from "modules/admin/lib/types";
+import { Transaction } from 'modules/admin/lib/types';
 
 // manager
-import { getTransactionStatus } from "modules/manager/lib/helpers";
+import { getTransactionStatus } from 'modules/manager/lib/helpers';
 
 dayjs.extend(advancedFormat);
 
@@ -34,14 +23,11 @@ type Props = {
   cancelTransaction: (transaction: Transaction) => Promise<void>;
 };
 
-const AdminTransactionsTable: FC<Props> = ({
-  transactions,
-  cancelTransaction,
-}) => {
+const AdminTransactionsTable: FC<Props> = ({ transactions, cancelTransaction }) => {
   // constants
   const addresses = useMemo(
     () => transactions.map((transaction) => transaction.transferTo),
-    [transactions]
+    [transactions],
   );
   const hasRows = Boolean(transactions.length);
 
@@ -67,26 +53,15 @@ const AdminTransactionsTable: FC<Props> = ({
         <Tbody>
           {transactions.map((transaction: Transaction, index: number) => {
             const status = getTransactionStatus(transaction);
-            const btnDisabled =
-              transaction.canceled || transaction.executed || transaction.stale;
-            const profileImage = getProfileImage(
-              usersInformation,
-              transaction.transferTo
-            );
-            const username = getUsername(
-              usersInformation,
-              transaction.transferTo,
-              false
-            );
+            const btnDisabled = transaction.canceled || transaction.executed || transaction.stale;
+            const profileImage = getProfileImage(usersInformation, transaction.transferTo);
+            const username = getUsername(usersInformation, transaction.transferTo, false);
 
             return (
               <Tr key={`${transaction.txHash}-${index}`}>
                 <Td>
                   <HStack spacing={2}>
-                    <Avatar
-                      address={transaction.transferTo}
-                      src={profileImage}
-                    />
+                    <Avatar address={transaction.transferTo} src={profileImage} />
                     <Text color="gray.500" textStyle="body.regular.md">
                       {username}
                     </Text>
@@ -113,11 +88,7 @@ const AdminTransactionsTable: FC<Props> = ({
                   </Text>
                 </Td>
                 <Td>
-                  <StatusTag
-                    borderRadius="sm"
-                    alignContent="center"
-                    status={status}
-                  />
+                  <StatusTag borderRadius="sm" alignContent="center" status={status} />
                 </Td>
                 <Td>
                   <Button

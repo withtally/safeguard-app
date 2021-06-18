@@ -1,4 +1,4 @@
-import wretch, { Wretcher } from "wretch";
+import wretch, { Wretcher } from 'wretch';
 
 // custom fetch
 export const axivios = (): Wretcher => {

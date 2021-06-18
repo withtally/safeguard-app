@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // common
-import { axivios } from "modules/common/lib/axivios";
-import { ENDPOINTS } from "modules/common/lib/endpoints";
+import { axivios } from 'modules/common/lib/axivios';
+import { ENDPOINTS } from 'modules/common/lib/endpoints';
 
 type Address = {
   address: string;
@@ -45,9 +45,7 @@ const DEFAULT_USER_INFORMATION = {
 
 export const useUserInformation = ({ addresses }: Props): Values => {
   // react hooks
-  const [usersInformation, setUsersInformation] = useState<UsersInformation>(
-    {}
-  );
+  const [usersInformation, setUsersInformation] = useState<UsersInformation>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // constants
@@ -63,15 +61,13 @@ export const useUserInformation = ({ addresses }: Props): Values => {
         .get()
         .json();
 
-      const usersInformation: UsersInformation =
-        usersInformationResponse.data.usersByAddress;
+      const usersInformation: UsersInformation = usersInformationResponse.data.usersByAddress;
 
       const usersInformationWithDefaults = Object.fromEntries(
         addresses.map((address) => {
           const selectedUser = usersInformation[address];
 
-          const doesAddressExistInUsersInformation =
-            usersInformation.hasOwnProperty(address);
+          const doesAddressExistInUsersInformation = usersInformation.hasOwnProperty(address);
 
           const informationWithDefaults = doesAddressExistInUsersInformation
             ? selectedUser
@@ -81,7 +77,7 @@ export const useUserInformation = ({ addresses }: Props): Values => {
               };
 
           return [address, informationWithDefaults];
-        })
+        }),
       );
 
       setUsersInformation(usersInformationWithDefaults);

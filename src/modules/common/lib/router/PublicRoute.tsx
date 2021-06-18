@@ -1,5 +1,5 @@
-import React from "react";
-import { RouteComponentProps } from "@reach/router";
+import React from 'react';
+import { RouteComponentProps } from '@reach/router';
 
 type Prop = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

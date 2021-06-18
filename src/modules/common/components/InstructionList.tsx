@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react';
 import {
   Text,
   HStack,
@@ -9,14 +9,14 @@ import {
   AccordionIcon,
   Icon,
   Stack,
-} from "@chakra-ui/react";
-import { IoInformationCircleOutline } from "react-icons/io5";
+} from '@chakra-ui/react';
+import { IoInformationCircleOutline } from 'react-icons/io5';
 
 // common
-import { Instruction } from "modules/common/lib/types";
+import { Instruction } from 'modules/common/lib/types';
 
 // admin
-import InstructionElement from "modules/common/components/InstructionElement";
+import InstructionElement from 'modules/common/components/InstructionElement';
 
 type Props = {
   title: string;
@@ -39,11 +39,7 @@ const InstructionList: FC<Props> = ({ title, instructions }) => {
         <AccordionPanel pb={6} px={6}>
           <Stack spacing={5}>
             {instructions.map(({ type, description }) => (
-              <InstructionElement
-                key={type}
-                type={type}
-                description={description}
-              />
+              <InstructionElement key={type} type={type} description={description} />
             ))}
           </Stack>
         </AccordionPanel>

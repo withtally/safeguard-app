@@ -1,11 +1,5 @@
-import { FC } from "react";
-import {
-  FormikErrors,
-  FormikValues,
-  FormikHandlers,
-  FormikTouched,
-  getIn,
-} from "formik";
+import { FC } from 'react';
+import { FormikErrors, FormikValues, FormikHandlers, FormikTouched, getIn } from 'formik';
 import {
   FormControl,
   Input,
@@ -13,12 +7,12 @@ import {
   Flex,
   FlexProps,
   InputProps,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 // common
-import FormLabel from "modules/common/components/FormLabel";
+import FormLabel from 'modules/common/components/FormLabel';
 
-type HandleChange = Pick<FormikHandlers, "handleChange">["handleChange"];
+type HandleChange = Pick<FormikHandlers, 'handleChange'>['handleChange'];
 
 type Props = {
   onChange: HandleChange;
@@ -52,10 +46,10 @@ const FormInput: FC<Props & FlexProps> = ({
         <FormLabel htmlFor={name}>{label}</FormLabel>
         <Input
           _focus={{
-            boxShadow: "outline",
+            boxShadow: 'outline',
           }}
           _placeholder={{
-            color: "gray.400",
+            color: 'gray.400',
           }}
           border="gray.dark"
           borderColor="auto"

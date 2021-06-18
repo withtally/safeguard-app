@@ -1,24 +1,16 @@
-import { FC } from "react";
-import dayjs from "dayjs";
-import {
-  Flex,
-  Stack,
-  StackProps,
-  Link,
-  Box,
-  Text,
-  BoxProps,
-} from "@chakra-ui/react";
+import { FC } from 'react';
+import dayjs from 'dayjs';
+import { Flex, Stack, StackProps, Link, Box, Text, BoxProps } from '@chakra-ui/react';
 
 const Copyright: FC<BoxProps> = ({ ...boxProps }) => {
   return (
     <Text color="gray.400" textStyle="h6" w="max-content" {...boxProps}>
-      Made with ❤ by{" "}
+      Made with ❤ by{' '}
       <Link color="inherit" to="https://withtally.com/">
         Tally
-      </Link>{" "}
-      {dayjs().format("YYYY")}
-      {"."}
+      </Link>{' '}
+      {dayjs().format('YYYY')}
+      {'.'}
     </Text>
   );
 };
@@ -26,7 +18,7 @@ const Copyright: FC<BoxProps> = ({ ...boxProps }) => {
 const Footer: FC<StackProps> = ({ ...stackProps }) => {
   return (
     <Stack
-      align={{ base: "center" }}
+      align={{ base: 'center' }}
       as="footer"
       borderTop="gray.dark"
       justify="center"
@@ -38,9 +30,9 @@ const Footer: FC<StackProps> = ({ ...stackProps }) => {
       {...stackProps}
     >
       <Flex
-        direction={{ base: "column", lg: "row" }}
+        direction={{ base: 'column', lg: 'row' }}
         mx={{ base: 0, lg: 4 }}
-        w={{ base: "full", lg: "auto" }}
+        w={{ base: 'full', lg: 'auto' }}
       >
         <Box mr={{ base: 0, lg: 36 }}>
           <Copyright mt={{ base: 0, lg: 5 }} />

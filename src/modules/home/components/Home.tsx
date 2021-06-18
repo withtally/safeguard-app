@@ -1,11 +1,11 @@
-import { FC } from "react";
-import { Stack } from "@chakra-ui/react";
+import { FC } from 'react';
+import { Stack } from '@chakra-ui/react';
 
 // home
-import HomeHeader from "modules/home/components/HomeHeader";
-import HomeRoles from "modules/home/components/HomeRoles";
-import HomeStates from "modules/home/components/HomeStates";
-import HomeFailFlow from "modules/home/components/HomeSafeGuardFlow";
+import HomeHeader from 'modules/home/components/HomeHeader';
+import HomeRoles from 'modules/home/components/HomeRoles';
+import HomeStates from 'modules/home/components/HomeStates';
+import HomeFailFlow from 'modules/home/components/HomeSafeGuardFlow';
 
 const Home: FC = () => {
   return (

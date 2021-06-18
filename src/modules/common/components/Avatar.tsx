@@ -1,10 +1,10 @@
-import { FC } from "react";
-import makeBlockie from "ethereum-blockies-base64";
-import { Flex, Icon, Image, FlexProps, Tooltip } from "@chakra-ui/react";
+import { FC } from 'react';
+import makeBlockie from 'ethereum-blockies-base64';
+import { Flex, Icon, Image, FlexProps, Tooltip } from '@chakra-ui/react';
 
 // common
-import TwitterIcon from "modules/common/components/icons/TwitterIcon";
-import { FiCheck } from "react-icons/fi";
+import TwitterIcon from 'modules/common/components/icons/TwitterIcon';
+import { FiCheck } from 'react-icons/fi';
 
 type Props = {
   address: string;
@@ -24,7 +24,7 @@ const Avatar: FC<Props & FlexProps> = ({
 }) => {
   // constants
   const hasImage = Boolean(src);
-  const srcToUse = hasImage && typeof src === "string" ? src : undefined;
+  const srcToUse = hasImage && typeof src === 'string' ? src : undefined;
 
   const isVerifiedByBoth = isVerifiedByTally && isVerifiedByTwitter;
 
@@ -64,14 +64,7 @@ const Avatar: FC<Props & FlexProps> = ({
             w={4}
             zIndex={3}
           >
-            <Icon
-              as={FiCheck}
-              bg="purple.500"
-              color="white"
-              p={0.5}
-              rounded="full"
-              size={6}
-            />
+            <Icon as={FiCheck} bg="purple.500" color="white" p={0.5} rounded="full" size={6} />
           </Flex>
         </Tooltip>
       ) : null}
@@ -92,13 +85,7 @@ const Avatar: FC<Props & FlexProps> = ({
             w={4}
             zIndex={2}
           >
-            <TwitterIcon
-              bg="external.twitter"
-              color="white"
-              p={0.5}
-              rounded="full"
-              size={6}
-            />
+            <TwitterIcon bg="external.twitter" color="white" p={0.5} rounded="full" size={6} />
           </Flex>
         </Tooltip>
       ) : null}

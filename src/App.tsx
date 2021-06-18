@@ -1,18 +1,18 @@
-import { FC } from "react";
-import { Router } from "@reach/router";
+import { FC } from 'react';
+import { Router } from '@reach/router';
 
 // layout
-import Layout from "modules/layout/components/Layout";
+import Layout from 'modules/layout/components/Layout';
 
 // common
-import PublicRoute from "modules/common/lib/router/PublicRoute";
+import PublicRoute from 'modules/common/lib/router/PublicRoute';
 
 // home
-import Home from "modules/home/components/Home";
+import Home from 'modules/home/components/Home';
 
 // safeGuard
-import SafeGuard from "modules/safeGuard/components/SafeGuard";
-import SafeGuardView from "modules/safeGuard/components/SafeGuardView";
+import SafeGuard from 'modules/safeGuard/components/SafeGuard';
+import SafeGuardView from 'modules/safeGuard/components/SafeGuardView';
 
 const App: FC = () => {
   return (

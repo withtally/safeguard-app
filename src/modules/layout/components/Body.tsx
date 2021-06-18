@@ -1,16 +1,11 @@
-import { FC } from "react";
-import { Container as ChakraContainer, ContainerProps } from "@chakra-ui/react";
+import { FC } from 'react';
+import { Container as ChakraContainer, ContainerProps } from '@chakra-ui/react';
 
 type Props = {
   isHome?: boolean;
 };
 
-const Body: FC<Props & ContainerProps> = ({
-  isHome,
-  children,
-  bg,
-  ...containerProps
-}) => (
+const Body: FC<Props & ContainerProps> = ({ isHome, children, bg, ...containerProps }) => (
   <ChakraContainer
     centerContent
     alignItems="stretch"

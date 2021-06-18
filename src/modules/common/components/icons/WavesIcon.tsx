@@ -1,8 +1,8 @@
-import { createIcon } from "@chakra-ui/icon";
+import { createIcon } from '@chakra-ui/icon';
 
 const WavesIcon = createIcon({
-  displayName: "WavesIcon",
-  viewBox: "0 0 836 102",
+  displayName: 'WavesIcon',
+  viewBox: '0 0 836 102',
   path: (
     <g fill="none">
       <path

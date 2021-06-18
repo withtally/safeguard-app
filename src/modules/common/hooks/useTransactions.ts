@@ -1,37 +1,37 @@
-import { useState, useEffect } from "react";
-import { useFormik, FormikErrors, FormikTouched } from "formik";
-import dayjs from "dayjs";
-import { ethers } from "ethers";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { useToast } from "@chakra-ui/react";
-import { useParams } from "@reach/router";
+import { useState, useEffect } from 'react';
+import { useFormik, FormikErrors, FormikTouched } from 'formik';
+import dayjs from 'dayjs';
+import { ethers } from 'ethers';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { useToast } from '@chakra-ui/react';
+import { useParams } from '@reach/router';
 
 // common
-import { useSignedContract } from "modules/common/hooks/useSignedContract";
-import { CONTRACT_ADDRESSES } from "modules/common/lib/constants";
-import { useWeb3 } from "modules/common/hooks/useWeb3";
-import { parseTransaction } from "modules/common/lib/parsers/parseTransaction";
-import { useUserInfo } from "modules/common/hooks/useUserInfo";
-import { RequestPaymentValidationSchema } from "modules/common/lib/validations";
-import { useFundInformation } from "modules/common/hooks/useFundInformation";
-import SAFEGUARD_JSON from "modules/common/lib/abis/SafeGuard.json";
-import TOKEN_JSON from "modules/common/lib/abis/Comp.json";
-import TIMELOCK_JSON from "modules/common/lib/abis/Timelock.json";
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
+import { CONTRACT_ADDRESSES } from 'modules/common/lib/constants';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
+import { parseTransaction } from 'modules/common/lib/parsers/parseTransaction';
+import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
+import { RequestPaymentValidationSchema } from 'modules/common/lib/validations';
+import { useFundInformation } from 'modules/common/hooks/useFundInformation';
+import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
+import TOKEN_JSON from 'modules/common/lib/abis/Comp.json';
+import TIMELOCK_JSON from 'modules/common/lib/abis/Timelock.json';
 
 // manager
-import { InitialValuesRequestFunds } from "modules/manager/lib/types";
-import { getTransactionEta } from "modules/manager/lib/helpers";
+import { InitialValuesRequestFunds } from 'modules/manager/lib/types';
+import { getTransactionEta } from 'modules/manager/lib/helpers';
 
 // admin
-import { Transaction } from "modules/admin/lib/types";
+import { Transaction } from 'modules/admin/lib/types';
 
 dayjs.extend(advancedFormat);
 
 const initialValues: InitialValuesRequestFunds = {
-  unitType: "",
-  amount: "",
-  address: "",
-  description: "",
+  unitType: '',
+  amount: '',
+  address: '',
+  description: '',
 };
 
 type Values = {
@@ -43,9 +43,7 @@ type Values = {
   submitForm: () => Promise<any>;
   handleChange: {
     (e: React.ChangeEvent<any>): void;
-    <T_1 = string | React.ChangeEvent<any>>(
-      field: T_1
-    ): T_1 extends React.ChangeEvent<any>
+    <T_1 = string | React.ChangeEvent<any>>(field: T_1): T_1 extends React.ChangeEvent<any>
       ? void
       : (e: string | React.ChangeEvent<any>) => void;
   };
@@ -65,8 +63,7 @@ export const useTransactions = (): Values => {
   const toast = useToast();
 
   // constants
-  const tokenAddress =
-    CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
+  const tokenAddress = CONTRACT_ADDRESSES.token[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
   const { timelockAddress } = useFundInformation();
@@ -79,34 +76,28 @@ export const useTransactions = (): Values => {
     contractAbi: SAFEGUARD_JSON.abi,
   });
   const { web3 } = useWeb3();
-  const { hasCancelerRole, hasExecutorRole, hasProposerRole } = useUserInfo();
+  const { hasCancelerRole, hasExecutorRole, hasProposerRole } = useUserContractRoles();
 
   const getTimelockEvents = async () => {
     try {
-      const queuedEventFilter =
-        await signedRolContract?.filters.QueueTransactionWithDescription();
+      const queuedEventFilter = await signedRolContract?.filters.QueueTransactionWithDescription();
       const queuedTransactions =
-        queuedEventFilter &&
-        (await signedRolContract?.queryFilter(queuedEventFilter));
+        queuedEventFilter && (await signedRolContract?.queryFilter(queuedEventFilter));
 
-      const canceledEventFilter =
-        await signedTimelockContract?.filters.CancelTransaction();
+      const canceledEventFilter = await signedTimelockContract?.filters.CancelTransaction();
       const canceledTransactions =
-        canceledEventFilter &&
-        (await signedTimelockContract?.queryFilter(canceledEventFilter));
+        canceledEventFilter && (await signedTimelockContract?.queryFilter(canceledEventFilter));
 
-      const executedEventFilter =
-        await signedTimelockContract?.filters.ExecuteTransaction();
+      const executedEventFilter = await signedTimelockContract?.filters.ExecuteTransaction();
       const executedTransactions =
-        executedEventFilter &&
-        (await signedTimelockContract?.queryFilter(executedEventFilter));
+        executedEventFilter && (await signedTimelockContract?.queryFilter(executedEventFilter));
 
       const gracePeriodLabel = await signedTimelockContract?.GRACE_PERIOD();
       const gracePeriod = Number(gracePeriodLabel.toString());
-      const currentTimestamp = Number(dayjs().format("X"));
+      const currentTimestamp = Number(dayjs().format('X'));
 
       const transactionInfo = queuedTransactions?.map(
-        (item) => item.args && parseTransaction(item.args, gracePeriod)
+        (item) => item.args && parseTransaction(item.args, gracePeriod),
       );
 
       const allTransactions = (transactionInfo &&
@@ -117,37 +108,29 @@ export const useTransactions = (): Values => {
                 ...item,
                 currentlyQueued:
                   signedTimelockContract &&
-                  (await signedTimelockContract?.queuedTransactions(
-                    item.txHash
-                  )),
+                  (await signedTimelockContract?.queuedTransactions(item.txHash)),
                 canceled:
                   canceledTransactions &&
-                  canceledTransactions?.some(
-                    (canceled) => canceled.args?.txHash === item.txHash
-                  ),
+                  canceledTransactions?.some((canceled) => canceled.args?.txHash === item.txHash),
                 executed:
                   executedTransactions &&
-                  executedTransactions?.some(
-                    (executed) => executed.args?.txHash === item.txHash
-                  ),
+                  executedTransactions?.some((executed) => executed.args?.txHash === item.txHash),
                 stale:
                   executedTransactions &&
-                  !executedTransactions.some(
-                    (executed) => executed.args?.txHash === item.txHash
-                  ) &&
+                  !executedTransactions.some((executed) => executed.args?.txHash === item.txHash) &&
                   item.executableTime <= currentTimestamp,
               };
             }
-          })
+          }),
         ))) as Transaction[];
 
       const sortedTransactions = allTransactions.sort(
-        (a, b) => b.executableTime - a.executableTime
+        (a, b) => b.executableTime - a.executableTime,
       );
 
       setTransactions(sortedTransactions);
     } catch (error) {
-      console.log("🚀 ~ ~ error", error);
+      console.log('🚀 ~ ~ error', error);
     }
   };
 
@@ -158,22 +141,22 @@ export const useTransactions = (): Values => {
   useEffect(() => {
     if (!signedTimelockContract) return;
 
-    signedTimelockContract.on("QueueTransaction", (event) => {
+    signedTimelockContract.on('QueueTransaction', (event) => {
       getTimelockEvents();
     });
 
-    signedTimelockContract.on("ExecuteTransaction", (event) => {
+    signedTimelockContract.on('ExecuteTransaction', (event) => {
       getTimelockEvents();
     });
 
-    signedTimelockContract.on("CancelTransaction", (event) => {
+    signedTimelockContract.on('CancelTransaction', (event) => {
       getTimelockEvents();
     });
 
     return () => {
-      signedTimelockContract.removeAllListeners("QueueTransaction");
-      signedTimelockContract.removeAllListeners("ExecuteTransaction");
-      signedTimelockContract.removeAllListeners("CancelTransaction");
+      signedTimelockContract.removeAllListeners('QueueTransaction');
+      signedTimelockContract.removeAllListeners('ExecuteTransaction');
+      signedTimelockContract.removeAllListeners('CancelTransaction');
     };
   });
 
@@ -181,11 +164,11 @@ export const useTransactions = (): Values => {
   const cancelTransaction = async (transaction: Transaction) => {
     if (!hasCancelerRole) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: "You don't have the role needed for this action",
-        status: "error",
+        status: 'error',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
       return;
     }
@@ -196,33 +179,30 @@ export const useTransactions = (): Values => {
         transaction.value,
         transaction.signature,
         transaction.data,
-        transaction.eta
+        transaction.eta,
       );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
       setSubmitting(false);
       toast({
-        title: "Success",
-        description: "Transaction canceled!",
-        status: "success",
+        title: 'Success',
+        description: 'Transaction canceled!',
+        status: 'success',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
-        error
-      );
+      console.log('🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error', error);
     }
   };
 
   const executeTransaction = async (transaction: Transaction) => {
     if (!hasExecutorRole) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: "You don't have the role needed for this action",
-        status: "error",
+        status: 'error',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
       return;
     }
@@ -233,37 +213,31 @@ export const useTransactions = (): Values => {
         transaction.value,
         transaction.signature,
         transaction.data,
-        transaction.eta
+        transaction.eta,
       );
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
 
       setSubmitting(false);
       toast({
-        title: "Success",
-        description: "Transaction executed!",
-        status: "success",
+        title: 'Success',
+        description: 'Transaction executed!',
+        status: 'success',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
     } catch (error) {
-      console.log(
-        "🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error",
-        error
-      );
+      console.log('🚀 ~ file: useFunds.ts ~ line 37 ~ sendFunds ~ error', error);
     }
   };
 
-  const onSubmit = async (
-    formValues: InitialValuesRequestFunds,
-    formikInfo: any
-  ) => {
+  const onSubmit = async (formValues: InitialValuesRequestFunds, formikInfo: any) => {
     if (!hasProposerRole) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: "You don't have the role needed for this action",
-        status: "error",
+        status: 'error',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
       return;
     }
@@ -271,15 +245,15 @@ export const useTransactions = (): Values => {
       formikInfo.setSubmitting(true);
       const tokenInterface = new ethers.utils.Interface(TOKEN_JSON.abi);
 
-      const value = ethers.utils.parseEther("0");
+      const value = ethers.utils.parseEther('0');
       const target = tokenAddress;
 
       // get timelock delay
       const timelockDelay = await signedTimelockContract?.delay();
-      let currentETA = await getTransactionEta(Number(timelockDelay), web3);
+      let currentETA = web3 && (await getTransactionEta(Number(timelockDelay), web3));
 
-      const transferSignature = "";
-      const transferCallData = tokenInterface.encodeFunctionData("transfer", [
+      const transferSignature = '';
+      const transferCallData = tokenInterface.encodeFunctionData('transfer', [
         formValues.address,
         ethers.utils.parseEther(formValues.amount),
       ]);
@@ -290,22 +264,22 @@ export const useTransactions = (): Values => {
         transferSignature,
         transferCallData,
         currentETA,
-        formValues.description
+        formValues.description,
       );
 
-      const receipt = await web3.waitForTransaction(transferTx.hash, 3);
+      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
 
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
       toast({
-        title: "Success",
-        description: "Payment requested!",
-        status: "success",
+        title: 'Success',
+        description: 'Payment requested!',
+        status: 'success',
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
     } catch (error) {
-      console.log("🚀 ~ ~ error", error);
+      console.log('🚀 ~ ~ error', error);
     }
   };
 

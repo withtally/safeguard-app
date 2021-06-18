@@ -1,26 +1,12 @@
-import { FC } from "react";
-import {
-  FormikErrors,
-  FormikValues,
-  FormikHandlers,
-  FormikTouched,
-} from "formik";
-import {
-  Text,
-  Flex,
-  FlexProps,
-  HStack,
-  Icon,
-  Stack,
-  Button,
-  InputProps,
-} from "@chakra-ui/react";
+import { FC } from 'react';
+import { FormikErrors, FormikValues, FormikHandlers, FormikTouched } from 'formik';
+import { Text, Flex, FlexProps, HStack, Icon, Stack, Button, InputProps } from '@chakra-ui/react';
 
 // common
-import FormInput from "modules/common/components/FormInput";
-import UniswapIcon from "modules/common/components/icons/UniswapIcon";
+import FormInput from 'modules/common/components/FormInput';
+import UniswapIcon from 'modules/common/components/icons/UniswapIcon';
 
-type HandleChange = Pick<FormikHandlers, "handleChange">["handleChange"];
+type HandleChange = Pick<FormikHandlers, 'handleChange'>['handleChange'];
 
 type Props = {
   onChange: HandleChange;
@@ -56,14 +42,7 @@ const FormAmountInput: FC<Props & InputProps> = ({
         h="inherit"
       />
       <Stack spacing={2} justify="center" h="inherit">
-        <HStack
-          px={2}
-          w="5.188rem"
-          h={10}
-          spacing={1}
-          border="gray.dark"
-          borderLeft="none"
-        >
+        <HStack px={2} w="5.188rem" h={10} spacing={1} border="gray.dark" borderLeft="none">
           <UniswapIcon w={5} h={5} />
           <Text textStyle="body.regular.md">UNI</Text>
         </HStack>

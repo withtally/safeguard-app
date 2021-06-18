@@ -1,18 +1,15 @@
-import { ethers } from "ethers";
-import { abbreviate } from "@pqt/abbreviate";
-import { isAddress } from "ethers/lib/utils";
-import isEmpty from "lodash.isempty";
-import { JsonRpcSigner } from "@ethersproject/providers/lib/json-rpc-provider";
+import { ethers } from 'ethers';
+import { abbreviate } from '@pqt/abbreviate';
+import { isAddress } from 'ethers/lib/utils';
+import isEmpty from 'lodash.isempty';
+import { JsonRpcSigner } from '@ethersproject/providers/lib/json-rpc-provider';
 
 // common
-import { UsersInformation } from "modules/common/hooks/useUserInformation";
+import { UsersInformation } from 'modules/common/hooks/useUserInformation';
 
 // address
-export const shortAddress = (
-  address: string,
-  initialLength = 6,
-  endLength = -4
-): string => `${address.slice(0, initialLength)}...${address.slice(endLength)}`;
+export const shortAddress = (address: string, initialLength = 6, endLength = -4): string =>
+  `${address.slice(0, initialLength)}...${address.slice(endLength)}`;
 
 export const parseBigNumber = (number: number): number => number / 1e18;
 
@@ -25,31 +22,28 @@ export const labelNumber = (number: number): string => {
   if (number === 0) return String(0);
   if (number > 0.01) return String(limitNumberDecimals(number));
 
-  return "< 0.01";
+  return '< 0.01';
 };
 
 export const unhashCalldata = (
   calldata: string,
   abi: any,
-  funcName: string
+  funcName: string,
 ): ethers.utils.Result | undefined => {
   try {
     const contractInterface = new ethers.utils.Interface(abi);
 
-    const decodedData = contractInterface.decodeFunctionData(
-      funcName,
-      calldata
-    );
+    const decodedData = contractInterface.decodeFunctionData(funcName, calldata);
 
     return decodedData;
   } catch (error) {
-    console.log("🚀 ~ file: helpers.ts ~ line 45 ~ error");
+    console.log('🚀 ~ file: helpers.ts ~ line 45 ~ error');
   }
 };
 
 export const getProfileImage = (
   usersInformation: UsersInformation,
-  address?: string
+  address?: string,
 ): string | null => {
   return address ? usersInformation?.[address]?.avatarUrl : null;
 };
@@ -57,7 +51,7 @@ export const getProfileImage = (
 export const getUsername = (
   usersInformation: UsersInformation,
   address?: string | null,
-  isTruncated = true
+  isTruncated = true,
 ): string | null => {
   if (!address) {
     return null;
@@ -76,7 +70,7 @@ export const getUsername = (
   }
 
   // constants
-  const displayName = usersInformation[address]?.displayName ?? "";
+  const displayName = usersInformation[address]?.displayName ?? '';
   const username = displayName ? displayName : address;
 
   return isAddress(username) ? applyTruncation(username) : username;

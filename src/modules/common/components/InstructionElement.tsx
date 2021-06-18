@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Text, Stack } from "@chakra-ui/react";
+import { FC } from 'react';
+import { Text, Stack } from '@chakra-ui/react';
 
 type Props = {
   type: string;

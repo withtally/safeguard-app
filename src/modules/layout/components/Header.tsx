@@ -36,20 +36,26 @@ const Header: FC = () => {
           </Link>
         </Box>
         <HStack spacing={4} align="center">
-          <Link _hover={{ textDecor: 'none' }} as={ReachLink} to={ROUTES.safes}>
-            <Button size="lg" variant="secondary">
-              <Text textStyle="paragraph">Safe Management</Text>
-            </Button>
-          </Link>
-          <Stack ml={isWeb3Ready ? 6 : 2} align="center">
-            {isWeb3Ready ? (
+          {isWeb3Ready ? (
+            <HStack spacing={4} align="center">
+              <Link
+                _hover={{ textDecor: 'none' }}
+                mr={isWeb3Ready ? 4 : 2}
+                as={ReachLink}
+                to={ROUTES.safes}
+              >
+                <Button size="lg" variant="secondary">
+                  <Text textStyle="paragraph">Safe Management</Text>
+                </Button>
+              </Link>
+
               <HeaderUser signerAddress={signerAddress} />
-            ) : (
-              <Button onClick={handleConnectWalletClick} size="lg" variant="secondary">
-                Connect wallet
-              </Button>
-            )}
-          </Stack>
+            </HStack>
+          ) : (
+            <Button onClick={handleConnectWalletClick} size="lg" variant="secondary">
+              Connect wallet
+            </Button>
+          )}
         </HStack>
       </HStack>
     </Flex>

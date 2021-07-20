@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, Button, HStack, Text, Flex } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
 // common
 import { parseBigNumber } from 'modules/common/lib/helpers';
@@ -32,9 +33,21 @@ const ManagerTransactionsTable: FC<Props> = ({ transactions, executeTransaction 
   const hasRows = Boolean(transactions.length);
 
   // custom hooks
+  const { openSelectWallet, isWeb3Ready } = useWeb3();
   const { usersInformation } = useUserInformation({
     addresses,
   });
+
+  // handlers
+  const handleExecutePayment = async (transaction: Transaction): Promise<void> => {
+    if (isWeb3Ready) {
+      await executeTransaction(transaction)
+    } else {
+      await openSelectWallet()
+    }
+  };
+
+
   return (
     <Flex align="stretch" direction="column" w="full">
       <Table variant="simple" size="md">
@@ -92,7 +105,7 @@ const ManagerTransactionsTable: FC<Props> = ({ transactions, executeTransaction 
                 </Td>
                 <Td>
                   <Button
-                    onClick={() => executeTransaction(transaction)}
+                    onClick={() => handleExecutePayment(transaction)}
                     size="md"
                     variant="primary"
                     disabled={btnDisabled}

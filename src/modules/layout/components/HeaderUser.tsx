@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { Flex, Text, Stack } from '@chakra-ui/react';
 
 // common
@@ -11,8 +11,11 @@ type Props = {
 };
 
 const HeaderUser: FC<Props> = ({ signerAddress }) => {
+  // constants
+  const addresses = useMemo(() => [signerAddress], [signerAddress])
+
   // custom hooks
-  const result = useUserInformation({ addresses: [signerAddress.toLowerCase()] });
+  const result = useUserInformation({ addresses });
   const userName = getUsername(result.usersInformation, signerAddress);
   const profileImage = getProfileImage(result.usersInformation, signerAddress);
 

@@ -64,7 +64,7 @@ export const useGrantRole = (): Values => {
         formValues.role,
         formValues.address.toLowerCase(),
       );
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 2);
+      const receipt = await transferTx.wait();
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
       toast({

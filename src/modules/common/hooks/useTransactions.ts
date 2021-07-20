@@ -136,7 +136,7 @@ export const useTransactions = (): Values => {
 
   useEffect(() => {
     if (signedTimelockContract) getTimelockEvents();
-  }, [timelockAddress]);
+  }, []);
 
   useEffect(() => {
     if (!signedTimelockContract) return;

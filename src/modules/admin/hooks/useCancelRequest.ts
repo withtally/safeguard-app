@@ -55,7 +55,7 @@ export const useCancelRequest = (): Values => {
         transaction.data,
         transaction.eta,
       );
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+      const receipt = await transferTx.wait();
       toast({
         title: 'Success',
         description: 'Transaction canceled!',

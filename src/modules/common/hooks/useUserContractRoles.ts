@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from '@reach/router';
+import {Contract} from 'ethers';
 
 // common
 import { ROLES_HASHES } from 'modules/common/lib/constants';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
-import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 import { Role } from 'modules/common/lib/types';
+import {useReadOnlyProvider} from 'modules/common/hooks/useReadOnlyProvider';
 
 type Values = {
   hasAdminRole: boolean;
@@ -29,21 +30,24 @@ export const useUserContractRoles = (): Values => {
 
   // custom hooks
   const { signerAddress } = useWeb3();
-  const { signedContract } = useSignedContract({
-    contractAddress: safeGuardAddress,
-    contractAbi: SAFEGUARD_JSON.abi,
-  });
+  const {readOnlyProvider} = useReadOnlyProvider();
+
+  const safeGuardContract = new Contract(
+    safeGuardAddress,
+    SAFEGUARD_JSON.abi,
+    readOnlyProvider
+  );
 
   useEffect(() => {
     const getUserRole = async () => {
       const { adminRole, proposerRole, executorRole, cancelerRole } = ROLES_HASHES;
-      const admin = await signedContract?.hasRole(adminRole, signerAddress);
+      const admin = await safeGuardContract?.hasRole(adminRole, signerAddress);
 
-      const proposer = await signedContract?.hasRole(proposerRole, signerAddress);
+      const proposer = await safeGuardContract?.hasRole(proposerRole, signerAddress);
 
-      const executor = await signedContract?.hasRole(executorRole, signerAddress);
+      const executor = await safeGuardContract?.hasRole(executorRole, signerAddress);
 
-      const canceler = await signedContract?.hasRole(cancelerRole, signerAddress);
+      const canceler = await safeGuardContract?.hasRole(cancelerRole, signerAddress);
 
       setHasAdminRole(Boolean(admin));
       setHasProposerRole(Boolean(proposer));
@@ -69,7 +73,7 @@ export const useUserContractRoles = (): Values => {
     };
 
     if (signerAddress) getUserRole();
-  }, [signerAddress, signedContract]);
+  }, []);
 
   return {
     hasAdminRole,

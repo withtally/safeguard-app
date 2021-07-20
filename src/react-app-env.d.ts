@@ -9,3 +9,9 @@ declare namespace NodeJS {
     REACT_APP_INFURA_ID: string;
   }
 }
+
+interface Window {
+  ethereum: any;
+}
+
+window.ethereum = window.ethereum || {};

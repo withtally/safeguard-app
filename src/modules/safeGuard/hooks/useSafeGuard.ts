@@ -3,12 +3,15 @@ import { FormikHelpers } from 'formik';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { useToast } from '@chakra-ui/react';
+import {Contract} from 'ethers';
 
 // common
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import { CONTRACT_ADDRESSES } from 'modules/common/lib/constants';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
 import FACTORY_JSON from 'modules/common/lib/abis/Factory.json';
+import {useReadOnlyProvider} from 'modules/common/hooks/useReadOnlyProvider';
+
 
 // safeGuard
 import { InitialValuesCreateSafeGuard, SafeGuard } from 'modules/safeGuard/lib/types';
@@ -42,18 +45,26 @@ export const useSafeGuard = (): Values => {
   const factoryAddress = CONTRACT_ADDRESSES.factory[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
+  const {readOnlyProvider} = useReadOnlyProvider();
   const { signedContract: signedFactoryContract } = useSignedContract({
     contractAddress: factoryAddress,
     contractAbi: FACTORY_JSON.abi,
   });
   const { web3, signerAddress } = useWeb3();
 
+  const safeGuardContract = new Contract(
+    factoryAddress,
+    FACTORY_JSON.abi,
+    readOnlyProvider
+  );
+
+
   const getRegistries = async () => {
     try {
-      const createdSafesEventFilter = await signedFactoryContract?.filters.SafeGuardCreated();
+      const createdSafesEventFilter = await safeGuardContract?.filters.SafeGuardCreated();
       const createdSafes =
         createdSafesEventFilter &&
-        (await signedFactoryContract?.queryFilter(createdSafesEventFilter));
+        (await safeGuardContract?.queryFilter(createdSafesEventFilter));
 
       const createdSafesInfo = createdSafes?.map(
         (item) => item.args && parseSafeGuardCreations(item.args),
@@ -74,18 +85,18 @@ export const useSafeGuard = (): Values => {
   };
 
   useEffect(() => {
-    if (signedFactoryContract) getRegistries();
+    if (safeGuardContract) getRegistries();
   }, []);
 
   useEffect(() => {
-    if (!signedFactoryContract) return;
+    if (!safeGuardContract) return;
 
-    signedFactoryContract.on('SafeGuardCreated', (event) => {
+    safeGuardContract.on('SafeGuardCreated', (event) => {
       getRegistries();
     });
 
     return () => {
-      signedFactoryContract.removeAllListeners('SafeGuardCreated');
+      safeGuardContract.removeAllListeners('SafeGuardCreated');
     };
   });
 

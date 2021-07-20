@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Flex } from '@chakra-ui/react';
-import dayjs from 'dayjs';
+import {extend} from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 // common
@@ -15,7 +15,7 @@ import { usePayments } from 'modules/manager/hooks/usePayments';
 // admin
 import { Transaction } from 'modules/admin/lib/types';
 
-dayjs.extend(advancedFormat);
+extend(advancedFormat);
 
 type Props = {
   transactions?: Transaction[];

@@ -69,7 +69,7 @@ export const useManageFunds = (): Values => {
         timelockAddress,
         ethers.utils.parseEther(formValues.amount),
       );
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+      const receipt = await transferTx.wait();
       await getSafeGuardTokenBalance();
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();

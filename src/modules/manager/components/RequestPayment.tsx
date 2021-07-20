@@ -7,6 +7,7 @@ import { FormikErrors, FormikTouched } from 'formik';
 import FormAmountInput from 'modules/common/components/FormAmountInput';
 import FormInput from 'modules/common/components/FormInput';
 import InstructionList from 'modules/common/components/InstructionList';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
 // manager
 import { InitialValuesRequestFunds } from 'modules/manager/lib/types';
@@ -35,6 +36,19 @@ const RequestPayment: FC<FlexProps & Props> = ({
   isSubmitting,
   ...flexProps
 }) => {
+
+  // custom hooks
+  const { openSelectWallet, isWeb3Ready } = useWeb3();
+
+  // handlers
+  const handleSubmitForm = async (): Promise<void> => {
+    if (isWeb3Ready) {
+      await submitForm()
+    } else {
+      await openSelectWallet()
+    }
+  };
+
   return (
     <Flex
       as="article"
@@ -76,7 +90,7 @@ const RequestPayment: FC<FlexProps & Props> = ({
             errors={errors}
             touched={touched}
             onChange={handleChange}
-            w={64}
+            maxW='xs'
           />
           <FormInput
             name="description"
@@ -90,7 +104,7 @@ const RequestPayment: FC<FlexProps & Props> = ({
             maxW="xs"
             h="6.125rem"
           />
-          <Button isLoading={isSubmitting} onClick={submitForm} variant="primary" size="md">
+          <Button isLoading={isSubmitting} onClick={handleSubmitForm} variant="primary" size="md" minW='3xs'>
             Request payment
           </Button>
         </HStack>

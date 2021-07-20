@@ -98,7 +98,7 @@ export const useSafeGuard = (): Values => {
     return () => {
       safeGuardContract.removeAllListeners('SafeGuardCreated');
     };
-  });
+  }, []);
 
   const formSubmit = async (
     formValues: InitialValuesCreateSafeGuard,

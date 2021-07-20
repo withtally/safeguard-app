@@ -101,7 +101,7 @@ export const useRoles = (): Values => {
       safeGuardContract.removeAllListeners('RoleGranted');
       safeGuardContract.removeAllListeners('RoleRevoked');
     };
-  });
+  }, []);
 
   // handlers
   const revokeRole = async (role: string, address: string) => {

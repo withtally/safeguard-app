@@ -73,7 +73,7 @@ export const useUserContractRoles = (): Values => {
     };
 
     if (signerAddress) getUserRole();
-  }, []);
+  }, [signerAddress]);
 
   return {
     hasAdminRole,

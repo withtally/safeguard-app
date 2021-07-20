@@ -34,7 +34,7 @@ export const useFundInformation = () => {
     readOnlyProvider
   );
 
-  const getSafeGuardTokenBalance = useCallback(async () => {
+  const getSafeGuardTokenBalance = async () => {
     // SafeGuard timelock
     try {
       const timelock = await safeGuardContract?.timelock();
@@ -46,7 +46,7 @@ export const useFundInformation = () => {
     } catch (e) {
       console.log('🚀 ~ file: useFundInformation.ts ~ line 27 ~ getSafeGuardTokenBalance ~ e', e);
     }
-  }, [safeGuardContract, tokenContract]);
+  };
   
   useEffect(() => {
     if (tokenContract) getSafeGuardTokenBalance();

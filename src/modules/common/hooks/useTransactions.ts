@@ -158,7 +158,7 @@ export const useTransactions = (): Values => {
       signedTimelockContract.removeAllListeners('ExecuteTransaction');
       signedTimelockContract.removeAllListeners('CancelTransaction');
     };
-  });
+  }, []);
 
   // handlers
   const cancelTransaction = async (transaction: Transaction) => {

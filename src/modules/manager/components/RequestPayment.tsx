@@ -104,7 +104,7 @@ const RequestPayment: FC<FlexProps & Props> = ({
             maxW="xs"
             h="6.125rem"
           />
-          <Button isLoading={isSubmitting} onClick={handleSubmitForm} variant="primary" size="md" minW='3xs'>
+          <Button isLoading={isSubmitting} onClick={handleSubmitForm} variant="primary" size="md" minW='4xs'>
             Request payment
           </Button>
         </HStack>

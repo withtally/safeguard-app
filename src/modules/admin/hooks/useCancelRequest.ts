@@ -27,8 +27,6 @@ export const useCancelRequest = (): Values => {
   // chakra hooks
   const toast = useToast();
 
-  const { web3 } = useWeb3();
-
   const { signedContract: signedRolContract } = useSignedContract({
     contractAddress: safeGuardAddress,
     contractAbi: SAFEGUARD_JSON.abi,

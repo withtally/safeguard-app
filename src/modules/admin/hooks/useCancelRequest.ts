@@ -1,20 +1,17 @@
-import dayjs from 'dayjs';
+import {extend} from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { useToast } from '@chakra-ui/react';
 import { useParams } from '@reach/router';
 
 // common
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
-import { useWeb3 } from 'modules/common/hooks/useWeb3';
-
 import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
-
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
 // admin
 import { Transaction } from 'modules/admin/lib/types';
 
-dayjs.extend(advancedFormat);
+extend(advancedFormat);
 
 type Values = {
   cancelTransaction: (transaction: Transaction) => Promise<void>;

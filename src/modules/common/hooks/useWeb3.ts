@@ -60,8 +60,10 @@ const useWeb3Constate = (): Values => {
       networkId: chainId,
       subscriptions: {
         address: (address) => {
-          setSignerAddress(address);
-          setIsWeb3Ready(true);
+          if (address) {
+            setSignerAddress(address);
+            setIsWeb3Ready(true);
+          }
         },
         wallet: (wallet) => {
           if (wallet.provider) {

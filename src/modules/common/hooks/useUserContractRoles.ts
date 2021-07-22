@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams } from '@reach/router';
-import {Contract} from 'ethers';
 
 // common
 import { ROLES_HASHES } from 'modules/common/lib/constants';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 import { Role } from 'modules/common/lib/types';
-import {useReadOnlyProvider} from 'modules/common/hooks/useReadOnlyProvider';
+import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 
 type Values = {
   hasAdminRole: boolean;
@@ -30,24 +29,24 @@ export const useUserContractRoles = (): Values => {
 
   // custom hooks
   const { signerAddress } = useWeb3();
-  const {readOnlyProvider} = useReadOnlyProvider();
 
-  const safeGuardContract = new Contract(
-    safeGuardAddress,
-    SAFEGUARD_JSON.abi,
-    readOnlyProvider
-  );
+  const { signedContract: signedRolContract } = useSignedContract({
+    contractAddress: safeGuardAddress,
+    contractAbi: SAFEGUARD_JSON.abi,
+  });
+
+  const hasSignerAddress = useMemo(() =>  signerAddress !== '' && signerAddress !== null && signerAddress !== undefined, [signerAddress])
 
   useEffect(() => {
     const getUserRole = async () => {
       const { adminRole, proposerRole, executorRole, cancelerRole } = ROLES_HASHES;
-      const admin = await safeGuardContract?.hasRole(adminRole, signerAddress);
+      const admin = await signedRolContract?.hasRole(adminRole, signerAddress);
 
-      const proposer = await safeGuardContract?.hasRole(proposerRole, signerAddress);
+      const proposer = await signedRolContract?.hasRole(proposerRole, signerAddress);
 
-      const executor = await safeGuardContract?.hasRole(executorRole, signerAddress);
+      const executor = await signedRolContract?.hasRole(executorRole, signerAddress);
 
-      const canceler = await safeGuardContract?.hasRole(cancelerRole, signerAddress);
+      const canceler = await signedRolContract?.hasRole(cancelerRole, signerAddress);
 
       setHasAdminRole(Boolean(admin));
       setHasProposerRole(Boolean(proposer));
@@ -57,7 +56,7 @@ export const useUserContractRoles = (): Values => {
       const userRoles = [
         { name: 'admin', active: Boolean(admin) },
         { name: 'proposer', active: Boolean(proposer) },
-        { name: 'executor', active: Boolean(executor) },
+        { name: 'executer', active: Boolean(executor) },
         { name: 'canceler', active: Boolean(canceler) },
         {
           name: 'viewer',
@@ -72,8 +71,8 @@ export const useUserContractRoles = (): Values => {
       setRoles(userAssignedRoles);
     };
 
-    if (signerAddress) getUserRole();
-  }, [signerAddress]);
+    if (signedRolContract && hasSignerAddress) getUserRole();
+  }, [signerAddress, signedRolContract]);
 
   return {
     hasAdminRole,

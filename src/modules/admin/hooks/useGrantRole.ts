@@ -4,7 +4,6 @@ import { useParams } from '@reach/router';
 
 // common
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
-import { useWeb3 } from 'modules/common/hooks/useWeb3';
 import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
@@ -43,7 +42,7 @@ export const useGrantRole = (): Values => {
     contractAddress: safeGuardAddress,
     contractAbi: SAFEGUARD_JSON.abi,
   });
-  const { web3 } = useWeb3();
+
   const { hasAdminRole } = useUserContractRoles();
 
   // handlers

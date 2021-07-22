@@ -3,15 +3,12 @@ import { FormikHelpers } from 'formik';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { useToast } from '@chakra-ui/react';
-import {Contract} from 'ethers';
 
 // common
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
 import { CONTRACT_ADDRESSES } from 'modules/common/lib/constants';
 import { useWeb3 } from 'modules/common/hooks/useWeb3';
 import FACTORY_JSON from 'modules/common/lib/abis/Factory.json';
-import {useReadOnlyProvider} from 'modules/common/hooks/useReadOnlyProvider';
-
 
 // safeGuard
 import { InitialValuesCreateSafeGuard, SafeGuard } from 'modules/safeGuard/lib/types';
@@ -36,7 +33,7 @@ type Values = {
 
 export const useSafeGuard = (): Values => {
   // react hooks
-  const [registries, setRegistries] = useState<SafeGuard[]>();
+  const [registries, setRegistries] = useState<SafeGuard[]>([]);
 
   // chakra hooks
   const toast = useToast();
@@ -45,26 +42,18 @@ export const useSafeGuard = (): Values => {
   const factoryAddress = CONTRACT_ADDRESSES.factory[process.env.REACT_APP_ETHEREUM_NETWORK];
 
   // custom hook
-  const {readOnlyProvider} = useReadOnlyProvider();
   const { signedContract: signedFactoryContract } = useSignedContract({
     contractAddress: factoryAddress,
     contractAbi: FACTORY_JSON.abi,
   });
-  const { web3, signerAddress } = useWeb3();
-
-  const safeGuardContract = new Contract(
-    factoryAddress,
-    FACTORY_JSON.abi,
-    readOnlyProvider
-  );
-
+  const { signerAddress } = useWeb3();
 
   const getRegistries = async () => {
     try {
-      const createdSafesEventFilter = await safeGuardContract?.filters.SafeGuardCreated();
+      const createdSafesEventFilter = await signedFactoryContract?.filters.SafeGuardCreated();
       const createdSafes =
         createdSafesEventFilter &&
-        (await safeGuardContract?.queryFilter(createdSafesEventFilter));
+        (await signedFactoryContract?.queryFilter(createdSafesEventFilter));
 
       const createdSafesInfo = createdSafes?.map(
         (item) => item.args && parseSafeGuardCreations(item.args),
@@ -85,20 +74,20 @@ export const useSafeGuard = (): Values => {
   };
 
   useEffect(() => {
-    if (safeGuardContract) getRegistries();
+    if (signedFactoryContract) getRegistries();
   }, []);
 
   useEffect(() => {
-    if (!safeGuardContract) return;
+    if (!signedFactoryContract) return;
 
-    safeGuardContract.on('SafeGuardCreated', (event) => {
-      getRegistries();
+    signedFactoryContract?.on('SafeGuardCreated', (event) => {
+      event.removeListener(); 
+
+      const newSafeGuard = parseSafeGuardCreations(event);
+
+      setRegistries([...registries, newSafeGuard])
     });
-
-    return () => {
-      safeGuardContract.removeAllListeners('SafeGuardCreated');
-    };
-  }, []);
+  }, [signedFactoryContract]);
 
   const formSubmit = async (
     formValues: InitialValuesCreateSafeGuard,
@@ -118,7 +107,7 @@ export const useSafeGuard = (): Values => {
         rolesAssignees,
       );
 
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+      const receipt = await transferTx.wait();
 
       actions.setSubmitting(false);
       actions.resetForm();

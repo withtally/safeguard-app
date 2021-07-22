@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, Text, Flex, Link, HStack } from '@chakra-ui/react';
-import dayjs from 'dayjs';
+import {extend} from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { Link as ReachLink } from '@reach/router';
 
@@ -13,7 +13,7 @@ import { getUsername, getProfileImage } from 'modules/common/lib/helpers';
 // safeGuard
 import { SafeGuard } from 'modules/safeGuard/lib/types';
 
-dayjs.extend(advancedFormat);
+extend(advancedFormat);
 
 type Props = {
   safeList: SafeGuard[];
@@ -69,6 +69,7 @@ const SafeGuardTable: FC<Props> = ({ safeList }) => {
                     _hover={{ textDecor: 'none' }}
                     as={ReachLink}
                     to={ROUTES.viewSafe(safe.safeGuardAddress)}
+                    variant="markdown"
                   >
                     <Text textStyle="body.regular.md">view safe</Text>
                   </Link>

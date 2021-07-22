@@ -56,7 +56,7 @@ export const useTransactions = (): Values => {
   const { safeGuardAddress } = useParams();
 
   // react hooks
-  const [transactions, setTransactions] = useState<Transaction[]>();
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isSubmitting, setSubmitting] = useState(false);
 
   // chakra hooks
@@ -71,94 +71,105 @@ export const useTransactions = (): Values => {
     contractAddress: timelockAddress,
     contractAbi: TIMELOCK_JSON.abi,
   });
+
   const { signedContract: signedRolContract } = useSignedContract({
     contractAddress: safeGuardAddress,
     contractAbi: SAFEGUARD_JSON.abi,
   });
+
   const { web3 } = useWeb3();
   const { hasCancelerRole, hasExecutorRole, hasProposerRole } = useUserContractRoles();
 
-  const getTimelockEvents = async () => {
-    try {
-      const queuedEventFilter = await signedRolContract?.filters.QueueTransactionWithDescription();
-      const queuedTransactions =
-        queuedEventFilter && (await signedRolContract?.queryFilter(queuedEventFilter));
-
-      const canceledEventFilter = await signedTimelockContract?.filters.CancelTransaction();
-      const canceledTransactions =
-        canceledEventFilter && (await signedTimelockContract?.queryFilter(canceledEventFilter));
-
-      const executedEventFilter = await signedTimelockContract?.filters.ExecuteTransaction();
-      const executedTransactions =
-        executedEventFilter && (await signedTimelockContract?.queryFilter(executedEventFilter));
-
-      const gracePeriodLabel = await signedTimelockContract?.GRACE_PERIOD();
-      const gracePeriod = Number(gracePeriodLabel.toString());
-      const currentTimestamp = Number(dayjs().format('X'));
-
-      const transactionInfo = queuedTransactions?.map(
-        (item) => item.args && parseTransaction(item.args, gracePeriod),
-      );
-
-      const allTransactions = (transactionInfo &&
-        (await Promise.all(
-          transactionInfo.map(async (item) => {
-            if (item) {
-              return {
-                ...item,
-                currentlyQueued:
-                  signedTimelockContract &&
-                  (await signedTimelockContract?.queuedTransactions(item.txHash)),
-                canceled:
-                  canceledTransactions &&
-                  canceledTransactions?.some((canceled) => canceled.args?.txHash === item.txHash),
-                executed:
-                  executedTransactions &&
-                  executedTransactions?.some((executed) => executed.args?.txHash === item.txHash),
-                stale:
-                  executedTransactions &&
-                  !executedTransactions.some((executed) => executed.args?.txHash === item.txHash) &&
-                  item.executableTime <= currentTimestamp,
-              };
-            }
-          }),
-        ))) as Transaction[];
-
-      const sortedTransactions = allTransactions.sort(
-        (a, b) => b.executableTime - a.executableTime,
-      );
-
-      setTransactions(sortedTransactions);
-    } catch (error) {
-      console.log('🚀 ~ ~ error', error);
-    }
-  };
-
   useEffect(() => {
+    const getTimelockEvents = async () => {
+      try {
+        const queuedEventFilter = await signedRolContract?.filters.QueueTransactionWithDescription();
+        const queuedTransactions =
+          queuedEventFilter && (await signedRolContract?.queryFilter(queuedEventFilter));
+  
+        const canceledEventFilter = await signedTimelockContract?.filters.CancelTransaction();
+        const canceledTransactions =
+          canceledEventFilter && (await signedTimelockContract?.queryFilter(canceledEventFilter));
+  
+        const executedEventFilter = await signedTimelockContract?.filters.ExecuteTransaction();
+        const executedTransactions =
+          executedEventFilter && (await signedTimelockContract?.queryFilter(executedEventFilter));
+  
+        const gracePeriodLabel = await signedTimelockContract?.GRACE_PERIOD();
+        const gracePeriod = Number(gracePeriodLabel.toString());
+        const currentTimestamp = Number(dayjs().format('X'));
+  
+        const transactionInfo = queuedTransactions?.map(
+          (item) => item.args && parseTransaction(item.args, gracePeriod),
+        );
+  
+        const allTransactions = (transactionInfo &&
+          (await Promise.all(
+            transactionInfo.map(async (item) => {
+              if (item) {
+                return {
+                  ...item,
+                  currentlyQueued:
+                  signedTimelockContract &&
+                    (await signedTimelockContract?.queuedTransactions(item.txHash)),
+                  canceled:
+                    canceledTransactions &&
+                    canceledTransactions?.some((canceled) => canceled.args?.txHash === item.txHash),
+                  executed:
+                    executedTransactions &&
+                    executedTransactions?.some((executed) => executed.args?.txHash === item.txHash),
+                  stale:
+                    executedTransactions &&
+                    !executedTransactions.some((executed) => executed.args?.txHash === item.txHash) &&
+                    item.executableTime <= currentTimestamp,
+                };
+              }
+            }),
+          ))) as Transaction[];
+  
+        const sortedTransactions = allTransactions.sort(
+          (a, b) => b.executableTime - a.executableTime,
+        );
+  
+        setTransactions(sortedTransactions);
+      } catch (error) {
+        console.log('🚀 ~ ~ error', error);
+      }
+    };
+
     if (signedTimelockContract) getTimelockEvents();
-  }, [timelockAddress]);
+  }, [signedTimelockContract]);
 
   useEffect(() => {
     if (!signedTimelockContract) return;
 
     signedTimelockContract.on('QueueTransaction', (event) => {
-      getTimelockEvents();
+      event.removeListener(); 
+      event.removeListener(); 
+
+      const transactionsUpdated = transactions?.map(item => item.txHash === event.txHash ? { ...item, currentlyQueued: true} : item)
+
+      setTransactions(transactionsUpdated)
     });
 
     signedTimelockContract.on('ExecuteTransaction', (event) => {
-      getTimelockEvents();
+      event.removeListener(); 
+      event.removeListener(); 
+
+      const transactionsUpdated = transactions?.map(item => item.txHash === event.txHash ? { ...item, executed: true} : item)
+
+      setTransactions(transactionsUpdated)
     });
 
     signedTimelockContract.on('CancelTransaction', (event) => {
-      getTimelockEvents();
+      event.removeListener(); 
+
+      const transactionsUpdated = transactions?.map(item => item.txHash === event.txHash ? { ...item, canceled: true} : item)
+
+      setTransactions(transactionsUpdated)
     });
 
-    return () => {
-      signedTimelockContract.removeAllListeners('QueueTransaction');
-      signedTimelockContract.removeAllListeners('ExecuteTransaction');
-      signedTimelockContract.removeAllListeners('CancelTransaction');
-    };
-  });
+  }, []);
 
   // handlers
   const cancelTransaction = async (transaction: Transaction) => {
@@ -181,7 +192,9 @@ export const useTransactions = (): Values => {
         transaction.data,
         transaction.eta,
       );
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+
+      const receipt = await transferTx.wait();
+
       setSubmitting(false);
       toast({
         title: 'Success',
@@ -215,7 +228,7 @@ export const useTransactions = (): Values => {
         transaction.data,
         transaction.eta,
       );
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+      const receipt = await transferTx.wait();
 
       setSubmitting(false);
       toast({
@@ -267,7 +280,7 @@ export const useTransactions = (): Values => {
         formValues.description,
       );
 
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+      const receipt = await transferTx.wait();
 
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();

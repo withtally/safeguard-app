@@ -33,7 +33,7 @@ type Values = {
 
 export const useSafeGuard = (): Values => {
   // react hooks
-  const [registries, setRegistries] = useState<SafeGuard[]>();
+  const [registries, setRegistries] = useState<SafeGuard[]>([]);
 
   // chakra hooks
   const toast = useToast();
@@ -46,7 +46,7 @@ export const useSafeGuard = (): Values => {
     contractAddress: factoryAddress,
     contractAbi: FACTORY_JSON.abi,
   });
-  const { web3, signerAddress } = useWeb3();
+  const { signerAddress } = useWeb3();
 
   const getRegistries = async () => {
     try {
@@ -80,14 +80,14 @@ export const useSafeGuard = (): Values => {
   useEffect(() => {
     if (!signedFactoryContract) return;
 
-    signedFactoryContract.on('SafeGuardCreated', (event) => {
-      getRegistries();
-    });
+    signedFactoryContract?.on('SafeGuardCreated', (event) => {
+      event.removeListener(); 
 
-    return () => {
-      signedFactoryContract.removeAllListeners('SafeGuardCreated');
-    };
-  });
+      const newSafeGuard = parseSafeGuardCreations(event);
+
+      setRegistries([...registries, newSafeGuard])
+    });
+  }, [signedFactoryContract]);
 
   const formSubmit = async (
     formValues: InitialValuesCreateSafeGuard,
@@ -107,7 +107,7 @@ export const useSafeGuard = (): Values => {
         rolesAssignees,
       );
 
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+      const receipt = await transferTx.wait();
 
       actions.setSubmitting(false);
       actions.resetForm();

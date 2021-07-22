@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo} from 'react';
 
 // common
 import { axivios } from 'modules/common/lib/axivios';
@@ -49,9 +49,12 @@ export const useUserInformation = ({ addresses }: Props): Values => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // constants
-  const hasAddresses = addresses ? addresses.length > 0 : false;
+  const hasAddresses = useMemo(() => ((addresses != null) ? addresses.length > 0 : false), [addresses])
 
-  // methods
+  // effects
+  useEffect(() => {
+    if (!hasAddresses) return;
+
   const getUsersInformation = async () => {
     if (addresses) {
       setIsLoading(true);
@@ -84,10 +87,6 @@ export const useUserInformation = ({ addresses }: Props): Values => {
       setIsLoading(false);
     }
   };
-
-  // effects
-  useEffect(() => {
-    if (!hasAddresses) return;
 
     getUsersInformation();
   }, [addresses]);

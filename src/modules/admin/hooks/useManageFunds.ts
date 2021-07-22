@@ -29,7 +29,6 @@ type Values = {
       : (e: string | React.ChangeEvent<any>) => void;
   };
   isSubmitting: boolean;
-  fundBalance: string;
   errors: FormikErrors<InitialValuesSendValues>;
   touched: FormikTouched<InitialValuesSendValues>;
 };
@@ -42,12 +41,11 @@ export const useManageFunds = (): Values => {
   const toast = useToast();
 
   // custom hook
-  const { timelockAddress, getSafeGuardTokenBalance, fundBalance } = useFundInformation();
+  const { timelockAddress } = useFundInformation();
   const { signedContract: signedTokenContract } = useSignedContract({
     contractAddress: tokenAddress,
     contractAbi: TOKEN_JSON.abi,
   });
-  const { web3 } = useWeb3();
   const { hasAdminRole } = useUserContractRoles();
 
   // handlers
@@ -69,8 +67,7 @@ export const useManageFunds = (): Values => {
         timelockAddress,
         ethers.utils.parseEther(formValues.amount),
       );
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
-      await getSafeGuardTokenBalance();
+      const receipt = await transferTx.wait();
       formikInfo.setSubmitting(false);
       formikInfo.resetForm();
     } catch (error) {
@@ -86,7 +83,6 @@ export const useManageFunds = (): Values => {
   });
 
   return {
-    fundBalance,
     values,
     handleChange,
     submitForm,

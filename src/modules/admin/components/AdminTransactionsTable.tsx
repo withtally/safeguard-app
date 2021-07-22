@@ -9,6 +9,7 @@ import StatusTag from 'modules/common/components/StatusTag';
 import Avatar from 'modules/common/components/Avatar';
 import { useUserInformation } from 'modules/common/hooks/useUserInformation';
 import { getUsername, getProfileImage } from 'modules/common/lib/helpers';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
 // admin
 import { Transaction } from 'modules/admin/lib/types';
@@ -35,6 +36,16 @@ const AdminTransactionsTable: FC<Props> = ({ transactions, cancelTransaction }) 
   const { usersInformation } = useUserInformation({
     addresses,
   });
+  const { openSelectWallet, isWeb3Ready } = useWeb3();
+
+  // handlers
+  const handleCancelPayment = async (transaction: Transaction): Promise<void> => {
+    if (isWeb3Ready) {
+      await cancelTransaction(transaction)
+    } else {
+      await openSelectWallet()
+    }
+  };
 
   return (
     <Flex align="stretch" direction="column" w="full">
@@ -92,7 +103,7 @@ const AdminTransactionsTable: FC<Props> = ({ transactions, cancelTransaction }) 
                 </Td>
                 <Td>
                   <Button
-                    onClick={() => cancelTransaction(transaction)}
+                    onClick={() => handleCancelPayment(transaction)}
                     size="md"
                     variant="error"
                     disabled={btnDisabled}

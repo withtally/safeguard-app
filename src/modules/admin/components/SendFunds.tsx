@@ -4,6 +4,7 @@ import { IoAddCircleOutline } from 'react-icons/io5';
 
 // common
 import FormAmountInput from 'modules/common/components/FormAmountInput';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
 // admin
 import { useManageFunds } from 'modules/admin/hooks/useManageFunds';
@@ -12,7 +13,17 @@ import InstructionList from 'modules/common/components/InstructionList';
 
 const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
   // custom hooks
+  const { openSelectWallet, isWeb3Ready } = useWeb3();
   const { values, handleChange, submitForm, isSubmitting, errors, touched } = useManageFunds();
+
+  // handlers
+  const handleSubmitForm = async (): Promise<void> => {
+    if (isWeb3Ready) {
+      await submitForm()
+    } else {
+      await openSelectWallet()
+    }
+  };
 
   return (
     <Flex
@@ -46,7 +57,7 @@ const SendFunds: FC<FlexProps> = ({ ...flexProps }) => {
             w={64}
             h="6.125rem"
           />
-          <Button isLoading={isSubmitting} onClick={submitForm} size="md" variant="primary">
+          <Button isLoading={isSubmitting} onClick={handleSubmitForm} size="md" variant="primary">
             Send Funds
           </Button>
         </HStack>

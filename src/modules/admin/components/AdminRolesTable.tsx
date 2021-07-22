@@ -1,18 +1,19 @@
 import { FC, useMemo } from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, Button, HStack, Text, Flex } from '@chakra-ui/react';
-import dayjs from 'dayjs';
+import {extend} from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 // common
 import Avatar from 'modules/common/components/Avatar';
 import { useUserInformation } from 'modules/common/hooks/useUserInformation';
 import { getUsername, getProfileImage } from 'modules/common/lib/helpers';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
 // admin
 import { ROLES } from 'modules/admin/lib/constants';
 import { GrantedRole } from 'modules/admin/lib/types';
 
-dayjs.extend(advancedFormat);
+extend(advancedFormat);
 
 type Props = {
   grantedRoles: GrantedRole[];
@@ -25,9 +26,19 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
   const hasRows = Boolean(grantedRoles.length);
 
   // custom hooks
+  const { openSelectWallet, isWeb3Ready } = useWeb3();
   const { usersInformation } = useUserInformation({
     addresses,
   });
+
+  // handlers
+  const handleRevokeRole = async (role: GrantedRole): Promise<void> => {
+    if (isWeb3Ready) {
+      await revokeRole(role.roleId, role.address)
+    } else {
+      await openSelectWallet()
+    }
+  };
 
   return (
     <Flex align="stretch" direction="column" w="full">
@@ -64,7 +75,7 @@ const AdminRolesTable: FC<Props> = ({ grantedRoles, revokeRole }) => {
                   <Button
                     size="md"
                     variant="error"
-                    onClick={() => revokeRole(role.roleId, role.address)}
+                    onClick={() => handleRevokeRole(role)}
                   >
                     Revoke
                   </Button>

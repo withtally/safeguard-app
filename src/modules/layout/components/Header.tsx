@@ -44,7 +44,7 @@ const Header: FC = () => {
                 as={ReachLink}
                 to={ROUTES.safes}
               >
-                <Button size="lg" variant="secondary">
+                <Button size="lg" variant="tertiary">
                   <Text textStyle="paragraph">Safe Management</Text>
                 </Button>
               </Link>
@@ -52,7 +52,7 @@ const Header: FC = () => {
               <HeaderUser signerAddress={signerAddress} />
             </HStack>
           ) : (
-            <Button onClick={handleConnectWalletClick} size="lg" variant="secondary">
+            <Button onClick={handleConnectWalletClick} size="lg" variant="tertiary">
               Connect wallet
             </Button>
           )}

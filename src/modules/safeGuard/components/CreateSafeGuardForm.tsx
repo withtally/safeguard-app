@@ -6,6 +6,7 @@ import { IoAddCircleOutline } from 'react-icons/io5';
 // common
 import FormInput from 'modules/common/components/FormInput';
 import FormSelect from 'modules/common/components/FormSelect';
+import { useWeb3 } from 'modules/common/hooks/useWeb3';
 
 // safeGuard
 import { InitialValuesCreateSafeGuard } from 'modules/safeGuard/lib/types';
@@ -23,6 +24,9 @@ type Props = {
 };
 
 const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
+  // custom hooks
+  const { openSelectWallet, isWeb3Ready } = useWeb3();
+
   const emptyRolAssignation = { role: '', address: '' };
   return (
     <Formik
@@ -35,7 +39,12 @@ const CreateSafeGuardForm: FC<Props> = ({ initialValues, formSubmit }) => {
           id="formTest"
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit(e);
+            if (isWeb3Ready) {
+              handleSubmit(e);
+            } else {
+              openSelectWallet()
+            }
+            
           }}
         >
           <Stack spacing={4} mb={10} w="full">

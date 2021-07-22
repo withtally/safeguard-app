@@ -1,20 +1,17 @@
-import dayjs from 'dayjs';
+import {extend} from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { useToast } from '@chakra-ui/react';
 import { useParams } from '@reach/router';
 
 // common
 import { useSignedContract } from 'modules/common/hooks/useSignedContract';
-import { useWeb3 } from 'modules/common/hooks/useWeb3';
-
 import { useUserContractRoles } from 'modules/common/hooks/useUserContractRoles';
-
 import SAFEGUARD_JSON from 'modules/common/lib/abis/SafeGuard.json';
 
 // admin
 import { Transaction } from 'modules/admin/lib/types';
 
-dayjs.extend(advancedFormat);
+extend(advancedFormat);
 
 type Values = {
   cancelTransaction: (transaction: Transaction) => Promise<void>;
@@ -26,8 +23,6 @@ export const useCancelRequest = (): Values => {
 
   // chakra hooks
   const toast = useToast();
-
-  const { web3 } = useWeb3();
 
   const { signedContract: signedRolContract } = useSignedContract({
     contractAddress: safeGuardAddress,
@@ -55,7 +50,7 @@ export const useCancelRequest = (): Values => {
         transaction.data,
         transaction.eta,
       );
-      const receipt = await web3?.waitForTransaction(transferTx.hash, 3);
+      const receipt = await transferTx.wait();
       toast({
         title: 'Success',
         description: 'Transaction canceled!',

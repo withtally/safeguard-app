@@ -27,17 +27,15 @@ const useWeb3Constate = (): Values => {
   const [selectedWallet, setSelectedWallet] = useState<Wallet | undefined>(undefined);
   const [onboard, setOnboard] = useState<API | undefined>(undefined);
 
-  const getPreviousWallet = async () => {
-    try {
-      await onboard?.walletSelect();
-    } catch (error) {
-      console.log('🚀 ~ file: useWeb3.ts ~ line 61 ~ getPreviousWal ~ error', error);
-    }
-  };
-
   const signer = useMemo(() => {
     if (web3Provider) return web3Provider.getSigner();
   }, [web3Provider]);
+
+  // constants
+  const isDomReady = useMemo(
+    () => window?.ethereum != null,
+    []
+  )
 
   // handler
   const openSelectWallet = async (): Promise<void> => {
@@ -58,21 +56,32 @@ const useWeb3Constate = (): Values => {
   // effects
   useEffect(() => {
     const onboard = Onboard({
-      dappId: process.env.GATSBY_BLOCKNATIVE_ID,
+      dappId: process.env.REACT_BLOCKNATIVE_ID,
       networkId: chainId,
       subscriptions: {
         address: (address) => {
-          setSignerAddress(address);
-          setIsWeb3Ready(true);
+          if (address) {
+            setSignerAddress(address);
+            setIsWeb3Ready(true);
+          }
         },
         wallet: (wallet) => {
           if (wallet.provider) {
             const web3 = new ethers.providers.Web3Provider(wallet.provider);
             setWeb3Provider(web3);
             setSelectedWallet(wallet);
+            if (wallet.name != null) {
+              window.localStorage.setItem('selectedWallet', wallet.name)
+            }
           }
         },
-        network: setChainId,
+        network: (networkId) => {
+          if (networkId > 0) {
+            setChainId(networkId)
+          } else {
+            setChainId(chainId)
+          }
+        },
       },
       walletSelect: {
         wallets: [
@@ -88,8 +97,28 @@ const useWeb3Constate = (): Values => {
       ],
     });
     setOnboard(onboard);
-    getPreviousWallet();
   }, [chainId]);
+
+  useEffect(() => {
+    if (isDomReady && onboard != null) {
+      const connectPreviousWallet = async (): Promise<void> => {
+        const walletProvider = new ethers.providers.Web3Provider(
+          window.ethereum
+        )
+        const previouslySelectedWallet = localStorage.getItem('selectedWallet')
+        const accounts = await walletProvider.listAccounts()
+        const hasAccounts = accounts != null ? accounts.length > 0 : false
+
+        if (previouslySelectedWallet != null && hasAccounts) {
+          onboard?.walletSelect(previouslySelectedWallet)
+        }
+      }
+
+      connectPreviousWallet().catch((error) =>
+        console.error('useWeb3 => connectPreviousWallet =>', error)
+      )
+    }
+  }, [isDomReady, onboard])
 
   return {
     web3: web3Provider,
